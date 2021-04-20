@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { CredenciaisUsuario } from './shared/model/credenciais-usuario.model';
 import { ToastyComponent } from './../shared/toasty/toasty.component';
 import { AuthenticationService } from './../shared/service/authentication.service';
+import { TokenService } from './../shared/service/token.service';
 
 @Component({
   selector: 'app-login',
@@ -21,6 +22,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private authenticationService: AuthenticationService,
+    private tokenService: TokenService,
     private router: Router
     ) { }
 
@@ -30,17 +32,15 @@ export class LoginComponent implements OnInit {
 
   public efetuarLogin(): void {
     this.authenticationService.autenticarUsuario(this.credenciaisUsuario)
-      .subscribe(() => {
-        this.toasty.success('sucesso')
+      .subscribe((response: any) => {
+        this.tokenService.armazenarToken(response);
         this.credenciaisUsuario = new CredenciaisUsuario();
-        //this.router.navigate(['inicio']);
+        this.router.navigate(['inicio']);
       },
         (error: HttpErrorResponse) => {
           if (error.status === 401) {
             this.toasty.error('Email ou senha inválidos!');
           }
-          
-          console.log(error)
         }
       );
   }

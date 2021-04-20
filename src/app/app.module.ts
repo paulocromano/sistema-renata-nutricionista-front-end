@@ -6,9 +6,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 
+import { JwtHelperService, JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
+
 import { LoginModule } from './login/login.module';
 import { PaginaInicialModule } from './pagina-inicial/pagina-inicial.module';
 import { ToastyModule } from './shared/toasty/toasty.module';
+import { InterceptorModule } from './interceptor/interceptor.module';
 
 
 @NgModule({
@@ -22,8 +25,14 @@ import { ToastyModule } from './shared/toasty/toasty.module';
     HttpClientModule,
     LoginModule,
     PaginaInicialModule,
-    ToastyModule
+    ToastyModule,
+    InterceptorModule,
+    JwtModule.forRoot( {} )
   ],
+  providers: [
+    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+    JwtHelperService
+   ],
   bootstrap: [AppComponent]
 })
 
