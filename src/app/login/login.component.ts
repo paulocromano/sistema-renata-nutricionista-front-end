@@ -2,9 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import { LoginService } from './shared/service/login.service';
 import { CredenciaisUsuario } from './shared/model/credenciais-usuario.model';
 import { ToastyComponent } from './../shared/toasty/toasty.component';
+import { AuthenticationService } from './../shared/service/authentication.service';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
   public credenciaisUsuario: CredenciaisUsuario = new CredenciaisUsuario();
 
   constructor(
-    private loginService: LoginService,
+    private authenticationService: AuthenticationService,
     private router: Router
     ) { }
 
@@ -29,10 +29,11 @@ export class LoginComponent implements OnInit {
   }
 
   public efetuarLogin(): void {
-    this.loginService.efetuarLoginUsuario(this.credenciaisUsuario)
+    this.authenticationService.autenticarUsuario(this.credenciaisUsuario)
       .subscribe(() => {
+        this.toasty.success('sucesso')
         this.credenciaisUsuario = new CredenciaisUsuario();
-        this.router.navigate(['inicio']);
+        //this.router.navigate(['inicio']);
       },
         (error: HttpErrorResponse) => {
           if (error.status === 401) {
