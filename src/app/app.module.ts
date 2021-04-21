@@ -12,6 +12,8 @@ import { LoginModule } from './login/login.module';
 import { PaginaInicialModule } from './pagina-inicial/pagina-inicial.module';
 import { ToastyModule } from './shared/toasty/toasty.module';
 import { InterceptorModule } from './interceptor/interceptor.module';
+import { LogadoGuard } from './shared/guard/logado.guard';
+import { AdminGuard } from './shared/guard/admin.guard';
 
 
 @NgModule({
@@ -27,11 +29,13 @@ import { InterceptorModule } from './interceptor/interceptor.module';
     PaginaInicialModule,
     ToastyModule,
     InterceptorModule,
-    JwtModule.forRoot( {} )
+    JwtModule.forRoot({})
   ],
   providers: [
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
-    JwtHelperService
+    JwtHelperService,
+    LogadoGuard,
+    AdminGuard
    ],
   bootstrap: [AppComponent]
 })

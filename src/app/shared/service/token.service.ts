@@ -6,14 +6,25 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 })
 export class TokenService {
 
+  public jwtPayload: any = '';
+
   constructor(private JwtHelper: JwtHelperService) { }
 
 
   public armazenarToken(response: any): void {
     localStorage.clear();
+
     const token: string = response.headers.get('Authorization');
-    console.log(token);
     localStorage.setItem('token', (token.startsWith('Bearer ')) ? token.substring(7) : null);
+  }
+
+  public carregarInformacoesToken(): void {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      this.jwtPayload = this.JwtHelper.decodeToken(token);
+      console.log(this.jwtPayload);
+    }
   }
 
   public isTokenInvalido(): boolean {
@@ -23,6 +34,13 @@ export class TokenService {
 
   public getToken(): string {
     const token = localStorage.getItem('token');
-    return (token.startsWith('Bearer ')) ? token.substring(7) : null;
+    return (token && token.startsWith('Bearer ')) ? token.substring(7) : null;
+  }
+
+  public getPermissoes(): string[] {
+    this.carregarInformacoesToken();
+    const permissoesToken: any[] = this.jwtPayload.permissoes;
+    
+    return permissoesToken.map(permissao => permissao.authority);
   }
 }

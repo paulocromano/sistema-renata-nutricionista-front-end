@@ -19,6 +19,7 @@ export class LoginComponent implements OnInit {
   public toasty: ToastyComponent;
 
   public credenciaisUsuario: CredenciaisUsuario = new CredenciaisUsuario();
+  public processandoOperacao: boolean = false;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -31,15 +32,23 @@ export class LoginComponent implements OnInit {
   }
 
   public efetuarLogin(): void {
+    this.processandoOperacao = true;
+
     this.authenticationService.autenticarUsuario(this.credenciaisUsuario)
       .subscribe((response: any) => {
         this.tokenService.armazenarToken(response);
         this.credenciaisUsuario = new CredenciaisUsuario();
+        this.processandoOperacao = false
         this.router.navigate(['inicio']);
       },
         (error: HttpErrorResponse) => {
+          this.processandoOperacao = false;
+          
           if (error.status === 401) {
             this.toasty.error('Email ou senha inválidos!');
+          }
+          else {
+            this.toasty.error('Erro ao efetuar o login!');
           }
         }
       );

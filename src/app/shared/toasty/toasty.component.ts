@@ -34,6 +34,8 @@ export class ToastyComponent implements OnInit {
   }
 
   public mensagemErro(tipoErro: string, tituloErro: string, mensagem: string): void {
+    this.messageService.clear();
+
     this.messageService.add({
       severity: tipoErro, 
       summary: tituloErro, 

@@ -19,10 +19,7 @@ export class TokenInvalidoInterceptorService implements HttpInterceptor {
         window.location.href = this.servidorService.urlFrontAcessoNegado;
       }
     }
-    else {
-      window.location.href = this.servidorService.urlFrontAcessoNegado;
-    }
-
+    
     return next.handle(req);
   }
 }
