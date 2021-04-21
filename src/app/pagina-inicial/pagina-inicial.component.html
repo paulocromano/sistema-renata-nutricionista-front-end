@@ -1,1 +1,22 @@
-<p>pagina-inicial works!</p>
+<div class="container-buttons">
+    <div>
+        <button class="btn btn-success" [routerLink]="['/consultas-retornos']">
+            <i class="fas fa-notes-medical fa-lg"></i>
+            Consultas/Retornos
+        </button>
+    </div>
+
+    <div>
+        <button class="btn btn-warning my-3" [routerLink]="['/calendario-atendimento']">
+            <i class="far fa-calendar-check fa-lg"></i>
+            Calendário Atendimento
+        </button>
+    </div>
+
+    <div>
+        <button class="btn btn-info" [routerLink]="['/pacientes']">
+            <i class="fas fa-users fa-lg"></i>
+            Pacientes
+        </button>
+    </div>
+</div>

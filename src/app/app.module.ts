@@ -10,6 +10,9 @@ import { JwtHelperService, JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 
 import { LoginModule } from './login/login.module';
 import { PaginaInicialModule } from './pagina-inicial/pagina-inicial.module';
+import { ConsultaRetornoModule } from './consulta-retorno/consulta-retorno.module';
+import { CalendarioAtendimentoModule } from './calendario-atendimento/calendario-atendimento.module';
+import { PacienteModule } from './paciente/paciente.module';
 import { ToastyModule } from './shared/toasty/toasty.module';
 import { InterceptorModule } from './interceptor/interceptor.module';
 import { LogadoGuard } from './shared/guard/logado.guard';
@@ -27,6 +30,9 @@ import { AdminGuard } from './shared/guard/admin.guard';
     HttpClientModule,
     LoginModule,
     PaginaInicialModule,
+    ConsultaRetornoModule,
+    CalendarioAtendimentoModule,
+    PacienteModule,
     ToastyModule,
     InterceptorModule,
     JwtModule.forRoot({})
