@@ -1,1 +1,72 @@
-<p>paciente works!</p>
+<p-table #dataView [value]="pacientes" [columns]="colunasTabela" [responsive]="true" [rows]="8" [paginator]="true" class="text-center">
+
+    <ng-template pTemplate="caption">
+        <div class="row">
+            <div class="col-12 col-sm-6 col-md-4">
+                <input type="text" pInputText placeholder="Pesquisa" class="pesquisa" [(ngModel)]="inputPesquisa"
+                    (input)="dataView.filterGlobal($event.target.value, 'contains')">
+                <i class="fas fa-search" style="font-size: 1.18em;"></i>
+            </div>
+    
+            <div class="col-12 col-sm-6 col-md-8 text-right">
+                <button class="btn btn-success px-5">
+                    <i class="fas fa-plus"></i>
+                    Cadastrar Paciente
+                </button>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="header" let-colunas>
+        <tr>
+            <th *ngFor="let coluna of colunas" [pSortableColumn]="coluna.field" [ngClass]="coluna.style" class="text-center">
+                {{ coluna.header }}
+                <p-sortIcon *ngIf="coluna.header !== 'Ações'" [field]="coluna.field" ariaLabel="active to sort"
+                    ariaLabelDesc="Activate to sort in descending order"
+                    ariaLabelAsc="Activate to sort in ascending order">
+                </p-sortIcon>
+            </th>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-paciente>
+        <tr>
+            <td *ngFor="let coluna of colunas">
+                <span class="ui-column-title text-left">{{ coluna.header }}</span>
+                {{ paciente[coluna.field] }}
+
+                <span *ngIf="coluna.header === 'Ações'">
+
+                </span>
+            </td>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage" class="text-center" let-pacientes>
+        <tr>
+            <td [attr.colspan]="pacientes.length" class="text-center">
+                <span *ngIf="!processandoOperacao">
+                    {{ inputPesquisa ? 'Nenhum paciente corresponde à pesquisa!' : 'Nenhum paciente encontrado!' }}
+                </span>
+
+                <span *ngIf="processandoOperacao && !inputPesquisa">
+                    <p-progressSpinner strokeWidth="5"></p-progressSpinner>
+                </span>
+            </td>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="summary">
+        Pacientes encontrados: {{ pacientes ? pacientes.length : 0 }}
+    </ng-template>
+</p-table>
+
+<!-- Dialog de cadastro -->
+<p-dialog [visible]="dialogCadastroEstaVisivel" [modal]="true" [draggable]="false" [closable]="false">
+    <p-header>
+        Cadastrar Paciente
+    </p-header>
+
+</p-dialog>
+
+<app-toasty #toastyComponent></app-toasty>

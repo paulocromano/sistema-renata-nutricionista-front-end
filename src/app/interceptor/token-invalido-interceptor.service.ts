@@ -16,6 +16,7 @@ export class TokenInvalidoInterceptorService implements HttpInterceptor {
 
     if (localStorage.getItem('token')) {
       if (this.tokenService.isTokenInvalido()) {
+        localStorage.clear();
         window.location.href = this.servidorService.urlFrontAcessoNegado;
       }
     }

@@ -36,6 +36,7 @@ export class LoginComponent implements OnInit {
 
     this.authenticationService.autenticarUsuario(this.credenciaisUsuario)
       .subscribe((response: any) => {
+        localStorage.clear();
         this.tokenService.armazenarToken(response);
         this.credenciaisUsuario = new CredenciaisUsuario();
         this.processandoOperacao = false
