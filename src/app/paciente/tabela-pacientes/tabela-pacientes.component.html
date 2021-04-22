@@ -9,10 +9,7 @@
             </div>
     
             <div class="col-12 col-sm-6 col-md-8 text-right">
-                <button class="btn btn-success px-5">
-                    <i class="fas fa-plus"></i>
-                    Cadastrar Paciente
-                </button>
+                <app-cadastro-paciente></app-cadastro-paciente>
             </div>
         </div>
     </ng-template>
@@ -60,13 +57,5 @@
         Pacientes encontrados: {{ pacientes ? pacientes.length : 0 }}
     </ng-template>
 </p-table>
-
-<!-- Dialog de cadastro -->
-<p-dialog [visible]="dialogCadastroEstaVisivel" [modal]="true" [draggable]="false" [closable]="false">
-    <p-header>
-        Cadastrar Paciente
-    </p-header>
-
-</p-dialog>
 
 <app-toasty #toastyComponent></app-toasty>

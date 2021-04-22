@@ -7,12 +7,16 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { DialogModule } from 'primeng/dialog';
 import { TooltipModule } from 'primeng/tooltip';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import {DropdownModule} from 'primeng/dropdown';
+import { InputMaskModule } from 'primeng/inputmask';
 
-import { PacienteComponent } from './paciente.component';
 import { ToastyModule } from './../shared/toasty/toasty.module';
+import { CadastroPacienteComponent } from './cadastro-paciente/cadastro-paciente.component';
+import { TabelaPacientesComponent } from './tabela-pacientes/tabela-pacientes.component';
 
 @NgModule({
-  declarations: [ PacienteComponent ],
+  declarations: [ CadastroPacienteComponent, TabelaPacientesComponent ],
   imports: [
     CommonModule,
     FormsModule,
@@ -21,8 +25,12 @@ import { ToastyModule } from './../shared/toasty/toasty.module';
     ProgressSpinnerModule,
     DialogModule,
     TooltipModule,
+    RadioButtonModule,
+    DropdownModule,
+    InputMaskModule,
     ToastyModule
-  ]
+  ],
+  exports: [ CadastroPacienteComponent ]
 })
 
 export class PacienteModule { }

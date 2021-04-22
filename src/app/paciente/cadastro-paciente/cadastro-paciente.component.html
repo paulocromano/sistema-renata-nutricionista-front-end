@@ -1,0 +1,126 @@
+<button class="btn btn-success px-5" (click)="abrirDialogCadastroPaciente = true">
+    <i class="fas fa-plus"></i>
+    Cadastrar Paciente
+</button>
+
+<p-dialog [visible]="abrirDialogCadastroPaciente" [modal]="true" [responsive]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false">
+
+    <p-header>
+        Cadastrar Paciente
+    </p-header>
+
+    <div class="container mt-4 text-left">
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-5">
+                <span class="p-float-label">
+                    <input type="text" style="width: 350px;" pInputText> 
+                    <label for="inputtext">Nome</label>
+                </span>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4 mt-2">
+                Sexo:
+                <p-radioButton name="sexo" [value]="'F'" class="pl-2"></p-radioButton> Feminino
+                <p-radioButton name="sexo" [value]="'M'" class="pl-2"></p-radioButton> Masculino
+            </div>
+
+            <div class="col-12 col-md-12 col-lg-3">
+                <p-dropdown [scrollHeight]="'120px'" placeholder="Selecione uma Etnia"></p-dropdown>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12 col-md-4">
+                <span class="p-float-label">
+                    <p-inputMask mask="99/99/9999"></p-inputMask>
+                    <label>Data de Nascimento</label>
+                </span>
+            </div>
+
+            <div class="col-12 col-md-4">
+                <span class="p-float-label">
+                    <p-inputMask mask="(99) 99999-9999"></p-inputMask>
+                    <label>Telefone</label>
+                </span>
+            </div>
+
+            <div class="col-12 col-md-4">
+                <span class="p-float-label">
+                    <p-inputMask mask="(99) 99999-9999"></p-inputMask>
+                    <label>Telefone para recado</label>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container text-left">
+        <div class="row mt-4">
+            <div class="col-12 col-md-6 col-lg-6">
+                <span class="p-float-label">
+                    <input type="text" style="width: 380px;" pInputText> 
+                    <label for="inputtext">Logradouro</label>
+                </span>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-2">
+                <span class="p-float-label">
+                    <input type="text" style="width: 100px;" pInputText> 
+                    <label for="inputtext">Número</label>
+                </span>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+                <span class="p-float-label">
+                    <input type="text" style="width: 270px;" pInputText> 
+                    <label for="inputtext">Complemento</label>
+                </span>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12 col-md-6 col-lg-5">
+                <span class="p-float-label">
+                    <input type="text" style="width: 300px;" pInputText> 
+                    <label for="inputtext">Bairro</label>
+                </span>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-7">
+                <span class="p-float-label">
+                    <input type="text" style="width: 400px;" pInputText> 
+                    <label for="inputtext">Cidade</label>
+                </span>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-3">
+                <span class="p-float-label">
+                    <input type="text" style="width: 160px;" pInputText> 
+                    <label for="inputtext">CEP</label>
+                </span>
+            </div>
+
+            <div class="col-2">
+                <span class="p-float-label">
+                    <input type="text" style="width: 70px;" pInputText> 
+                    <label for="inputtext">UF</label>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="abrirDialogCadastroPaciente = false">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+        <button class="btn btn-success">
+            <i class="fas fa-check-circle"></i>
+            Confirmar
+        </button>
+    </p-footer>
+</p-dialog>
+
+<app-toasty #toastyComponent></app-toasty>
