@@ -2,8 +2,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { PacienteService } from './../shared/service/paciente.service';
-import { Paciente } from './../shared/model/paciente.model';
 import { ToastyComponent } from './../../shared/toasty/toasty.component';
+import { ListagemCadastroPaciente } from './../shared/model/listagem-cadastro-paciente.model';
 
 @Component({
   selector: 'app-tabela-pacientes',
@@ -18,7 +18,7 @@ export class TabelaPacientesComponent implements OnInit {
 
   public inputPesquisa: string = '';
   public colunasTabela: any[];
-  public pacientes: Paciente[];
+  public listagemCadastroPaciente: ListagemCadastroPaciente = new ListagemCadastroPaciente();
 
   public processandoOperacao: boolean = false;
 
@@ -31,16 +31,20 @@ export class TabelaPacientesComponent implements OnInit {
       { header: 'Data de nascimento', field: 'data-nascimento', style: 'col-data-nascimento' },
       { header: 'Telefone', field: 'telefone', style: 'col-telefone' },
       { header: 'Ações', field: 'acoes', style: 'col-acoes' }
-    ]
+    ];
+
+    this.buscarInformacoesListagemCadastroPaciente();
   }
 
-  public buscarPacientesEmOrdemAlfabetica(): void {
+  public buscarInformacoesListagemCadastroPaciente(): void {
     this.processandoOperacao = true;
 
-    this.pacienteService.buscarPacientesEmOrdemAlfabetica()
-      .subscribe((pacientes: Paciente[]) => {
-        this.pacientes = pacientes;
+    this.pacienteService.buscarInformacoesListagemCadastroPaciente()
+      .subscribe((informacoesListagemCadastroPaciente: ListagemCadastroPaciente) => {
+        this.listagemCadastroPaciente = informacoesListagemCadastroPaciente;
         this.processandoOperacao = false;
+
+        console.log(this.listagemCadastroPaciente)
       },
       (error: HttpErrorResponse) => {
         this.processandoOperacao = false;

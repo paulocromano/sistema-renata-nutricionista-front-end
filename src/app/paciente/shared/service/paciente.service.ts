@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Paciente } from './../model/paciente.model';
+import { ListagemCadastroPaciente } from './../model/listagem-cadastro-paciente.model';
 import { ServidorService } from './../../../shared/service/servidor.service';
 
 @Injectable({
@@ -12,7 +12,7 @@ export class PacienteService {
 
   constructor(private http: HttpClient, private servidorService: ServidorService) { }
 
-  public buscarPacientesEmOrdemAlfabetica(): Observable<Paciente[]> {
-    return this.http.get<Paciente[]>(`${this.servidorService.getServidorBackEnd()}/paciente`);
+  public buscarInformacoesListagemCadastroPaciente(): Observable<ListagemCadastroPaciente> {
+    return this.http.get<ListagemCadastroPaciente>(`${this.servidorService.getServidorBackEnd()}/paciente/informacoes-listagem-cadastro`);
   }
 }

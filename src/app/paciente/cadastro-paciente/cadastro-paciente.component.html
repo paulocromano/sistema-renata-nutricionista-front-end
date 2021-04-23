@@ -14,40 +14,42 @@
         <div class="row">
             <div class="col-12 col-md-6 col-lg-5">
                 <span class="p-float-label">
-                    <input type="text" style="width: 350px;" pInputText> 
+                    <input type="text" style="width: 350px;" [(ngModel)]="cadastroPaciente.nome" pInputText> 
                     <label for="inputtext">Nome</label>
                 </span>
             </div>
 
             <div class="col-12 col-md-6 col-lg-4 mt-2">
                 Sexo:
-                <p-radioButton name="sexo" [value]="'F'" class="pl-2"></p-radioButton> Feminino
-                <p-radioButton name="sexo" [value]="'M'" class="pl-2"></p-radioButton> Masculino
+                <p-radioButton [value]="'F'" class="pl-2" [(ngModel)]="cadastroPaciente.sexo"></p-radioButton> Feminino
+                <p-radioButton [value]="'M'" class="pl-2" [(ngModel)]="cadastroPaciente.sexo"></p-radioButton> Masculino
             </div>
 
             <div class="col-12 col-md-12 col-lg-3">
-                <p-dropdown [scrollHeight]="'120px'" placeholder="Selecione uma Etnia"></p-dropdown>
+                <p-dropdown [options]="etnias" [(ngModel)]="cadastroPaciente.etnia" name="descricao" [scrollHeight]="'120px'" 
+                    placeholder="Selecione uma Etnia">
+                </p-dropdown>
             </div>
         </div>
 
         <div class="row mt-4">
             <div class="col-12 col-md-4">
                 <span class="p-float-label">
-                    <p-inputMask mask="99/99/9999"></p-inputMask>
+                    <p-inputMask mask="99/99/9999" [(ngModel)]="cadastroPaciente.dataNascimento"></p-inputMask>
                     <label>Data de Nascimento</label>
                 </span>
             </div>
 
             <div class="col-12 col-md-4">
                 <span class="p-float-label">
-                    <p-inputMask mask="(99) 99999-9999"></p-inputMask>
+                    <p-inputMask mask="(99) 99999-9999" [(ngModel)]="cadastroPaciente.telefone"></p-inputMask>
                     <label>Telefone</label>
                 </span>
             </div>
 
             <div class="col-12 col-md-4">
                 <span class="p-float-label">
-                    <p-inputMask mask="(99) 99999-9999"></p-inputMask>
+                    <p-inputMask mask="(99) 99999-9999" [(ngModel)]="cadastroPaciente.telefoneRecado"></p-inputMask>
                     <label>Telefone para recado</label>
                 </span>
             </div>
@@ -58,21 +60,23 @@
         <div class="row mt-4">
             <div class="col-12 col-md-6 col-lg-6">
                 <span class="p-float-label">
-                    <input type="text" style="width: 380px;" pInputText> 
+                    <input type="text" style="width: 380px;" [(ngModel)]="cadastroEndereco.logradouro" 
+                        [disabled]="processandoOperacao" pInputText> 
                     <label for="inputtext">Logradouro</label>
                 </span>
             </div>
 
             <div class="col-12 col-md-6 col-lg-2">
                 <span class="p-float-label">
-                    <input type="text" style="width: 100px;" pInputText> 
+                    <input type="text" style="width: 100px;" [(ngModel)]="cadastroEndereco.numero" pInputText> 
                     <label for="inputtext">Número</label>
                 </span>
             </div>
 
             <div class="col-12 col-md-6 col-lg-4">
                 <span class="p-float-label">
-                    <input type="text" style="width: 270px;" pInputText> 
+                    <input type="text" style="width: 270px;" [(ngModel)]="cadastroEndereco.complemento" 
+                        [disabled]="processandoOperacao" pInputText> 
                     <label for="inputtext">Complemento</label>
                 </span>
             </div>
@@ -81,14 +85,16 @@
         <div class="row mt-4">
             <div class="col-12 col-md-6 col-lg-5">
                 <span class="p-float-label">
-                    <input type="text" style="width: 300px;" pInputText> 
+                    <input type="text" style="width: 300px;" [(ngModel)]="cadastroEndereco.bairro" 
+                        [disabled]="processandoOperacao" pInputText> 
                     <label for="inputtext">Bairro</label>
                 </span>
             </div>
 
             <div class="col-12 col-md-6 col-lg-7">
                 <span class="p-float-label">
-                    <input type="text" style="width: 400px;" pInputText> 
+                    <input type="text" style="width: 400px;" [(ngModel)]="cadastroEndereco.cidade" 
+                        [disabled]="processandoOperacao" pInputText> 
                     <label for="inputtext">Cidade</label>
                 </span>
             </div>
@@ -97,22 +103,27 @@
         <div class="row mt-4">
             <div class="col-3">
                 <span class="p-float-label">
-                    <input type="text" style="width: 160px;" pInputText> 
+                    <p-inputMask mask="99999-999" [(ngModel)]="cadastroEndereco.cep" 
+                        (ngModelChange)="validarCampoCEPParaPreenchimentoAutomatico()">
+                    </p-inputMask>
                     <label for="inputtext">CEP</label>
                 </span>
             </div>
 
             <div class="col-2">
                 <span class="p-float-label">
-                    <input type="text" style="width: 70px;" pInputText> 
+                    <input type="text" style="width: 70px;" max="2" [(ngModel)]="cadastroEndereco.uf" 
+                        [disabled]="processandoOperacao" pInputText> 
                     <label for="inputtext">UF</label>
                 </span>
             </div>
+
+            <i class="" [ngClass]="processandoOperacao ? 'fas fa-spin fa-circle-notch' : null"></i>
         </div>
     </div>
 
     <p-footer>
-        <button class="btn btn-danger" (click)="abrirDialogCadastroPaciente = false">
+        <button class="btn btn-danger" (click)="limparCamposFormulario()">
             <i class="fas fa-arrow-circle-left"></i>
             Voltar
         </button>

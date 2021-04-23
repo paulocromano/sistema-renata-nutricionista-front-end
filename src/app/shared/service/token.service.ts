@@ -34,7 +34,7 @@ export class TokenService {
 
   public getToken(): string {
     const token = localStorage.getItem('token');
-    return (token && token.startsWith('Bearer ')) ? token.substring(7) : null;
+    return token;
   }
 
   public getPermissoes(): string[] {

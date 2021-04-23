@@ -1,4 +1,5 @@
-<p-table #dataView [value]="pacientes" [columns]="colunasTabela" [responsive]="true" [rows]="8" [paginator]="true" class="text-center">
+<p-table #dataView [value]="listagemCadastroPaciente.pacientes" [columns]="colunasTabela" [responsive]="true" 
+    [rows]="8" [paginator]="true" class="text-center">
 
     <ng-template pTemplate="caption">
         <div class="row">
@@ -9,7 +10,7 @@
             </div>
     
             <div class="col-12 col-sm-6 col-md-8 text-right">
-                <app-cadastro-paciente></app-cadastro-paciente>
+                <app-cadastro-paciente [etnias]="listagemCadastroPaciente.etnias"></app-cadastro-paciente>
             </div>
         </div>
     </ng-template>

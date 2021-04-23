@@ -1,5 +1,11 @@
-import { PacienteAbstract } from "./paciente-abstract.model";
+export class Paciente {
 
-export class Paciente extends PacienteAbstract {
-    
+    id: number;
+    nome: string;
+    dataNascimento: string;
+    sexo: string;
+    etnia: string;
+    telefone: string;
+    telefoneRecado: string;
+    dataHoraUltimaAtualizacaoDadosDoPaciente: string
 }
