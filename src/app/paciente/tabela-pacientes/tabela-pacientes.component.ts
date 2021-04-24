@@ -1,10 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
 import { PacienteService } from './../shared/service/paciente.service';
 import { ToastyComponent } from './../../shared/toasty/toasty.component';
 import { ListagemCadastroPaciente } from './../shared/model/listagem-cadastro-paciente.model';
+import { Paciente } from './../shared/model/paciente.model';
 
 
 @Component({
@@ -21,11 +21,13 @@ export class TabelaPacientesComponent implements OnInit {
   public inputPesquisa: string = '';
   public colunasTabela: any[];
   public listagemCadastroPaciente: ListagemCadastroPaciente = new ListagemCadastroPaciente();
+  public pacienteSelecionado: Paciente = new Paciente();
 
   public processandoOperacao: boolean = false;
   public enviarEtniasComponenteCadastroPaciente: boolean = false;
+  public abrirDialogInformacoesPaciente: boolean = false;
 
-  constructor(private pacienteService: PacienteService, private route: ActivatedRoute) { }
+  constructor(private pacienteService: PacienteService) { }
 
   ngOnInit(): void {
     this.buscarInformacoesListagemCadastroPaciente();
@@ -52,5 +54,12 @@ export class TabelaPacientesComponent implements OnInit {
         this.processandoOperacao = false;
         this.toasty.error('Erro ao listar Pacientes!');
       });
+  }
+
+
+  public atualizarTabelaPacientesAposCadastro(pacienteSalvo: boolean): void {
+    if (pacienteSalvo) {
+      this.buscarInformacoesListagemCadastroPaciente();
+    }
   }
 }

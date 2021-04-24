@@ -1,14 +1,15 @@
-import { Endereco } from './../shared/model/endereco.model';
-import { EnderecoService } from './../shared/service/endereco.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+
+import { SelectItem } from 'primeng/api';
 
 import { PacienteService } from './../shared/service/paciente.service';
 import { EnderecoFORM } from './../shared/model/endereco.form';
 import { PacienteFORM } from './../shared/model/paciente.form';
 import { ToastyComponent } from './../../shared/toasty/toasty.component';
 import { DadosEnum } from './../../shared/model/dados-enum.mode';
-import { SelectItem } from 'primeng/api';
+import { Endereco } from './../shared/model/endereco.model';
+import { EnderecoService } from './../shared/service/endereco.service';
 
 @Component({
   selector: 'app-cadastro-paciente',
@@ -49,10 +50,8 @@ export class CadastroPacienteComponent implements OnInit {
       .subscribe((endereco: Endereco) => {
         this.cadastroEndereco = endereco;
         this.buscandoEnderecoPeloCEP = false;
-        this.toasty.success('CEP encontrado!')
       },
       (errorResponse: HttpErrorResponse) => {
-        console.log(errorResponse.error)
         this.buscandoEnderecoPeloCEP = false;
 
         if (errorResponse.error.status === 400 || errorResponse.error.status === 404) {
@@ -74,7 +73,25 @@ export class CadastroPacienteComponent implements OnInit {
   }
 
   public cadastrarPaciente(): void {
+    this.processandoOperacao = true;
 
+    if (!this.cadastroEndereco.numero) {
+      this.cadastroEndereco.numero = 's/n';
+    }
+    this.cadastroPaciente.endereco = this.cadastroEndereco;
+
+    this.pacienteService.cadastrarPaciente(this.cadastroPaciente)
+      .subscribe(() => {
+        this.processandoOperacao = false;
+        this.toasty.success('Paciente cadastrado com sucesso!');
+        this.limparCamposFormulario();
+        this.pacienteSalvo.emit(true);
+      },
+      (errorResponse: HttpErrorResponse) => {
+        this.processandoOperacao = false;
+        this.toasty.error('Erro ao cadastrar paciente!');
+        this.pacienteSalvo.emit(false);
+      });
   }
 
   public informacoesPacienteNaoEstaoValidas(): boolean {

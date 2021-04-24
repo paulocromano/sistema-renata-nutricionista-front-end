@@ -11,7 +11,7 @@
     
             <div class="col-12 col-sm-6 col-md-8 text-right">
                 <app-cadastro-paciente *ngIf="enviarEtniasComponenteCadastroPaciente" 
-                    [etnias]="listagemCadastroPaciente.etniasPaciente">
+                    [etnias]="listagemCadastroPaciente.etniasPaciente" (pacienteSalvo)="atualizarTabelaPacientesAposCadastro($event)">
                 </app-cadastro-paciente>
             </div>
         </div>
@@ -37,7 +37,21 @@
                 {{ paciente[coluna.field] }}
 
                 <span *ngIf="coluna.header === 'Ações'">
+                    <button class="btn btn-primary px-3" pTooltip="Informações" tooltipPosition="bottom">
+                        <i class="fas fa-info"></i>
+                    </button>
 
+                    <button class="btn btn-secondary mx-2" pTooltip="Histórico" tooltipPosition="bottom">
+                        <i class="far fa-address-card"></i>
+                    </button>
+
+                    <button class="btn btn-warning" pTooltip="Editar" tooltipPosition="bottom">
+                        <i class="fas fa-pen text-light"></i>
+                    </button>
+
+                    <button class="btn btn-danger ml-2" pTooltip="Excluir" tooltipPosition="bottom">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
                 </span>
             </td>
         </tr>
@@ -61,5 +75,25 @@
         Pacientes encontrados: {{ listagemCadastroPaciente.pacientes ? listagemCadastroPaciente.pacientes.length : 0 }}
     </ng-template>
 </p-table>
+
+
+<p-dialog [visible]="abrirDialogInformacoesPaciente" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false">
+
+    <p-header>
+        Informações do(a) Paciente
+    </p-header>
+
+    <div class="container">
+
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="abrirDialogInformacoesPaciente = false;">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+    </p-footer>
+</p-dialog>
 
 <app-toasty #toastyComponent></app-toasty>
