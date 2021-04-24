@@ -1,9 +1,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { PacienteService } from './../shared/service/paciente.service';
 import { ToastyComponent } from './../../shared/toasty/toasty.component';
 import { ListagemCadastroPaciente } from './../shared/model/listagem-cadastro-paciente.model';
+
 
 @Component({
   selector: 'app-tabela-pacientes',
@@ -21,19 +23,20 @@ export class TabelaPacientesComponent implements OnInit {
   public listagemCadastroPaciente: ListagemCadastroPaciente = new ListagemCadastroPaciente();
 
   public processandoOperacao: boolean = false;
+  public enviarEtniasComponenteCadastroPaciente: boolean = false;
 
-  constructor(private pacienteService: PacienteService) { }
+  constructor(private pacienteService: PacienteService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.buscarInformacoesListagemCadastroPaciente();
+
     this.colunasTabela = [
       { header: 'Nome', field: 'nome', style: 'col-nome' },
       { header: 'Etnia', field: 'etnia', style: 'col-etnia' },
-      { header: 'Data de nascimento', field: 'data-nascimento', style: 'col-data-nascimento' },
+      { header: 'Data de nascimento', field: 'dataNascimento', style: 'col-data-nascimento' },
       { header: 'Telefone', field: 'telefone', style: 'col-telefone' },
       { header: 'Ações', field: 'acoes', style: 'col-acoes' }
     ];
-
-    this.buscarInformacoesListagemCadastroPaciente();
   }
 
   public buscarInformacoesListagemCadastroPaciente(): void {
@@ -43,8 +46,7 @@ export class TabelaPacientesComponent implements OnInit {
       .subscribe((informacoesListagemCadastroPaciente: ListagemCadastroPaciente) => {
         this.listagemCadastroPaciente = informacoesListagemCadastroPaciente;
         this.processandoOperacao = false;
-
-        console.log(this.listagemCadastroPaciente)
+        this.enviarEtniasComponenteCadastroPaciente = true;
       },
       (error: HttpErrorResponse) => {
         this.processandoOperacao = false;

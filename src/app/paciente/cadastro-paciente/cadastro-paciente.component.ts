@@ -1,12 +1,14 @@
+import { Endereco } from './../shared/model/endereco.model';
+import { EnderecoService } from './../shared/service/endereco.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 
-import { ViaCEPApiService } from './../shared/service/via-cep-api.service';
 import { PacienteService } from './../shared/service/paciente.service';
 import { EnderecoFORM } from './../shared/model/endereco.form';
 import { PacienteFORM } from './../shared/model/paciente.form';
 import { ToastyComponent } from './../../shared/toasty/toasty.component';
 import { DadosEnum } from './../../shared/model/dados-enum.mode';
+import { SelectItem } from 'primeng/api';
 
 @Component({
   selector: 'app-cadastro-paciente',
@@ -28,40 +30,36 @@ export class CadastroPacienteComponent implements OnInit {
 
   public abrirDialogCadastroPaciente: boolean = false;
   public processandoOperacao: boolean = false;
+  public buscandoEnderecoPeloCEP: boolean = false;
+  public etniasDropdown: SelectItem[] = [];
 
   constructor(
     private pacienteService: PacienteService,
-    private viaCEPApiService: ViaCEPApiService
+    private enderecoService: EnderecoService
     ) { }
 
   ngOnInit(): void {
-    
-    console.log(this.etnias);
+    this.etnias.forEach(etnia => this.etniasDropdown.push({ label: etnia.descricao, value: etnia.codigo }));
    }
 
   public buscarEnderecoConformeCEP(cep: string): void {
-    this.processandoOperacao = true;
+    this.buscandoEnderecoPeloCEP = true;
 
-    this.viaCEPApiService.buscarEnderecoConformeCEP(cep)
-      .subscribe((endereco: any) => {
-        if (endereco?.erro) {
-         this.toasty.warning('CEP não encontrado!');
-        }
-        else {
-          this.cadastroEndereco = endereco;
-          this.cadastroEndereco.cidade = endereco.localidade;
-        }
-
-        this.processandoOperacao = false;
+    this.enderecoService.buscarEnderecoConformeCEP(cep)
+      .subscribe((endereco: Endereco) => {
+        this.cadastroEndereco = endereco;
+        this.buscandoEnderecoPeloCEP = false;
+        this.toasty.success('CEP encontrado!')
       },
-      (error: HttpErrorResponse) => {
-        this.processandoOperacao = false;
+      (errorResponse: HttpErrorResponse) => {
+        console.log(errorResponse.error)
+        this.buscandoEnderecoPeloCEP = false;
 
-        if (error.status === 400) {
-          this.toasty.error('Formato de CEP inválido!');
+        if (errorResponse.error.status === 400 || errorResponse.error.status === 404) {
+          this.toasty.error(errorResponse.error.message);
         }
         else {
-          this.toasty.error('Erro ao consultar o CEP do Paciente!');
+          this.toasty.error('Erro ao buscar endereço!');
         }
       });
   }
@@ -73,6 +71,21 @@ export class CadastroPacienteComponent implements OnInit {
         this.campoCEPParaValidarNovaRequisicaoAPI = this.cadastroEndereco.cep;
       }
     }
+  }
+
+  public cadastrarPaciente(): void {
+
+  }
+
+  public informacoesPacienteNaoEstaoValidas(): boolean {
+    return !(this.cadastroPaciente.nome && this.cadastroPaciente.sexo && this.cadastroPaciente.etnia 
+      && this.cadastroPaciente.dataNascimento && this.cadastroPaciente.telefone)
+      || this.informacoesEnderecoNaoEstaoValidas();
+  }
+
+  private informacoesEnderecoNaoEstaoValidas(): boolean {
+    return !(this.cadastroEndereco.logradouro && this.cadastroEndereco.bairro && this.cadastroEndereco.cidade 
+      && this.cadastroEndereco.cep && this.cadastroEndereco.uf);
   }
 
   public limparCamposFormulario(): void {

@@ -10,7 +10,9 @@
             </div>
     
             <div class="col-12 col-sm-6 col-md-8 text-right">
-                <app-cadastro-paciente [etnias]="listagemCadastroPaciente.etnias"></app-cadastro-paciente>
+                <app-cadastro-paciente *ngIf="enviarEtniasComponenteCadastroPaciente" 
+                    [etnias]="listagemCadastroPaciente.etniasPaciente">
+                </app-cadastro-paciente>
             </div>
         </div>
     </ng-template>
@@ -19,7 +21,8 @@
         <tr>
             <th *ngFor="let coluna of colunas" [pSortableColumn]="coluna.field" [ngClass]="coluna.style" class="text-center">
                 {{ coluna.header }}
-                <p-sortIcon *ngIf="coluna.header !== 'Ações'" [field]="coluna.field" ariaLabel="active to sort"
+                <p-sortIcon *ngIf="coluna.header !== 'Ações' && coluna.header !== 'Telefone'" [field]="coluna.field" 
+                    ariaLabel="active to sort"
                     ariaLabelDesc="Activate to sort in descending order"
                     ariaLabelAsc="Activate to sort in ascending order">
                 </p-sortIcon>
@@ -29,8 +32,8 @@
 
     <ng-template pTemplate="body" let-paciente>
         <tr>
-            <td *ngFor="let coluna of colunas">
-                <span class="ui-column-title text-left">{{ coluna.header }}</span>
+            <td *ngFor="let coluna of colunasTabela" class="text-center">
+                <span class="ui-column-title text-left"></span>
                 {{ paciente[coluna.field] }}
 
                 <span *ngIf="coluna.header === 'Ações'">
@@ -48,14 +51,14 @@
                 </span>
 
                 <span *ngIf="processandoOperacao && !inputPesquisa">
-                    <p-progressSpinner strokeWidth="5"></p-progressSpinner>
+                    <p-progressSpinner strokeWidth="3"></p-progressSpinner>
                 </span>
             </td>
         </tr>
     </ng-template>
 
     <ng-template pTemplate="summary">
-        Pacientes encontrados: {{ pacientes ? pacientes.length : 0 }}
+        Pacientes encontrados: {{ listagemCadastroPaciente.pacientes ? listagemCadastroPaciente.pacientes.length : 0 }}
     </ng-template>
 </p-table>
 

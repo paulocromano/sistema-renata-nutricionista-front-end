@@ -16,5 +16,13 @@
     {
       "path": "./e2e/tsconfig.json"
     }
-]
+],
+
+"extends": "../../tsconfig.json",
+"compilerOptions": {
+  "types": ["node", "jest"]
+},
+"angularCompilerOptions": {
+  "strictTemplates": true
+}
 }

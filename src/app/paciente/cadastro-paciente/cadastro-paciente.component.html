@@ -3,7 +3,7 @@
     Cadastrar Paciente
 </button>
 
-<p-dialog [visible]="abrirDialogCadastroPaciente" [modal]="true" [responsive]="true" [resizable]="false" 
+<p-dialog [visible]="abrirDialogCadastroPaciente" [modal]="true" [resizable]="false" 
     [blockScroll]="true" [draggable]="false" [closable]="false">
 
     <p-header>
@@ -26,7 +26,8 @@
             </div>
 
             <div class="col-12 col-md-12 col-lg-3">
-                <p-dropdown [options]="etnias" [(ngModel)]="cadastroPaciente.etnia" name="descricao" [scrollHeight]="'120px'" 
+                <p-dropdown [options]="etniasDropdown" [(ngModel)]="cadastroPaciente.etnia" name="etniasDropdown" 
+                    [style]="{'width': '200px'}" [scrollHeight]="'120px'" 
                     placeholder="Selecione uma Etnia">
                 </p-dropdown>
             </div>
@@ -61,14 +62,15 @@
             <div class="col-12 col-md-6 col-lg-6">
                 <span class="p-float-label">
                     <input type="text" style="width: 380px;" [(ngModel)]="cadastroEndereco.logradouro" 
-                        [disabled]="processandoOperacao" pInputText> 
+                        [disabled]="buscandoEnderecoPeloCEP" pInputText> 
                     <label for="inputtext">Logradouro</label>
                 </span>
             </div>
 
             <div class="col-12 col-md-6 col-lg-2">
                 <span class="p-float-label">
-                    <input type="text" style="width: 100px;" [(ngModel)]="cadastroEndereco.numero" pInputText> 
+                    <input type="text" style="width: 100px;" [(ngModel)]="cadastroEndereco.numero" 
+                        [disabled]="buscandoEnderecoPeloCEP" pInputText> 
                     <label for="inputtext">Número</label>
                 </span>
             </div>
@@ -76,7 +78,7 @@
             <div class="col-12 col-md-6 col-lg-4">
                 <span class="p-float-label">
                     <input type="text" style="width: 270px;" [(ngModel)]="cadastroEndereco.complemento" 
-                        [disabled]="processandoOperacao" pInputText> 
+                        [disabled]="buscandoEnderecoPeloCEP" pInputText> 
                     <label for="inputtext">Complemento</label>
                 </span>
             </div>
@@ -86,7 +88,7 @@
             <div class="col-12 col-md-6 col-lg-5">
                 <span class="p-float-label">
                     <input type="text" style="width: 300px;" [(ngModel)]="cadastroEndereco.bairro" 
-                        [disabled]="processandoOperacao" pInputText> 
+                        [disabled]="buscandoEnderecoPeloCEP" pInputText> 
                     <label for="inputtext">Bairro</label>
                 </span>
             </div>
@@ -94,7 +96,7 @@
             <div class="col-12 col-md-6 col-lg-7">
                 <span class="p-float-label">
                     <input type="text" style="width: 400px;" [(ngModel)]="cadastroEndereco.cidade" 
-                        [disabled]="processandoOperacao" pInputText> 
+                        [disabled]="buscandoEnderecoPeloCEP" pInputText> 
                     <label for="inputtext">Cidade</label>
                 </span>
             </div>
@@ -113,12 +115,12 @@
             <div class="col-2">
                 <span class="p-float-label">
                     <input type="text" style="width: 70px;" max="2" [(ngModel)]="cadastroEndereco.uf" 
-                        [disabled]="processandoOperacao" pInputText> 
+                        [disabled]="buscandoEnderecoPeloCEP" pInputText> 
                     <label for="inputtext">UF</label>
                 </span>
             </div>
 
-            <i class="" [ngClass]="processandoOperacao ? 'fas fa-spin fa-circle-notch' : null"></i>
+            <i class="" [ngClass]="buscandoEnderecoPeloCEP ? 'fas fa-spin fa-circle-notch' : null"></i>
         </div>
     </div>
 
@@ -127,7 +129,7 @@
             <i class="fas fa-arrow-circle-left"></i>
             Voltar
         </button>
-        <button class="btn btn-success">
+        <button class="btn btn-success" [disabled]="informacoesPacienteNaoEstaoValidas()" (click)="cadastrarPaciente()">
             <i class="fas fa-check-circle"></i>
             Confirmar
         </button>
