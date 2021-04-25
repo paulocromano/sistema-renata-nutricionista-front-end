@@ -18,7 +18,6 @@ import { FieldsetHistoricoAlimentarComponent } from './historico-alimentar/field
 import { CadastroHistoricoAlimentarComponent } from './historico-alimentar/cadastro-historico-alimentar/cadastro-historico-alimentar.component';
 import { FieldsetHistoricoAtividadeFisicaComponent } from './historico-atividade-fisica/fieldset-historico-atividade-fisica/fieldset-historico-atividade-fisica.component';
 import { CadastroHistoricoAtividadeFisicaComponent } from './historico-atividade-fisica/cadastro-historico-atividade-fisica/cadastro-historico-atividade-fisica.component';
-import { FieldsetHistoricoPatologiaFamiliaresPorDataComponent } from './historico-patologia-familiares-por-data/fieldset-historico-patologia-familiares-por-data/fieldset-historico-patologia-familiares-por-data.component';
 import { CadastroHistoricoPatologiaFamiliaresComponent } from './historico-patologia-familiares-por-data/cadastro-historico-patologia-familiares/cadastro-historico-patologia-familiares.component';
 import { HistoricoQuestionarioFrequenciaAlimentarComponent } from './historico-questionario-frequencia-alimentar/historico-questionario-frequencia-alimentar/historico-questionario-frequencia-alimentar.component';
 import { CadastroQuestionarioFrequenciaAlimentarComponent } from './historico-questionario-frequencia-alimentar/cadastro-questionario-frequencia-alimentar/cadastro-questionario-frequencia-alimentar.component';

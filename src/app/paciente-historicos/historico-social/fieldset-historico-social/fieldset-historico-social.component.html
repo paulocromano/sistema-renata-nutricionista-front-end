@@ -1,1 +1,71 @@
-<p>fieldset-historico-social works!</p>
+<p-fieldset [toggleable]="true">
+    <p-header>
+        Histórico Social
+    </p-header>
+
+    <div class="borda-table">
+        <p-table #dataView [value]="previaHistoricoSocial" [columns]="colunasTabela" [responsive]="true" 
+            [rows]="8" [paginator]="true" class="text-center">
+
+            <ng-template pTemplate="caption">
+                <div class="row">
+                    <div class="col-12 col-sm-6 col-md-10 col-lg-6">
+                        <input type="text" pInputText placeholder="Pesquisa" class="pesquisa" [(ngModel)]="inputPesquisa"
+                            (input)="dataView.filterGlobal($event.target.value, 'contains')">
+                        <i class="fas fa-search" style="font-size: 1.18em;"></i>
+                    </div>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="header" let-colunas>
+                <tr>
+                    <th *ngFor="let coluna of colunas" [pSortableColumn]="coluna.field" [ngClass]="coluna.style" class="text-center">
+                        {{ coluna.header }}
+                        <p-sortIcon *ngIf="coluna.header !== 'Ações'" [field]="coluna.field" 
+                            ariaLabel="active to sort"
+                            ariaLabelDesc="Activate to sort in descending order"
+                            ariaLabelAsc="Activate to sort in ascending order">
+                        </p-sortIcon>
+                    </th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-historicoSocial>
+                <tr>
+                    <td *ngFor="let coluna of colunasTabela" class="text-center">
+                        <span class="ui-column-title text-left"></span>
+                        {{ historicoSocial[coluna.field] }}
+        
+                        <span *ngIf="coluna.header === 'Ações'">
+                            <button class="btn btn-primary px-3" pTooltip="Informações" tooltipPosition="bottom"
+                                (click)="armazenarHistoricoSocialSelecionadoParaDialogInformacoes(historicoSocial)">
+                            <i class="fas fa-info"></i>
+                        </button>
+                        </span>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage" class="text-center" let-historicoSociais>
+                <tr>
+                    <td [attr.colspan]="historicoSociais.length" class="text-center">
+                        {{ inputPesquisa ? 'Nenhum histórico social corresponde à pesquisa!' : 'Nenhum histórico social encontrado!' }}
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="summary">
+                <div class="col-12">
+                    Histórico Sociais encontrados: {{ previaHistoricoSocial ? previaHistoricoSocial.length : 0 }}
+                </div>
+                
+                <div *ngIf="previaHistoricoSocial && previaHistoricoSocial.length > 0" class="col-12">
+                    Data prevista para próxima atualização: {{ dataProximaAtualizacao }}
+                </div>
+            </ng-template>
+        </p-table>
+    </div>
+</p-fieldset>
+
+
+<app-toasty #toastyComponent></app-toasty>

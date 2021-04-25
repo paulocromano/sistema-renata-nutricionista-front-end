@@ -1,8 +1,13 @@
+import { DataProximaAtualizacaoHistoricosPaciente } from './shared/model/data-proxima-atualizacao-historicos-paciente.model';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { ToastyComponent } from './../../shared/toasty/toasty.component';
+import { PacienteService } from './../../paciente/shared/service/paciente.service';
+import { HistoricosPaciente } from './../informacoes-historicos/shared/model/historicos-paciente.model';
+import { Paciente } from './../../paciente/shared/model/paciente.model';
 
 @Component({
   selector: 'app-informacoes-historicos',
@@ -18,9 +23,15 @@ export class InformacoesHistoricosComponent implements OnInit, OnDestroy {
   private idPaciente: number;
   private subscription: Subscription;
 
+  public historicosPaciente: HistoricosPaciente = new HistoricosPaciente();
+  public dataProximaAtualizacaoHistorico = new DataProximaAtualizacaoHistoricosPaciente();
+  public paciente: Paciente = new Paciente();
+  public processandoOperacao: boolean = true;
+
   constructor(
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private pacienteService: PacienteService
     ) { }
 
   ngOnInit(): void {
@@ -31,6 +42,23 @@ export class InformacoesHistoricosComponent implements OnInit, OnDestroy {
         this.router.navigate(['/pacientes']);
       }
     });
+
+    this.buscarHistoricosPaciente();
+  }
+
+  public buscarHistoricosPaciente(): void {
+    this.pacienteService.buscarInformacoesHistoricosPaciente(this.idPaciente)
+      .subscribe((informacoesHistoricos: HistoricosPaciente) => {
+        this.historicosPaciente = informacoesHistoricos;
+        this.dataProximaAtualizacaoHistorico = this.historicosPaciente.dataProximaAtualizacaoHistoricosPaciente;
+        this.paciente = this.historicosPaciente.paciente;
+        console.log(this.historicosPaciente);
+        this.processandoOperacao = false;
+      },
+      (errorResponse: HttpErrorResponse) => {
+        this.processandoOperacao = false;
+        this.toasty.error('Erro ao buscar os hitóricos do paciente!');
+      });
   }
 
   ngOnDestroy(): void {
