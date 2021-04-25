@@ -26,6 +26,7 @@ export class TabelaPacientesComponent implements OnInit {
   public processandoOperacao: boolean = false;
   public enviarEtniasComponenteCadastroPaciente: boolean = false;
   public abrirDialogInformacoesPaciente: boolean = false;
+  public abrirDialogExclusaoPaciente: boolean = false;
 
   constructor(private pacienteService: PacienteService) { }
 
@@ -34,8 +35,7 @@ export class TabelaPacientesComponent implements OnInit {
 
     this.colunasTabela = [
       { header: 'Nome', field: 'nome', style: 'col-nome' },
-      { header: 'Etnia', field: 'etnia', style: 'col-etnia' },
-      { header: 'Data de nascimento', field: 'dataNascimento', style: 'col-data-nascimento' },
+      { header: 'Data do Cadastro', field: 'dataCadastro', style: 'col-data-cadastro' },
       { header: 'Telefone', field: 'telefone', style: 'col-telefone' },
       { header: 'Ações', field: 'acoes', style: 'col-acoes' }
     ];
@@ -56,10 +56,51 @@ export class TabelaPacientesComponent implements OnInit {
       });
   }
 
+  public excluirPaciente(): void {
+    this.processandoOperacao = true;
+
+    this.pacienteService.excluirPaciente(this.pacienteSelecionado.id)
+      .subscribe(() => {
+        this.processandoOperacao = false;
+        this.abrirDialogExclusaoPaciente = false;
+        this.toasty.success('Paciente excluído com sucesso!');
+        this.buscarInformacoesListagemCadastroPaciente();
+      },
+      (errorResponse: HttpErrorResponse) => {
+        this.processandoOperacao = false;
+        
+        if (errorResponse.status === 400 || errorResponse.status === 404) {
+          this.toasty.error(errorResponse.error.message);
+        }
+        else {
+          this.toasty.error('Erro ao excluir paciente!');
+        }
+      });
+  }
 
   public atualizarTabelaPacientesAposCadastro(pacienteSalvo: boolean): void {
     if (pacienteSalvo) {
       this.buscarInformacoesListagemCadastroPaciente();
     }
+  }
+
+  public armazenarPacienteSelecionadoParaDialogInformacoes(paciente: Paciente): void {
+    this.abrirDialogInformacoesPaciente = true;
+    this.pacienteSelecionado = paciente;
+  }
+
+  public fecharDialogInformacoesPaciente(): void {
+    this.abrirDialogInformacoesPaciente = false;
+    this.pacienteSelecionado = new Paciente();
+  }
+
+  public armazenarPacienteSelecionadoParaDialogExclusao(paciente: Paciente): void {
+    this.abrirDialogExclusaoPaciente = true;
+    this.pacienteSelecionado = paciente;
+  }
+
+  public fecharDialogExclusaoPaciente(): void {
+    this.abrirDialogExclusaoPaciente = false;
+    this.pacienteSelecionado = new Paciente();
   }
 }

@@ -12,8 +12,8 @@ import {DropdownModule} from 'primeng/dropdown';
 import { InputMaskModule } from 'primeng/inputmask';
 
 import { ToastyModule } from './../shared/toasty/toasty.module';
-import { CadastroPacienteComponent } from './cadastro-paciente/cadastro-paciente.component';
 import { TabelaPacientesComponent } from './tabela-pacientes/tabela-pacientes.component';
+import { CadastroPacienteComponent } from './cadastro-paciente/cadastro-paciente.component';
 
 @NgModule({
   declarations: [ CadastroPacienteComponent, TabelaPacientesComponent ],

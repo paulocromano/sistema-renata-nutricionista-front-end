@@ -1,3 +1,5 @@
+import { Endereco } from './endereco.model';
+
 export class Paciente {
 
     id: number;
@@ -7,5 +9,6 @@ export class Paciente {
     etnia: string;
     telefone: string;
     telefoneRecado: string;
-    dataHoraUltimaAtualizacaoDadosDoPaciente: string
+    endereco: Endereco = new Endereco();
+    dataCadastro: string
 }

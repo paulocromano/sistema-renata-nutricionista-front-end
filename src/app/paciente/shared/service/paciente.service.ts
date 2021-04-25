@@ -20,4 +20,8 @@ export class PacienteService {
   public cadastrarPaciente(paciente: PacienteFORM): Observable<any> {
     return this.http.post(`${this.servidorService.getServidorBackEnd()}/paciente`, paciente);
   }
+
+  public excluirPaciente(idPaciente: number): Observable<any> {
+    return this.http.delete(`${this.servidorService.getServidorBackEnd()}/paciente/${idPaciente}`);
+  }
 }

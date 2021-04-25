@@ -37,7 +37,8 @@
                 {{ paciente[coluna.field] }}
 
                 <span *ngIf="coluna.header === 'Ações'">
-                    <button class="btn btn-primary px-3" pTooltip="Informações" tooltipPosition="bottom">
+                    <button class="btn btn-primary px-3" pTooltip="Informações" tooltipPosition="bottom"
+                        (click)="armazenarPacienteSelecionadoParaDialogInformacoes(paciente)">
                         <i class="fas fa-info"></i>
                     </button>
 
@@ -49,7 +50,8 @@
                         <i class="fas fa-pen text-light"></i>
                     </button>
 
-                    <button class="btn btn-danger ml-2" pTooltip="Excluir" tooltipPosition="bottom">
+                    <button class="btn btn-danger ml-2" pTooltip="Excluir" tooltipPosition="bottom"
+                        (click)="armazenarPacienteSelecionadoParaDialogExclusao(paciente)">
                         <i class="fas fa-trash-alt"></i>
                     </button>
                 </span>
@@ -76,22 +78,61 @@
     </ng-template>
 </p-table>
 
-
+<!-- Dialog informações do Paciente -->
 <p-dialog [visible]="abrirDialogInformacoesPaciente" [modal]="true" [resizable]="false" 
-    [blockScroll]="true" [draggable]="false" [closable]="false">
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '70vh'}">
 
     <p-header>
         Informações do(a) Paciente
     </p-header>
 
     <div class="container">
+        <div><b>Nome: </b>{{ pacienteSelecionado.nome }}</div>
+        <div><b>Sexo: </b>{{ pacienteSelecionado.sexo }}</div>
+        <div><b>Etnia: </b>{{ pacienteSelecionado.etnia }}</div>
+        <div><b>Data de Nascimento: </b>{{ pacienteSelecionado.dataNascimento }}</div>
+        <div><b>Telefone: </b>{{ pacienteSelecionado.telefone }}</div>
+        <div *ngIf="pacienteSelecionado.telefoneRecado"><b>Telefone para Recado: </b>{{ pacienteSelecionado.telefoneRecado }}</div>
+        <hr>
 
+        <div><b>Logradouro: </b>{{ pacienteSelecionado.endereco.logradouro }}</div>
+        <div><b>Número: </b>{{ pacienteSelecionado.endereco.numero }}</div>
+        <div *ngIf="pacienteSelecionado.endereco.complemento"><b>Complemento: </b>{{ pacienteSelecionado.endereco.complemento }}</div>
+        <div><b>Bairro: </b>{{ pacienteSelecionado.endereco.bairro }}</div>
+        <div><b>Cidade: </b>{{ pacienteSelecionado.endereco.cidade }}</div>
+        <div><b>CEP: </b>{{ pacienteSelecionado.endereco.cep }}</div>
+        <div><b>UF: </b>{{ pacienteSelecionado.endereco.uf }}</div>
     </div>
 
     <p-footer>
-        <button class="btn btn-danger" (click)="abrirDialogInformacoesPaciente = false;">
+        <button class="btn btn-danger" (click)="fecharDialogInformacoesPaciente()">
             <i class="fas fa-arrow-circle-left"></i>
             Voltar
+        </button>
+    </p-footer>
+</p-dialog>
+
+
+<p-dialog [visible]="abrirDialogExclusaoPaciente" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '50vh'}">
+
+    <p-header>
+        Exclusão de Paciente
+    </p-header>
+
+    <div>
+        Tem certeza que deseja excluir <b>todas</b> as informações de <b>{{ pacienteSelecionado.nome }}</b>?
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="fecharDialogExclusaoPaciente()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+        <button class="btn btn-success" [disabled]="processandoOperacao" 
+            (click)="excluirPaciente()">
+            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
         </button>
     </p-footer>
 </p-dialog>
