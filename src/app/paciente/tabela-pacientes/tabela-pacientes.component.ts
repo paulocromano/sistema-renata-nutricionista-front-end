@@ -78,8 +78,8 @@ export class TabelaPacientesComponent implements OnInit {
       });
   }
 
-  public atualizarTabelaPacientesAposCadastro(pacienteSalvo: boolean): void {
-    if (pacienteSalvo) {
+  public atualizarTabelaPacientes(atualizarTabela: boolean): void {
+    if (atualizarTabela) {
       this.buscarInformacoesListagemCadastroPaciente();
     }
   }

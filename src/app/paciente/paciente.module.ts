@@ -14,9 +14,10 @@ import { InputMaskModule } from 'primeng/inputmask';
 import { ToastyModule } from './../shared/toasty/toasty.module';
 import { TabelaPacientesComponent } from './tabela-pacientes/tabela-pacientes.component';
 import { CadastroPacienteComponent } from './cadastro-paciente/cadastro-paciente.component';
+import { EdicaoPacienteComponent } from './edicao-paciente/edicao-paciente.component';
 
 @NgModule({
-  declarations: [ CadastroPacienteComponent, TabelaPacientesComponent ],
+  declarations: [ CadastroPacienteComponent, TabelaPacientesComponent, EdicaoPacienteComponent ],
   imports: [
     CommonModule,
     FormsModule,
@@ -30,7 +31,7 @@ import { CadastroPacienteComponent } from './cadastro-paciente/cadastro-paciente
     InputMaskModule,
     ToastyModule
   ],
-  exports: [ CadastroPacienteComponent ]
+  exports: [ CadastroPacienteComponent, EdicaoPacienteComponent ]
 })
 
 export class PacienteModule { }

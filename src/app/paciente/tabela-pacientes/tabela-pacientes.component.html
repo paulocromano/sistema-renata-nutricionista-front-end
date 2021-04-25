@@ -11,7 +11,7 @@
     
             <div class="col-12 col-sm-6 col-md-8 text-right">
                 <app-cadastro-paciente *ngIf="enviarEtniasComponenteCadastroPaciente" 
-                    [etnias]="listagemCadastroPaciente.etniasPaciente" (pacienteSalvo)="atualizarTabelaPacientesAposCadastro($event)">
+                    [etnias]="listagemCadastroPaciente.etniasPaciente" (pacienteSalvo)="atualizarTabelaPacientes($event)">
                 </app-cadastro-paciente>
             </div>
         </div>
@@ -46,9 +46,7 @@
                         <i class="far fa-address-card"></i>
                     </button>
 
-                    <button class="btn btn-warning" pTooltip="Editar" tooltipPosition="bottom">
-                        <i class="fas fa-pen text-light"></i>
-                    </button>
+                    <app-edicao-paciente [paciente]="paciente" (pacienteEditado)="atualizarTabelaPacientes($event)"></app-edicao-paciente>
 
                     <button class="btn btn-danger ml-2" pTooltip="Excluir" tooltipPosition="bottom"
                         (click)="armazenarPacienteSelecionadoParaDialogExclusao(paciente)">
@@ -112,7 +110,7 @@
     </p-footer>
 </p-dialog>
 
-
+<!-- Dialog exclusão de Paciente -->
 <p-dialog [visible]="abrirDialogExclusaoPaciente" [modal]="true" [resizable]="false" 
     [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '50vh'}">
 
