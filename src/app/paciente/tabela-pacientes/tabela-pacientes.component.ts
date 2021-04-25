@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 
@@ -28,7 +29,10 @@ export class TabelaPacientesComponent implements OnInit {
   public abrirDialogInformacoesPaciente: boolean = false;
   public abrirDialogExclusaoPaciente: boolean = false;
 
-  constructor(private pacienteService: PacienteService) { }
+  constructor(
+    private pacienteService: PacienteService,
+    private route: Router
+    ) { }
 
   ngOnInit(): void {
     this.buscarInformacoesListagemCadastroPaciente();
@@ -76,6 +80,10 @@ export class TabelaPacientesComponent implements OnInit {
           this.toasty.error('Erro ao excluir paciente!');
         }
       });
+  }
+
+  public redirecionarParaPaginaHistoricosDoPaciente(paciente: Paciente): void {
+    this.route.navigate(['paciente/historicos', paciente.id]);
   }
 
   public atualizarTabelaPacientes(atualizarTabela: boolean): void {

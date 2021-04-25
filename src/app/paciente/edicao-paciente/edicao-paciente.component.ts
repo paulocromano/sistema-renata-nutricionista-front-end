@@ -38,8 +38,6 @@ export class EdicaoPacienteComponent implements OnInit {
 
   ngOnInit(): void {
     this.converterParaEdicaoPacienteFORM();
-    console.log(this.pacienteSelecionado)
-    console.log(this.edicaoEndereco)
    }
 
 
@@ -103,7 +101,7 @@ export class EdicaoPacienteComponent implements OnInit {
   public informacoesParaEdicaoNaoMudaram(): boolean {
     return (this.pacienteSelecionado.telefone == this.paciente.telefone 
       && this.pacienteSelecionado.telefoneRecado === this.paciente.telefoneRecado
-      && this.edicaoEndereco === this.paciente.endereco);
+      && JSON.stringify(this.edicaoEndereco) == JSON.stringify(this.paciente.endereco));
   }
 
   public informacoesPacienteNaoEstaoValidas(): boolean {
