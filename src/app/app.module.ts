@@ -14,6 +14,7 @@ import { ConsultaRetornoModule } from './consulta-retorno/consulta-retorno.modul
 import { CalendarioAtendimentoModule } from './calendario-atendimento/calendario-atendimento.module';
 import { PacienteModule } from './paciente/paciente.module';
 import { PacienteHistoricosModule } from './paciente-historicos/paciente-historicos.module';
+import { PatologiaModule } from './patologia/patologia.module';
 import { ToastyModule } from './shared/toasty/toasty.module';
 import { InterceptorModule } from './interceptor/interceptor.module';
 import { LogadoGuard } from './shared/guard/logado.guard';
@@ -22,7 +23,7 @@ import { AdminGuard } from './shared/guard/admin.guard';
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -35,6 +36,7 @@ import { AdminGuard } from './shared/guard/admin.guard';
     CalendarioAtendimentoModule,
     PacienteModule,
     PacienteHistoricosModule,
+    PatologiaModule,
     ToastyModule,
     InterceptorModule,
     JwtModule.forRoot({})

@@ -4,13 +4,13 @@
     </p-header>
 
     <div class="borda-table">
-        <p-table #dataView [value]="previaHistoricoSocial" [columns]="colunasTabela" [responsive]="true" 
+        <p-table #dataView [value]="previaHistoricoSocial" [columns]="colunasTabelaPreviaHistoricos" [responsive]="true" 
             [rows]="8" [paginator]="true" class="text-center">
 
             <ng-template pTemplate="caption">
                 <div class="row">
                     <div class="col-12 col-sm-6 col-md-10 col-lg-6">
-                        <input type="text" pInputText placeholder="Pesquisa" class="pesquisa" [(ngModel)]="inputPesquisa"
+                        <input type="text" pInputText placeholder="Pesquisa" class="pesquisa" [(ngModel)]="inputPesquisaPreviaHistoricos"
                             (input)="dataView.filterGlobal($event.target.value, 'contains')">
                         <i class="fas fa-search" style="font-size: 1.18em;"></i>
                     </div>
@@ -30,17 +30,20 @@
                 </tr>
             </ng-template>
 
-            <ng-template pTemplate="body" let-historicoSocial>
+            <ng-template pTemplate="body" let-previaHistoricoSocial>
                 <tr>
-                    <td *ngFor="let coluna of colunasTabela" class="text-center">
+                    <td *ngFor="let coluna of colunasTabelaPreviaHistoricos" class="text-center">
                         <span class="ui-column-title text-left"></span>
-                        {{ historicoSocial[coluna.field] }}
+                        {{ previaHistoricoSocial[coluna.field] }}
         
                         <span *ngIf="coluna.header === 'Ações'">
                             <button class="btn btn-primary px-3" pTooltip="Informações" tooltipPosition="bottom"
-                                (click)="armazenarHistoricoSocialSelecionadoParaDialogInformacoes(historicoSocial)">
-                            <i class="fas fa-info"></i>
-                        </button>
+                                (click)="armazenarHistoricoSocialSelecionadoParaDialogInformacoes(previaHistoricoSocial)">
+                                <i class="fas fa-info"></i>
+                            </button>
+                            <button class="btn btn-danger ml-2" pTooltip="Excluir" tooltipPosition="bottom">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
                         </span>
                     </td>
                 </tr>
@@ -66,6 +69,150 @@
         </p-table>
     </div>
 </p-fieldset>
+
+
+<p-dialog [visible]="abrirDialogInformacoes" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '96%'}">
+
+    <p-header>
+        Informações do Histórico Social
+    </p-header>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-4">
+                <b>Profissão: </b>{{ historicoSocial.profissao }}
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <b>Estado Civil: </b>{{ historicoSocial.estadoCivil }}
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <b>Composição Familiar: </b>{{ historicoSocial.composicaoFamiliar }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-4">
+                <b>Local das refeições: </b>{{ historicoSocial.localRefeicoes }}
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <b>Consumo de bebidas alcoólicas: </b>{{ historicoSocial.frequenciaConsumoBebidasAlcoolicas }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-4">
+                <b>Consumo de cigarro: </b> {{ historicoSocial.consumoCigarro }}
+            </div>
+            <div *ngIf="historicoSocial.quantidadeCigarrosPorDia" class="col-12 col-md-6 col-lg-4">
+                <b>Quantidade de cigarros por dia: </b> {{ historicoSocial.quantidadeCigarrosPorDia }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-4">
+                <b>Hábito intestinal: </b> {{ historicoSocial.habitoIntestinal }}
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <b>Consistência das fezes: </b> {{ historicoSocial.consistenciaFezes }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-4">
+                <b>Frequência diurese: </b> {{ historicoSocial.frequenciaDiurese }}
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <b>Coloração diurese: </b> {{ historicoSocial.coloracaoDiurese }}
+            </div>
+        </div>
+
+        <div><b>Horas de sono: </b> {{ historicoSocial.horasSono }}</div>
+
+        <div *ngIf="paciente.sexo === 'Feminino'" class="row">
+            <div *ngIf="historicoSocial.menstruacaoNormal" class="row">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <b>Menstruação normal: </b> {{ historicoSocial.menstruacaoNormal }}
+                </div>
+                <div *ngIf="historicoSocial.menstruacaoNormal === 'Não'" class="col-12 col-md-6 col-lg-4">
+                    <b>Motivo anormalidade na menstruaçao: </b> {{ historicoSocial.motivoAnormalidadeMenstruacao }}
+                </div>
+            </div>
+
+            <div *ngIf="historicoSocial.menopausa" class="row">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <b>Menopausa: </b> {{ historicoSocial.menopausa }}
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                    <b>Tempo de menopausa: </b> {{ historicoSocial.quantosAnosEstaNaMenopausa }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabela Patologias do paciente -->
+        <div class="borda-table my-3">
+            <p-table #dataView *ngIf="historicoSocial.patologiasPaciente" [value]="historicoSocial.patologiasPaciente"
+                [columns]="colunasTabelaPatologiasPaciente" [responsive]="true" [rows]="5" [paginator]="true" class="text-center">
+                
+                <ng-template pTemplate="caption">
+                    <div style="font-size: 1.3em;">Patologias</div>
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-12 col-sm-6 col-md-4">
+                            <input type="text" pInputText placeholder="Pesquisa" class="pesquisa" [(ngModel)]="inputPesquisaPatologiasPaciente"
+                                (input)="dataView.filterGlobal($event.target.value, 'contains')">
+                            <i class="fas fa-search" style="font-size: 1.18em;"></i>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="header" let-colunas>
+                    <tr>
+                        <th *ngFor="let coluna of colunas" [pSortableColumn]="coluna.field" [ngClass]="coluna.style" class="text-center">
+                            {{ coluna.header }}
+                            <p-sortIcon *ngIf="coluna.header !== 'Ações' && coluna.header !== 'Telefone'" [field]="coluna.field" 
+                                ariaLabel="active to sort"
+                                ariaLabelDesc="Activate to sort in descending order"
+                                ariaLabelAsc="Activate to sort in ascending order">
+                            </p-sortIcon>
+                        </th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-patologiaPaciente>
+                    <tr>
+                        <td *ngFor="let coluna of colunasTabelaPatologiasPaciente" class="text-center">
+                            <span class="ui-column-title text-left"></span>
+                            {{ patologiaPaciente[coluna.field?.descricao] }}
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage" class="text-center" let-patologiasPaciente>
+                    <tr>
+                        <td [attr.colspan]="patologiasPaciente.length" class="text-center">
+                            <span>{{ inputPesquisaPatologiasPaciente ? 'Nenhuma patologia corresponde à pesquisa!' : '' }}</span>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="summary">
+                    Patologias encontradas: {{ historicoSocial.patologiasPaciente ? historicoSocial.patologiasPaciente.length : 0 }}
+                </ng-template>
+            </p-table>
+        </div>
+        
+        <div><b>Cadastrado em: </b>{{ historicoSocial.dataHoraCadastroHistoricoSocial }}</div>
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="limparCamposDialog()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+    </p-footer>
+</p-dialog>
 
 
 <app-toasty #toastyComponent></app-toasty>
