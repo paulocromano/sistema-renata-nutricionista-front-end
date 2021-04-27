@@ -1,9 +1,12 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 
 import { ToastyComponent } from './../../../shared/toasty/toasty.component';
 import { HistoricoSocial } from './../shared/model/historico-social.model';
-import { InformacoesPreviasHistoricoSocial } from './../shared/model/informacoes-previas-historico-social.model';
+import { PreviaHistoricoSocial } from '../shared/model/previa-historico-social.model';
 import { Paciente } from './../../../paciente/shared/model/paciente.model';
+import { HistoricoSocialService } from './../shared/service/historico-social.service';
+import { InformacoesPreviasHistoricosSociais } from '../shared/model/informacoes-previas-historicos-sociais.model';
 
 @Component({
   selector: 'app-fieldset-historico-social',
@@ -17,39 +20,86 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
   public toasty: ToastyComponent;
 
   @Input() public paciente: Paciente;
-  @Input() public previaHistoricoSocial: InformacoesPreviasHistoricoSocial[];
-  @Input() public dataProximaAtualizacao: string;
+  @Input() public informacoesPreviasHistoricosSociais: InformacoesPreviasHistoricosSociais;
 
-  public previaHistoricoSelecionado: InformacoesPreviasHistoricoSocial = new InformacoesPreviasHistoricoSocial();
+  public previaHistoricoSelecionado: PreviaHistoricoSocial = new PreviaHistoricoSocial();
   public historicoSocial: HistoricoSocial = new HistoricoSocial();
+  public previaHistoricosSociais: PreviaHistoricoSocial[] = [];
+  public dataProximaAtualizacao: string;
 
   public colunasTabelaPreviaHistoricos: any[];
   public colunasTabelaPatologiasPaciente: any[];
   public inputPesquisaPreviaHistoricos: string;
   public inputPesquisaPatologiasPaciente: string;
   public abrirDialogInformacoes: boolean = false;
+  public abrirDialogExclusao: boolean = false;
+  public processandoOperacao: boolean = false;
 
-  constructor() { }
+  constructor(private historicoSocialService: HistoricoSocialService) { }
 
   ngOnInit(): void {
+    this.previaHistoricosSociais = this.informacoesPreviasHistoricosSociais.previaHistoricosSociais;
+    this.dataProximaAtualizacao = this.informacoesPreviasHistoricosSociais.dataProximaAtualizacaoHistoricoSocial;
+
     this.colunasTabelaPreviaHistoricos = [
       { header: 'Cadastrado em', field: 'dataHoraCadastroHistoricoSocial', style: 'col-data-hora-cadastro' },
       { header: 'Ações', field: 'acoes', style: 'col-acoes' }
     ];
 
     this.colunasTabelaPatologiasPaciente = [
-      { header: 'Descrição', field: 'patologia', style: 'col-descricao' },
+      { header: 'Descrição', field: 'descricaoPatologia', style: 'col-descricaoPatologia' },
       { header: 'Tempo (anos)', field: 'quantosAnosPossuiPatologia', style: 'col-quantosAnosPossuiPatologia' }
     ];
   }
 
-  public armazenarHistoricoSocialSelecionadoParaDialogInformacoes(previaHistoricoSelecionado: InformacoesPreviasHistoricoSocial): void {
+  public armazenarHistoricoSocialSelecionadoParaDialogInformacoes(previaHistoricoSelecionado: PreviaHistoricoSocial): void {
     this.previaHistoricoSelecionado = previaHistoricoSelecionado;
+    this.buscarHistoricoSocialDoPaciente();
+  }
 
-    this.abrirDialogInformacoes = true;
+  public buscarHistoricoSocialDoPaciente(): void {
+    this.processandoOperacao = true;
+
+    this.historicoSocialService.buscarHistoricoSocialDoPaciente(this.previaHistoricoSelecionado.id)
+      .subscribe((historicoSocial: HistoricoSocial) => {
+        this.historicoSocial = historicoSocial;
+        console.log(historicoSocial)
+        this.processandoOperacao = false;
+        this.abrirDialogInformacoes = true;
+      },
+      (errorResponse: HttpErrorResponse) => {
+        this.processandoOperacao = false;
+        this.toasty.error('Erro ao buscar histórico social!');
+      });
+  }
+
+  public armazenarHistoricoSocialSelecionadoParaDialogExclusao(previaHistoricoSelecionado: PreviaHistoricoSocial): void {
+    this.previaHistoricoSelecionado = previaHistoricoSelecionado;
+    this.abrirDialogExclusao = true;
+  }
+
+  public excluirHistoricoSocial(): void {
+    this.processandoOperacao = true;
+
+    this.historicoSocialService.excluirHistoricoSocialDoPaciente(this.previaHistoricoSelecionado.id)
+      .subscribe(() => {
+        this.processandoOperacao = false;
+        this.toasty.success('Histórico social excluído com sucesso!');
+      },
+      (errorResponse: HttpErrorResponse) => {
+        this.processandoOperacao = false;
+        this.toasty.error('Erro ao excluir histórico social!');
+      });
+  }
+
+  public fecharDialogExclusaoHistoricoSocial(): void {
+    this.abrirDialogExclusao = false;
+    this.limparCamposDialog();
   }
 
   public limparCamposDialog(): void {
     this.abrirDialogInformacoes = false;
+    this.historicoSocial = new HistoricoSocial();
+    this.previaHistoricoSelecionado = new PreviaHistoricoSocial(); 
   }
 }

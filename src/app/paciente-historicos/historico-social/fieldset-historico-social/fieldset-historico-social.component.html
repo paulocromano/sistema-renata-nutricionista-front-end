@@ -4,7 +4,7 @@
     </p-header>
 
     <div class="borda-table">
-        <p-table #dataView [value]="previaHistoricoSocial" [columns]="colunasTabelaPreviaHistoricos" [responsive]="true" 
+        <p-table #dataView [value]="previaHistoricosSociais" [columns]="colunasTabelaPreviaHistoricos" [responsive]="true" 
             [rows]="8" [paginator]="true" class="text-center">
 
             <ng-template pTemplate="caption">
@@ -41,7 +41,8 @@
                                 (click)="armazenarHistoricoSocialSelecionadoParaDialogInformacoes(previaHistoricoSocial)">
                                 <i class="fas fa-info"></i>
                             </button>
-                            <button class="btn btn-danger ml-2" pTooltip="Excluir" tooltipPosition="bottom">
+                            <button class="btn btn-danger ml-2" pTooltip="Excluir" tooltipPosition="bottom"
+                                (click)="armazenarHistoricoSocialSelecionadoParaDialogExclusao(previaHistoricoSocial)">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
                         </span>
@@ -49,9 +50,9 @@
                 </tr>
             </ng-template>
 
-            <ng-template pTemplate="emptymessage" class="text-center" let-historicoSociais>
+            <ng-template pTemplate="emptymessage" class="text-center" let-historicosSociais>
                 <tr>
-                    <td [attr.colspan]="historicoSociais.length" class="text-center">
+                    <td [attr.colspan]="historicosSociais.length" class="text-center">
                         {{ inputPesquisa ? 'Nenhum histórico social corresponde à pesquisa!' : 'Nenhum histórico social encontrado!' }}
                     </td>
                 </tr>
@@ -59,10 +60,10 @@
 
             <ng-template pTemplate="summary">
                 <div class="col-12">
-                    Histórico Sociais encontrados: {{ previaHistoricoSocial ? previaHistoricoSocial.length : 0 }}
+                    Histórico Sociais encontrados: {{ previaHistoricosSociais ? previaHistoricosSociais.length : 0 }}
                 </div>
                 
-                <div *ngIf="previaHistoricoSocial && previaHistoricoSocial.length > 0" class="col-12">
+                <div *ngIf="previaHistoricosSociais && previaHistoricosSociais.length > 0" class="col-12">
                     Data prevista para próxima atualização: {{ dataProximaAtualizacao }}
                 </div>
             </ng-template>
@@ -71,6 +72,7 @@
 </p-fieldset>
 
 
+<!-- Dialog Histórico Social selecionado -->
 <p-dialog [visible]="abrirDialogInformacoes" [modal]="true" [resizable]="false" 
     [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '96%'}">
 
@@ -129,7 +131,7 @@
 
         <div><b>Horas de sono: </b> {{ historicoSocial.horasSono }}</div>
 
-        <div *ngIf="paciente.sexo === 'Feminino'" class="row">
+        <div *ngIf="paciente.sexo === 'Feminino'">
             <div *ngIf="historicoSocial.menstruacaoNormal" class="row">
                 <div class="col-12 col-md-6 col-lg-4">
                     <b>Menstruação normal: </b> {{ historicoSocial.menstruacaoNormal }}
@@ -184,7 +186,7 @@
                     <tr>
                         <td *ngFor="let coluna of colunasTabelaPatologiasPaciente" class="text-center">
                             <span class="ui-column-title text-left"></span>
-                            {{ patologiaPaciente[coluna.field?.descricao] }}
+                            {{ patologiaPaciente[coluna.field] }}
                         </td>
                     </tr>
                 </ng-template>
@@ -214,5 +216,29 @@
     </p-footer>
 </p-dialog>
 
+<p-dialog [visible]="abrirDialogExclusao" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '65vh'}">
+
+    <p-header>
+        Exclusão de Histórico Social
+    </p-header>
+
+    <div>
+        Tem certeza que deseja excluir <b>todas</b> as informações do histórico cadastrado em
+        <b>{{ previaHistoricoSelecionado.dataHoraCadastroHistoricoSocial }}</b>?
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="fecharDialogExclusaoHistoricoSocial()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+        <button class="btn btn-success" [disabled]="processandoOperacao" 
+            (click)="excluirHistoricoSocial()">
+            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
+        </button>
+    </p-footer>
+</p-dialog>
 
 <app-toasty #toastyComponent></app-toasty>
