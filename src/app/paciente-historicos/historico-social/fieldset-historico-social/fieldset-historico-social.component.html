@@ -1,11 +1,11 @@
-<p-fieldset [toggleable]="true">
+<p-fieldset [toggleable]="true" [collapsed]="true">
     <p-header>
         Histórico Social
     </p-header>
 
     <div class="borda-table">
         <p-table #dataView [value]="previaHistoricosSociais" [columns]="colunasTabelaPreviaHistoricos" [responsive]="true" 
-            [rows]="8" [paginator]="true" class="text-center">
+            [rows]="5" [paginator]="true" class="text-center">
 
             <ng-template pTemplate="caption">
                 <div class="row">
@@ -37,9 +37,11 @@
                         {{ previaHistoricoSocial[coluna.field] }}
         
                         <span *ngIf="coluna.header === 'Ações'">
-                            <button class="btn btn-primary px-3" pTooltip="Informações" tooltipPosition="bottom"
-                                (click)="armazenarHistoricoSocialSelecionadoParaDialogInformacoes(previaHistoricoSocial)">
-                                <i class="fas fa-info"></i>
+                            <button class="btn btn-primary" pTooltip="Informações" tooltipPosition="bottom" [disabled]="processandoOperacao"
+                                (click)="armazenarHistoricoSocialSelecionadoParaDialogInformacoes(previaHistoricoSocial)"
+                                [ngClass]="habilitarSpinnerBotaoInformacoes(previaHistoricoSocial) ? '' : 'px-3'">
+
+                                <i class="fas " [ngClass]="habilitarSpinnerBotaoInformacoes(previaHistoricoSocial) ? 'fa-spin fa-circle-notch' : 'fa-info'"></i>
                             </button>
                             <button class="btn btn-danger ml-2" pTooltip="Excluir" tooltipPosition="bottom"
                                 (click)="armazenarHistoricoSocialSelecionadoParaDialogExclusao(previaHistoricoSocial)">
@@ -53,7 +55,13 @@
             <ng-template pTemplate="emptymessage" class="text-center" let-historicosSociais>
                 <tr>
                     <td [attr.colspan]="historicosSociais.length" class="text-center">
-                        {{ inputPesquisa ? 'Nenhum histórico social corresponde à pesquisa!' : 'Nenhum histórico social encontrado!' }}
+                        <span *ngIf="!processandoOperacao">
+                            {{ inputPesquisaPreviaHistoricos ? 'Nenhum histórico social corresponde à pesquisa!' : 'Nenhum histórico social encontrado!' }}
+                        </span>
+
+                        <span *ngIf="processandoOperacao && !inputPesquisaPreviaHistoricos">
+                            <p-progressSpinner strokeWidth="3"></p-progressSpinner>
+                        </span>
                     </td>
                 </tr>
             </ng-template>
@@ -94,15 +102,15 @@
         </div>
 
         <div class="row">
-            <div class="col-12 col-md-6 col-lg-4">
+            <div class="col-12 col-md-8 col-lg-6">
                 <b>Local das refeições: </b>{{ historicoSocial.localRefeicoes }}
-            </div>
-            <div class="col-12 col-md-6 col-lg-4">
-                <b>Consumo de bebidas alcoólicas: </b>{{ historicoSocial.frequenciaConsumoBebidasAlcoolicas }}
             </div>
         </div>
 
         <div class="row">
+            <div class="col-12 col-md-6 col-lg-4">
+                <b>Consumo de bebidas alcoólicas: </b>{{ historicoSocial.frequenciaConsumoBebidasAlcoolicas }}
+            </div>
             <div class="col-12 col-md-6 col-lg-4">
                 <b>Consumo de cigarro: </b> {{ historicoSocial.consumoCigarro }}
             </div>
@@ -233,6 +241,7 @@
             <i class="fas fa-arrow-circle-left"></i>
             Voltar
         </button>
+
         <button class="btn btn-success" [disabled]="processandoOperacao" 
             (click)="excluirHistoricoSocial()">
             <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>

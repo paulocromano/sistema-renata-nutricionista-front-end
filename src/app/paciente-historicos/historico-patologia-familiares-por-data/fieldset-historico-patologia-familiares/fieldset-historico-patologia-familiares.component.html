@@ -1,1 +1,97 @@
-<p>fieldset-historico-patologia-familiares works!</p>
+<p-fieldset [toggleable]="true" [collapsed]="false">
+    <p-header>
+        Histórico Patologia Familiares
+    </p-header>
+
+    <div class="borda-table">
+        <p-table #dataView [value]="previaHistoricosPatologiaFamiliares" 
+            [columns]="colunasTabelaPreviaHistoricosPatologiaFamiliaresPorData" [responsive]="true" 
+            [rows]="5" [paginator]="true" class="text-center">
+
+            <ng-template pTemplate="caption">
+                <div class="row">
+                    <div class="col-12 col-sm-6 col-md-10 col-lg-6">
+                        <input type="text" pInputText placeholder="Pesquisa" class="pesquisa" [(ngModel)]="inputPesquisaPreviaHistoricos"
+                            (input)="dataView.filterGlobal($event.target.value, 'contains')">
+                        <i class="fas fa-search" style="font-size: 1.18em;"></i>
+                    </div>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="header" let-colunas>
+                <tr>
+                    <th *ngFor="let coluna of colunas" [pSortableColumn]="coluna.field" [ngClass]="coluna.style" class="text-center">
+                        {{ coluna.header }}
+                        <p-sortIcon *ngIf="coluna.header !== 'Ações'" [field]="coluna.field" 
+                            ariaLabel="active to sort"
+                            ariaLabelDesc="Activate to sort in descending order"
+                            ariaLabelAsc="Activate to sort in ascending order">
+                        </p-sortIcon>
+                    </th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-previaHistoricoPatologiaFamiliares>
+                <tr>
+                    <td *ngFor="let coluna of colunasTabelaPreviaHistoricosPatologiaFamiliaresPorData" class="text-center">
+                        <span class="ui-column-title text-left"></span>
+                        {{ previaHistoricoPatologiaFamiliares[coluna.field] }}
+        
+                        <span *ngIf="coluna.header === 'Ações'">
+                            <button class="btn btn-primary" pTooltip="Informações" tooltipPosition="bottom" [disabled]="processandoOperacao"
+                                (click)="armazenarHistoricoSelecionadoParaDialogInformacoes(previaHistoricoPatologiaFamiliares)"
+                                [ngClass]="habilitarSpinnerBotaoInformacoes(previaHistoricoPatologiaFamiliares) ? '' : 'px-3'">
+
+                                <i class="fas " [ngClass]="habilitarSpinnerBotaoInformacoes(previaHistoricoPatologiaFamiliares) 
+                                    ? 'fa-spin fa-circle-notch' : 'fa-info'">
+                                </i>
+                            </button>
+                            <button class="btn btn-danger ml-2" pTooltip="Excluir" tooltipPosition="bottom"
+                                (click)="armazenarHistoricoSelecionadoParaDialogExclusao(previaHistoricoPatologiaFamiliares)">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </span>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage" class="text-center" let-historicosPatologiaFamiliares>
+                <tr>
+                    <td [attr.colspan]="historicosPatologiaFamiliares.length" class="text-center">
+                        <span *ngIf="!processandoOperacao">
+                            {{ inputPesquisaPreviaHistoricos ? 'Nenhum histórico de patologia dos familiares corresponde à pesquisa!' 
+                                : 'Nenhum histórico de patologia dos familiares encontrado!' }}
+                        </span>
+
+                        <span *ngIf="processandoOperacao && !inputPesquisaPreviaHistoricos">
+                            <p-progressSpinner strokeWidth="3"></p-progressSpinner>
+                        </span>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="summary">
+                <div class="col-12">
+                    Histórico de Patologias dos Familiares encontrados: 
+                        {{ previaHistoricosPatologiaFamiliares ? previaHistoricosPatologiaFamiliares.length : 0 }}
+                </div>
+                
+                <div *ngIf="previaHistoricosPatologiaFamiliares && previaHistoricosPatologiaFamiliares.length > 0" class="col-12">
+                    Data prevista para próxima atualização: {{ dataProximaAtualizacao }}
+                </div>
+            </ng-template>
+        </p-table>
+    </div>
+</p-fieldset>
+
+<!-- Dialog Histórico Patologia Familiares selecionado -->
+<p-dialog [visible]="abrirDialogInformacoes" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '96%'}">
+
+    <p-header>
+        Informações do Histórico de Patologia dos Familiares
+    </p-header>
+</p-dialog>
+
+
+<app-toasty #toastyComponent></app-toasty>

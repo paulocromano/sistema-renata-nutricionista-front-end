@@ -54,7 +54,23 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
 
   public armazenarHistoricoSocialSelecionadoParaDialogInformacoes(previaHistoricoSelecionado: PreviaHistoricoSocial): void {
     this.previaHistoricoSelecionado = previaHistoricoSelecionado;
-    this.buscarHistoricoSocialDoPaciente();
+    this.buscarInformacoesPreviasHistoricosSociaisDoPaciente();
+  }
+
+
+  public buscarInformacoesPreviasHistoricosSociaisDoPaciente(): void {
+    this.processandoOperacao = true;
+
+    this.historicoSocialService.buscarInformacoesPreviasHistoricosSociaisDoPaciente(this.paciente.id)
+      .subscribe((informacoesPreviasHistoricosSociais: InformacoesPreviasHistoricosSociais) => {
+        this.previaHistoricosSociais = informacoesPreviasHistoricosSociais.previaHistoricosSociais
+        this.dataProximaAtualizacao = informacoesPreviasHistoricosSociais.dataProximaAtualizacaoHistoricoSocial;
+        this.processandoOperacao = false;
+      },
+      (errorResponse: HttpErrorResponse) => {
+        this.processandoOperacao = false;
+        this.toasty.error('Erro ao buscar históricos sociais do paciente!');
+      });
   }
 
   public buscarHistoricoSocialDoPaciente(): void {
@@ -63,7 +79,6 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
     this.historicoSocialService.buscarHistoricoSocialDoPaciente(this.previaHistoricoSelecionado.id)
       .subscribe((historicoSocial: HistoricoSocial) => {
         this.historicoSocial = historicoSocial;
-        console.log(historicoSocial)
         this.processandoOperacao = false;
         this.abrirDialogInformacoes = true;
       },
@@ -78,12 +93,19 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
     this.abrirDialogExclusao = true;
   }
 
+  public habilitarSpinnerBotaoInformacoes(previaHistoricoTabela: PreviaHistoricoSocial): boolean {
+    return this.processandoOperacao && this.previaHistoricoSelecionado.id === previaHistoricoTabela.id;
+  }
+
   public excluirHistoricoSocial(): void {
     this.processandoOperacao = true;
 
     this.historicoSocialService.excluirHistoricoSocialDoPaciente(this.previaHistoricoSelecionado.id)
       .subscribe(() => {
         this.processandoOperacao = false;
+        this.abrirDialogExclusao = false;
+        this.limparCamposDialog();
+        this.buscarInformacoesPreviasHistoricosSociaisDoPaciente();
         this.toasty.success('Histórico social excluído com sucesso!');
       },
       (errorResponse: HttpErrorResponse) => {

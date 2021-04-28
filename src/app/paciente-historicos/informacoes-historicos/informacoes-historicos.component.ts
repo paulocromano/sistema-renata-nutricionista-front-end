@@ -1,4 +1,3 @@
-import { DataProximaAtualizacaoHistoricosPaciente } from './shared/model/data-proxima-atualizacao-historicos-paciente.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -24,7 +23,6 @@ export class InformacoesHistoricosComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
 
   public historicosPaciente: HistoricosPaciente = new HistoricosPaciente();
-  public dataProximaAtualizacaoHistorico = new DataProximaAtualizacaoHistoricosPaciente();
   public paciente: Paciente = new Paciente();
   public processandoOperacao: boolean = true;
 
@@ -50,7 +48,6 @@ export class InformacoesHistoricosComponent implements OnInit, OnDestroy {
     this.pacienteService.buscarInformacoesHistoricosPaciente(this.idPaciente)
       .subscribe((informacoesHistoricos: HistoricosPaciente) => {
         this.historicosPaciente = informacoesHistoricos;
-        this.dataProximaAtualizacaoHistorico = this.historicosPaciente.dataProximaAtualizacaoHistoricosPaciente;
         this.paciente = this.historicosPaciente.paciente;
         console.log(this.historicosPaciente);
         this.processandoOperacao = false;
