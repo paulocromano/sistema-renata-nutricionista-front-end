@@ -54,7 +54,7 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
 
   public armazenarHistoricoSocialSelecionadoParaDialogInformacoes(previaHistoricoSelecionado: PreviaHistoricoSocial): void {
     this.previaHistoricoSelecionado = previaHistoricoSelecionado;
-    this.buscarInformacoesPreviasHistoricosSociaisDoPaciente();
+    this.buscarHistoricoSocialDoPaciente();
   }
 
 
@@ -121,6 +121,8 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
 
   public limparCamposDialog(): void {
     this.abrirDialogInformacoes = false;
+    this.abrirDialogExclusao = false;
+    
     this.historicoSocial = new HistoricoSocial();
     this.previaHistoricoSelecionado = new PreviaHistoricoSocial(); 
   }

@@ -91,7 +91,81 @@
     <p-header>
         Informações do Histórico de Patologia dos Familiares
     </p-header>
+
+    <div class="borda-table">
+        <p-table #dataView [value]="patologiasFamiliares" [columns]="colunasTabelaHistoricosPatologiaFamiliares" 
+            [responsive]="true" class="text-center">
+
+            <ng-template pTemplate="caption">
+                <div style="font-size: 1.3em;">Patologia dos Familiares</div>
+            </ng-template>
+
+            <ng-template pTemplate="header" let-colunas>
+                <tr>
+                    <th *ngFor="let coluna of colunas" [pSortableColumn]="coluna.field" [ngClass]="coluna.style" class="text-center">
+                        {{ coluna.header }}
+                        <p-sortIcon *ngIf="coluna.header !== 'Ações' && coluna.header !== 'Telefone'" [field]="coluna.field" 
+                            ariaLabel="active to sort"
+                            ariaLabelDesc="Activate to sort in descending order"
+                            ariaLabelAsc="Activate to sort in ascending order">
+                        </p-sortIcon>
+                    </th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-patologiaFamiliares>
+                <tr>
+                    <td *ngFor="let coluna of colunasTabelaHistoricosPatologiaFamiliares" class="text-center">
+                        <span class="ui-column-title text-left"></span>
+                        {{ patologiaFamiliares[coluna.field] }}
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="summary">
+                <div><b>Cadastrado em: </b>{{ historicoPatologiaFamiliaresPorData.dataHoraCadastroPatologiasFamiliares }}</div>
+            </ng-template>
+        </p-table>
+    </div>
+
+    <div *ngIf="historicoPatologiaFamiliaresPorData.observacao" class="mt-3">
+        <b>Observação: </b>{{ historicoPatologiaFamiliaresPorData.observacao }}
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="limparCamposDialog()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+    </p-footer>
 </p-dialog>
 
+
+<!-- Dialog exclusão de Histórico de Patologia dos Familiares -->
+<p-dialog [visible]="abrirDialogExclusao" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '78vh'}">
+
+    <p-header>
+        Exclusão de Histórico de Patologia dos Familiares
+    </p-header>
+
+    <div>
+        Tem certeza que deseja excluir <b>todas</b> as informações do histórico cadastrado em
+        <b>{{ previaHistoricoPorDataSelecionado.dataHoraCadastroPatologiasFamiliaresPorData }}</b>?
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="fecharDialogExclusaoHistoricoPatologiaFamiliaresPorData()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+
+        <button class="btn btn-success" [disabled]="processandoOperacao" 
+            (click)="excluirHistoricoPatologiaFamiliaresPorData()">
+            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
+        </button>
+    </p-footer>
+</p-dialog>
 
 <app-toasty #toastyComponent></app-toasty>

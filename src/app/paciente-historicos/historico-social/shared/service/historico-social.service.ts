@@ -17,14 +17,14 @@ export class HistoricoSocialService {
 
   public buscarInformacoesPreviasHistoricosSociaisDoPaciente(idPaciente: number): Observable<InformacoesPreviasHistoricosSociais> {
     return this.http.get<InformacoesPreviasHistoricosSociais>(
-      `${this.servidorService.getServidorBackEnd()}/historico-social-paciente/historicos/${idPaciente}`);
+      `${this.servidorService.getServidorBackEnd()}/historico-social/previa-historicos-paciente/${idPaciente}`);
   }
 
   public buscarHistoricoSocialDoPaciente(idHistoricoSocial: number): Observable<HistoricoSocial> {
-    return this.http.get<HistoricoSocial>(`${this.servidorService.getServidorBackEnd()}/historico-social-paciente/${idHistoricoSocial}`);
+    return this.http.get<HistoricoSocial>(`${this.servidorService.getServidorBackEnd()}/historico-social/${idHistoricoSocial}`);
   }
 
   public excluirHistoricoSocialDoPaciente(idHistoricoSocial: number): Observable<any> {
-    return this.http.delete(`${this.servidorService.getServidorBackEnd()}/historico-social-paciente/${idHistoricoSocial}`);
+    return this.http.delete(`${this.servidorService.getServidorBackEnd()}/historico-social/${idHistoricoSocial}`);
   }
 }
