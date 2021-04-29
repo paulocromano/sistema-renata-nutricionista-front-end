@@ -104,7 +104,7 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
       .subscribe(() => {
         this.processandoOperacao = false;
         this.abrirDialogExclusao = false;
-        this.limparCamposDialog();
+        this.resetarCampos();
         this.buscarInformacoesPreviasHistoricosSociaisDoPaciente();
         this.toasty.success('Histórico social excluído com sucesso!');
       },
@@ -114,12 +114,7 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
       });
   }
 
-  public fecharDialogExclusaoHistoricoSocial(): void {
-    this.abrirDialogExclusao = false;
-    this.limparCamposDialog();
-  }
-
-  public limparCamposDialog(): void {
+  public resetarCampos(): void {
     this.abrirDialogInformacoes = false;
     this.abrirDialogExclusao = false;
     

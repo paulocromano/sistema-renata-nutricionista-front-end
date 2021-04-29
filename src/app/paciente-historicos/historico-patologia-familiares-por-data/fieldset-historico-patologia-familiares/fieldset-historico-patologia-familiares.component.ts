@@ -58,8 +58,6 @@ export class FieldsetHistoricoPatologiaFamiliaresComponent implements OnInit {
       { header: 'Tios', field: 'tios', style: 'col-tios' },
       { header: 'Tias', field: 'tias', style: 'col-tias' },
     ];
-
-    console.log(this.previaHistoricosPatologiaFamiliares)
   }
 
   public buscarInformacoesPreviasHistoricosPatologiasFamiliaresPorDataDoPaciente(): void {
@@ -86,7 +84,6 @@ export class FieldsetHistoricoPatologiaFamiliaresComponent implements OnInit {
         this.patologiasFamiliares = historico.patologiasFamiliares;
         this.processandoOperacao = false;
         this.abrirDialogInformacoes = true;
-        console.log(historico)
       },
       (errorResponse: HttpErrorResponse) => {
         this.processandoOperacao = false;
@@ -100,7 +97,7 @@ export class FieldsetHistoricoPatologiaFamiliaresComponent implements OnInit {
     this.historicoPatologiaFamiliaresService.excluirHistoricoPatologiaFamiliaresPorData(this.previaHistoricoPorDataSelecionado.id)
       .subscribe(() => {
         this.processandoOperacao = false;
-        this.limparCamposDialog();
+        this.resetarCampos();
         this.buscarInformacoesPreviasHistoricosPatologiasFamiliaresPorDataDoPaciente();
         this.toasty.success('Histórico de patologia dos familiares excluído com sucesso!');
       },
@@ -108,11 +105,6 @@ export class FieldsetHistoricoPatologiaFamiliaresComponent implements OnInit {
         this.processandoOperacao = false;
         this.toasty.error('Erro ao excluir histórico de patologia dos familiares!');
       });
-  }
-
-  public fecharDialogExclusaoHistoricoPatologiaFamiliaresPorData(): void {
-    this.abrirDialogExclusao = false;
-    this.limparCamposDialog();
   }
 
   public armazenarHistoricoSelecionadoParaDialogInformacoes(
@@ -133,7 +125,7 @@ export class FieldsetHistoricoPatologiaFamiliaresComponent implements OnInit {
     return this.processandoOperacao && this.previaHistoricoPorDataSelecionado.id === previaHistoricoPatologiaFamiliares.id;
   }
 
-  public limparCamposDialog(): void {
+  public resetarCampos(): void {
     this.abrirDialogInformacoes = false;
     this.abrirDialogExclusao = false;
 

@@ -1,4 +1,4 @@
-<p-fieldset [toggleable]="true" [collapsed]="false">
+<p-fieldset [toggleable]="true" [collapsed]="true">
     <p-header>
         Histórico Patologia Familiares
     </p-header>
@@ -128,12 +128,13 @@
         </p-table>
     </div>
 
-    <div *ngIf="historicoPatologiaFamiliaresPorData.observacao" class="mt-3">
-        <b>Observação: </b>{{ historicoPatologiaFamiliaresPorData.observacao }}
+    <div class="mt-3">
+        <b>Observação: </b>{{ historicoPatologiaFamiliaresPorData.observacao 
+            ? historicoPatologiaFamiliaresPorData.observacao : 'Não há observações registradas!' }}
     </div>
 
     <p-footer>
-        <button class="btn btn-danger" (click)="limparCamposDialog()">
+        <button class="btn btn-danger" (click)="resetarCampos()">
             <i class="fas fa-arrow-circle-left"></i>
             Voltar
         </button>
@@ -155,7 +156,7 @@
     </div>
 
     <p-footer>
-        <button class="btn btn-danger" (click)="fecharDialogExclusaoHistoricoPatologiaFamiliaresPorData()">
+        <button class="btn btn-danger" (click)="resetarCampos()">
             <i class="fas fa-arrow-circle-left"></i>
             Voltar
         </button>

@@ -68,7 +68,7 @@
 
             <ng-template pTemplate="summary">
                 <div class="col-12">
-                    Histórico Sociais encontrados: {{ previaHistoricosSociais ? previaHistoricosSociais.length : 0 }}
+                    Históricos Sociais encontrados: {{ previaHistoricosSociais ? previaHistoricosSociais.length : 0 }}
                 </div>
                 
                 <div *ngIf="previaHistoricosSociais && previaHistoricosSociais.length > 0" class="col-12">
@@ -217,7 +217,7 @@
     </div>
 
     <p-footer>
-        <button class="btn btn-danger" (click)="limparCamposDialog()">
+        <button class="btn btn-danger" (click)="resetarCampos()">
             <i class="fas fa-arrow-circle-left"></i>
             Voltar
         </button>
@@ -237,7 +237,7 @@
     </div>
 
     <p-footer>
-        <button class="btn btn-danger" (click)="fecharDialogExclusaoHistoricoSocial()">
+        <button class="btn btn-danger" (click)="resetarCampos()">
             <i class="fas fa-arrow-circle-left"></i>
             Voltar
         </button>
