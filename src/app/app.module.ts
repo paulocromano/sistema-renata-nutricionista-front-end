@@ -15,10 +15,12 @@ import { CalendarioAtendimentoModule } from './calendario-atendimento/calendario
 import { PacienteModule } from './paciente/paciente.module';
 import { PacienteHistoricosModule } from './paciente-historicos/paciente-historicos.module';
 import { PatologiaModule } from './patologia/patologia.module';
+import { SuplementoModule } from './suplemento/suplemento.module';
 import { ToastyModule } from './shared/toasty/toasty.module';
 import { InterceptorModule } from './interceptor/interceptor.module';
 import { LogadoGuard } from './shared/guard/logado.guard';
 import { AdminGuard } from './shared/guard/admin.guard';
+import { MedicamentoModule } from './medicamento/medicamento.module';
 
 
 @NgModule({
@@ -37,6 +39,8 @@ import { AdminGuard } from './shared/guard/admin.guard';
     PacienteModule,
     PacienteHistoricosModule,
     PatologiaModule,
+    SuplementoModule,
+    MedicamentoModule,
     ToastyModule,
     InterceptorModule,
     JwtModule.forRoot({})
