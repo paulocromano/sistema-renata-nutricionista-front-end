@@ -81,6 +81,158 @@
     </div>
 </p-fieldset>
 
+<!-- Dialog Histórico Social selecionado -->
+<p-dialog [visible]="abrirDialogInformacoes" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '96%'}">
 
+    <p-header>
+        Informações do Histórico Alimentar
+    </p-header>
+
+    <div class="container-fluid">
+        <div><b>Alimentos com intolerância ou alergia: </b>
+            {{ historicoAlimentar.intoleranciaAlergiaAlimentos ? historicoAlimentar.intoleranciaAlergiaAlimentos : 'Não consta' }}
+        </div>
+        <div><b>Preferência alimentar: </b>
+            {{ historicoAlimentar.preferenciaAlimentar ? historicoAlimentar.preferenciaAlimentar : 'Não consta' }}
+        </div>
+        <div><b>Alimentos que não gosta: </b>
+            {{ historicoAlimentar.alimentosPacienteNaoGosta ? historicoAlimentar.alimentosPacienteNaoGosta : 'Não consta' }}
+        </div>
+        <div><b>Alterações gastrointestinal: </b>
+            {{ historicoAlimentar.alteracoesGastrointestinal ? historicoAlimentar.alteracoesGastrointestinal : 'Não consta' }}
+        </div>
+        <div><b>Consumo de água: </b>{{ historicoAlimentar.consumoAgua }}</div>
+        <div><b>Medicações: </b>
+            {{ historicoAlimentar.medicamentosPaciente ? historicoAlimentar.medicamentosPaciente : 'Não consta' }}
+        </div>
+
+        <!-- Tabela Suplementos do paciente -->
+        <div class="borda-table my-3">
+            <p-table #dataView *ngIf="suplementosPaciente.length > 0" [value]="suplementosPaciente" 
+                [columns]="colunasTabelaSuplementosPaciente" [responsive]="true" [rows]="5" [paginator]="true" class="text-center">
+
+                <ng-template pTemplate="caption">
+                    <div style="font-size: 1.3em;">Suplementos utilizados pelo paciente</div>
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-12 col-sm-6 col-md-4">
+                            <input type="text" pInputText placeholder="Pesquisa" class="pesquisa" [(ngModel)]="inputPesquisaSuplementosPaciente"
+                                (input)="dataView.filterGlobal($event.target.value, 'contains')">
+                            <i class="fas fa-search" style="font-size: 1.18em;"></i>
+                        </div>
+                    </div>
+
+                    <div class="text-left" style="font-size: 13px; color: #FF0000;">
+                        *As informações principais na tabela se referem ao modo de uso feito pelo paciente
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="header" let-colunas>
+                    <tr>
+                        <th *ngFor="let coluna of colunas" [pSortableColumn]="coluna.field" 
+                            [ngClass]="coluna.style" class="text-center">
+
+                            {{ coluna.header }}
+                            <p-sortIcon *ngIf="coluna.header !== 'Ações'" [field]="coluna.field" 
+                                ariaLabel="active to sort"
+                                ariaLabelDesc="Activate to sort in descending order"
+                                ariaLabelAsc="Activate to sort in ascending order">
+                            </p-sortIcon>
+                        </th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-suplementoPaciente>
+                    <tr>
+                        <td *ngFor="let coluna of colunasTabelaSuplementosPaciente" class="text-center">
+                            <span class="ui-column-title text-left"></span>
+                            {{ suplementoPaciente[coluna.field]?.nome ? suplementoPaciente[coluna.field]?.nome : suplementoPaciente[coluna.field] }}
+
+                            <span *ngIf="coluna.header === 'Ações'">
+                                <button class="btn btn-primary px-3" pTooltip="Informações" tooltipPosition="bottom"
+                                    (click)="armazenarSuplementoSelecionado(suplementoPaciente)">
+                                    <i class="fas fa-info"></i>
+                                </button>
+
+                                <button *ngIf="suplementoPaciente.mensagemDoseUtilizadaPeloPacienteDiferenteDoSuplemento
+                                    || suplementoPaciente.mensagemFormaPreparoUtilizadaPeloPacienteDiferenteDoSuplemento" 
+                                    class="btn btn-danger px-3 ml-2" [disabled]="true">
+
+                                    <i class="fas fa-exclamation"></i>
+                                </button>
+                            </span>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage" class="text-center" let-suplementosPaciente>
+                    <tr>
+                        <td [attr.colspan]="suplementosPaciente.length" class="text-center">
+                            <span>{{ inputPesquisaSuplementosPaciente ? 'Nenhum suplemento corresponde à pesquisa!' : '' }}</span>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="summary">
+                    Suplementos encontrados: {{ suplementosPaciente.length }}
+                </ng-template>
+            </p-table>
+        </div>  
+
+        <div class="mt-3"><b>Cadastrado em: </b>{{ historicoAlimentar.dataHoraCadastroHistoricoAlimentar }}</div>
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="resetarCampos()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+    </p-footer>
+</p-dialog>
+
+
+<!-- Dialog informações do modo correto de uso do suplemento na tabela de Suplementos do paciente -->
+<p-dialog [visible]="abrirDialogSuplemento" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '70vh'}">
+
+    <p-header>
+        Informações do Suplemento <b>{{ suplementoSelecionado.suplemento.nome }}</b>
+    </p-header>
+
+    <div class="container-fluid">
+        <div>
+            <div class="text-center"><b>Modo de uso feito pelo paciente</b></div>
+            <div class="mt-2"><b>Dose: </b> {{ suplementoSelecionado.dose }}</div>
+            <div><b>Forma de preparo:</b> {{ suplementoSelecionado.formaPreparo }}</div>
+        </div>
+        <hr>
+
+        <div>
+            <div class="text-center"><b>Modo correto de uso</b></div>
+            <div class="mt-2"><b>Dose: </b> {{ suplementoSelecionado.suplemento.dose }}</div>
+            <div><b>Forma de preparo:</b> {{ suplementoSelecionado.suplemento.formaPreparo }}</div>
+        </div>
+        <hr>
+
+        <div style="font-size: 13px; color: #FF0000;">
+            <div *ngIf="suplementoSelecionado.mensagemDoseUtilizadaPeloPacienteDiferenteDoSuplemento">
+               *{{ suplementoSelecionado.mensagemDoseUtilizadaPeloPacienteDiferenteDoSuplemento }}
+            </div>
+
+            <div *ngIf="suplementoSelecionado.mensagemFormaPreparoUtilizadaPeloPacienteDiferenteDoSuplemento" class="mt-2">
+                *{{ suplementoSelecionado.mensagemFormaPreparoUtilizadaPeloPacienteDiferenteDoSuplemento }}
+            </div>
+        </div>
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="abrirDialogSuplemento = false">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+    </p-footer>
+</p-dialog>
 
 <app-toasty #toastyComponent></app-toasty>

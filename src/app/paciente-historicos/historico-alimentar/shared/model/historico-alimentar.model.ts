@@ -3,7 +3,7 @@ import { SuplementoPaciente } from './suplemento-paciente.model';
 export class HistoricoAlimentar {
 
     id: number;
-    intoleranciaAlergiaAlimentosPaciente: string;
+    intoleranciaAlergiaAlimentos: string;
     preferenciaAlimentar: string;
     alimentosPacienteNaoGosta: string;
     alteracoesGastrointestinal: string;
