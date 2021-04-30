@@ -108,7 +108,7 @@
     [closable]="false" [style]="{width: '70vh'}">
 
     <p-header>
-        Exclusão de Histórico de Atividade Física
+        Excluir Histórico de Atividade Física
     </p-header>
 
     <div>
@@ -122,9 +122,9 @@
             Voltar
         </button>
 
-        <button class="btn btn-success" [disabled]="processandoOperacao" 
+        <button class="btn btn-success" [disabled]="processandoExclusao" 
         (click)="excluirHistoricoAtividadeFisica()">
-        <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+        <i class="fas " [ngClass]="processandoExclusao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
         Confirmar
     </button>
     </p-footer>

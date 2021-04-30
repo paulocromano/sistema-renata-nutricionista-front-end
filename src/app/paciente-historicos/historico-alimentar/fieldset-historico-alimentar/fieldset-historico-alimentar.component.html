@@ -1,4 +1,4 @@
-<p-fieldset [toggleable]="true" [collapsed]="false">
+<p-fieldset [toggleable]="true" [collapsed]="true">
     <p-header>
         Histórico Alimentar
     </p-header>
@@ -231,6 +231,33 @@
         <button class="btn btn-danger" (click)="abrirDialogSuplemento = false">
             <i class="fas fa-arrow-circle-left"></i>
             Voltar
+        </button>
+    </p-footer>
+</p-dialog>
+
+<!-- Dialog exclusão Histórico Alimentar -->
+<p-dialog [visible]="abrirDialogExclusao" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '65vh'}">
+
+    <p-header>
+        Excluir Histórico Alimentar
+    </p-header>
+
+    <div>
+        Tem certeza que deseja excluir <b>todas</b> as informações do histórico cadastrado em
+        <b>{{ previaHistoricoSelecionado.dataHoraCadastroHistoricoAlimentar }}</b>?
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="resetarCampos()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+
+        <button class="btn btn-success" [disabled]="processandoExclusao" 
+            (click)="excluirHistoricoAlimentar()">
+            <i class="fas " [ngClass]="processandoExclusao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
         </button>
     </p-footer>
 </p-dialog>

@@ -30,6 +30,7 @@ export class FieldsetHistoricoAtividadeFisicaComponent implements OnInit {
   public abrirDialogInformacoes: boolean = false;
   public abrirDialogExclusao: boolean = false;
   public processandoOperacao: boolean = false;
+  public processandoExclusao: boolean = false;
 
   constructor(private historicoAtividadeFisicaService: HistoricoAtividadeFisicaService) { }
 
@@ -59,17 +60,17 @@ export class FieldsetHistoricoAtividadeFisicaComponent implements OnInit {
   }
 
   public excluirHistoricoAtividadeFisica(): void {
-    this.processandoOperacao = true;
+    this.processandoExclusao = true;
 
     this.historicoAtividadeFisicaService.excluirHistoricoAtividadeFisica(this.historicoSelecionado.id)
       .subscribe(() => {
-        this.processandoOperacao = false;
+        this.processandoExclusao = false;
         this.resetarCampos();
         this.toasty.success('Histórico de atividade física excluída com sucesso!');
         this.buscarInformacoesHistoricosAtividadeFisicaDoPaciente();
       },
       (errorResponse: HttpErrorResponse) => {
-        this.processandoOperacao = false;
+        this.processandoExclusao = false;
         this.toasty.error('Erro ao excluir histórico de atividade física!');
       });
   }

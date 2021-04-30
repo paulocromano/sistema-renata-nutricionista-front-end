@@ -37,7 +37,8 @@ export class FieldsetHistoricoPatologiaFamiliaresComponent implements OnInit {
   public abrirDialogInformacoes: boolean = false;
   public abrirDialogExclusao: boolean = false;
   public processandoOperacao: boolean = false;
- 
+  public processandoExclusao: boolean = false;
+  
   constructor(private historicoPatologiaFamiliaresService: HistoricoPatologiaFamiliaresService) { }
 
   ngOnInit(): void {
@@ -92,17 +93,17 @@ export class FieldsetHistoricoPatologiaFamiliaresComponent implements OnInit {
   }
 
   public excluirHistoricoPatologiaFamiliaresPorData(): void {
-    this.processandoOperacao = true;
+    this.processandoExclusao = true;
 
     this.historicoPatologiaFamiliaresService.excluirHistoricoPatologiaFamiliaresPorData(this.previaHistoricoPorDataSelecionado.id)
       .subscribe(() => {
-        this.processandoOperacao = false;
+        this.processandoExclusao = false;
         this.resetarCampos();
         this.buscarInformacoesPreviasHistoricosPatologiasFamiliaresPorDataDoPaciente();
         this.toasty.success('Histórico de patologia dos familiares excluído com sucesso!');
       },
       (errorResponse: HttpErrorResponse) => {
-        this.processandoOperacao = false;
+        this.processandoExclusao = false;
         this.toasty.error('Erro ao excluir histórico de patologia dos familiares!');
       });
   }

@@ -1,1 +1,188 @@
-<p>historico-questionario-frequencia-alimentar works!</p>
+<p-fieldset [toggleable]="true" [collapsed]="false">
+
+    <p-header>
+        Questionário Frequência Alimentar
+    </p-header>
+
+    <div class="borda-table">
+        <p-table #dataView [value]="previaQuestionarios" [columns]="colunasTabelaPreviaHistoricos" [responsive]="true" 
+            [rows]="5" [paginator]="true" class="text-center">
+
+            <ng-template pTemplate="caption">
+                <div class="row">
+                    <div class="col-12 col-sm-6 col-md-10 col-lg-6">
+                        <input type="text" pInputText placeholder="Pesquisa" class="pesquisa" [(ngModel)]="inputPesquisaPreviaHistoricos"
+                            (input)="dataView.filterGlobal($event.target.value, 'contains')">
+                        <i class="fas fa-search" style="font-size: 1.18em;"></i>
+                    </div>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="header" let-colunas>
+                <tr>
+                    <th *ngFor="let coluna of colunas" [pSortableColumn]="coluna.field" [ngClass]="coluna.style" class="text-center">
+                        {{ coluna.header }}
+                        <p-sortIcon *ngIf="coluna.header !== 'Ações'" [field]="coluna.field" 
+                            ariaLabel="active to sort"
+                            ariaLabelDesc="Activate to sort in descending order"
+                            ariaLabelAsc="Activate to sort in ascending order">
+                        </p-sortIcon>
+                    </th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-previaQuestionario>
+                <tr>
+                    <td *ngFor="let coluna of colunasTabelaPreviaHistoricos" class="text-center">
+                        <span class="ui-column-title text-left"></span>
+                        {{ previaQuestionario[coluna.field] }}
+        
+                        <span *ngIf="coluna.header === 'Ações'">
+                            <button class="btn btn-primary" pTooltip="Informações" tooltipPosition="bottom" [disabled]="processandoOperacao"
+                                (click)="armazenarHistoricoQuestionarioSelecionadoParaDialogInformacoes(previaQuestionario)"
+                                [ngClass]="habilitarSpinnerBotaoInformacoes(previaQuestionario) ? '' : 'px-3'">
+
+                                <i class="fas " [ngClass]="habilitarSpinnerBotaoInformacoes(previaQuestionario) ? 'fa-spin fa-circle-notch' : 'fa-info'"></i>
+                            </button>
+                            <button class="btn btn-danger ml-2" pTooltip="Excluir" tooltipPosition="bottom"
+                                (click)="armazenarHistoricoQuestionarioSelecionadoParaDialogExclusao(previaQuestionario)">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </span>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage" class="text-center" let-questionarios>
+                <tr>
+                    <td [attr.colspan]="questionarios.length" class="text-center">
+                        <span *ngIf="!processandoOperacao">
+                            {{ inputPesquisaPreviaHistoricos ? 'Nenhum questionário de frequência alimentar corresponde à pesquisa!' 
+                                : 'Nenhum questionário de frequência alimentar encontrado!' }}
+                        </span>
+
+                        <span *ngIf="processandoOperacao && !inputPesquisaPreviaHistoricos">
+                            <p-progressSpinner strokeWidth="3"></p-progressSpinner>
+                        </span>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="summary">
+                <div class="col-12">
+                    Questionários de Frequência Alimentar encontrados: 
+                    {{ previaQuestionarios ? previaQuestionarios.length : 0 }}
+                </div>
+                
+                <div *ngIf="previaQuestionarios && previaQuestionarios.length > 0" class="col-12">
+                    Data prevista para próxima atualização: {{ dataProximaAtualizacao }}
+                </div>
+            </ng-template>
+        </p-table>
+    </div>
+</p-fieldset>
+
+<!-- Dialog Questionário de Frequência Alimentar selecionado -->
+<p-dialog [visible]="abrirDialogInformacoes" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '96%'}">
+
+    <p-header>
+        Informações do Questionário de Frequência Alimentar
+    </p-header>
+
+    <div class="container-fluid">
+        <div class="borda-table my-3">
+            <p-table #dataView *ngIf="frequenciaAlimentar.length > 0" [value]="frequenciaAlimentar" 
+                [columns]="colunasTabelaFrequenciaAlimentar" [responsive]="true" class="text-center">
+
+                <ng-template pTemplate="caption">
+                    <div class="row">
+                        <div class="col-12 col-sm-6 col-md-4">
+                            <input type="text" pInputText placeholder="Pesquisa" class="pesquisa" [(ngModel)]="inputPesquisaFrequenciaAlimentar"
+                                (input)="dataView.filterGlobal($event.target.value, 'contains')">
+                            <i class="fas fa-search" style="font-size: 1.18em;"></i>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="header" let-colunas>
+                    <tr>
+                        <th *ngFor="let coluna of colunas" [pSortableColumn]="coluna.field" [ngClass]="coluna.style" class="text-center">
+                            {{ coluna.header }}
+
+                            <p-sortIcon [field]="coluna.field" 
+                                ariaLabel="active to sort"
+                                ariaLabelDesc="Activate to sort in descending order"
+                                ariaLabelAsc="Activate to sort in ascending order">
+                            </p-sortIcon>
+                        </th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-frequenciaAlimentar>
+                    <tr>
+                        <td *ngFor="let coluna of colunasTabelaFrequenciaAlimentar" class="text-center">
+                            <span class="ui-column-title text-left"></span>
+                            {{ frequenciaAlimentar[coluna.field] }}
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage" class="text-center" let-frequenciaAlimentar>
+                    <tr>
+                        <td [attr.colspan]="frequenciaAlimentar.length" class="text-center">
+                            <span>{{ inputPesquisaFrequenciaAlimentar ? 'Nenhum suplemento corresponde à pesquisa!' : '' }}</span>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <div>
+            <div *ngIf="questionario.consumoTipoBebida"><b>Consumo bebidas: </b>{{ questionario.consumoTipoBebida }}</div>
+            <div *ngIf="questionario.consumoTipoLeite"><b>Consumo leite: </b>{{ questionario.consumoTipoLeite }}</div>
+            <div *ngIf="questionario.consumoCarneVermelha"><b>Consumo carne vermelha: </b>{{ questionario.consumoCarneVermelha }}</div>
+            <div *ngIf="questionario.consumoFrango"><b>Consumo frango: </b>{{ questionario.consumoFrango }}</div>
+            <div *ngIf="questionario.consumoPeixe"><b>Consumo pexio: </b>{{ questionario.consumoPeixe }}</div>
+        </div>
+
+        <div class="mt-3"><b>Cadastrado em: </b>{{ questionario.dataHoraCadastroQuestionario }}</div>
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="resetarCampos()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+    </p-footer>
+</p-dialog>
+
+
+<!-- Dialog exclusão Questionário de Frequência Alimentar -->
+<p-dialog [visible]="abrirDialogExclusao" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '70vh'}">
+
+    <p-header>
+        Excluir Questionário de Frequência Alimentar
+    </p-header>
+
+    <div>
+        Tem certeza que deseja excluir <b>todas</b> as informações do questionário cadastrado em
+        <b>{{ previaQuestionarioSelecionado.dataHoraCadastroQuestionario }}</b>?
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="resetarCampos()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+
+        <button class="btn btn-success" [disabled]="processandoExclusao" 
+            (click)="excluirQuestionarioFrequenciaAlimentar()">
+            <i class="fas " [ngClass]="processandoExclusao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
+        </button>
+    </p-footer>
+</p-dialog>
+
+<app-toasty #toastyComponent></app-toasty>

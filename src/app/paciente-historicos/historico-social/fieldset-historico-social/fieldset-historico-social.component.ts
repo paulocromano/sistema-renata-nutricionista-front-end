@@ -34,6 +34,7 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
   public abrirDialogInformacoes: boolean = false;
   public abrirDialogExclusao: boolean = false;
   public processandoOperacao: boolean = false;
+  public processandoExclusao: boolean = false;
 
   constructor(private historicoSocialService: HistoricoSocialService) { }
 
@@ -98,18 +99,18 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
   }
 
   public excluirHistoricoSocial(): void {
-    this.processandoOperacao = true;
+    this.processandoExclusao = true;
 
     this.historicoSocialService.excluirHistoricoSocialDoPaciente(this.previaHistoricoSelecionado.id)
       .subscribe(() => {
-        this.processandoOperacao = false;
+        this.processandoExclusao = false;
         this.abrirDialogExclusao = false;
         this.resetarCampos();
         this.buscarInformacoesPreviasHistoricosSociaisDoPaciente();
         this.toasty.success('Histórico social excluído com sucesso!');
       },
       (errorResponse: HttpErrorResponse) => {
-        this.processandoOperacao = false;
+        this.processandoExclusao = false;
         this.toasty.error('Erro ao excluir histórico social!');
       });
   }

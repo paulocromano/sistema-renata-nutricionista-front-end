@@ -3,5 +3,5 @@ import { PreviaQuestionarioFrequenciaAlimentar } from './previa-questionario-fre
 export class InformacoesPreviasQuestionarios {
 
     previaQuestionariosFrequenciaAlimentar: PreviaQuestionarioFrequenciaAlimentar[] = [];
-    dataProximaAtualizacaoQuestionarioFrequenciaAlimentar: string;
+    dataProximaAtualizacaoQuestionario: string;
 }

@@ -147,7 +147,7 @@
     [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '78vh'}">
 
     <p-header>
-        Exclusão de Histórico de Patologia dos Familiares
+        Excluir Histórico de Patologia dos Familiares
     </p-header>
 
     <div>
@@ -161,9 +161,9 @@
             Voltar
         </button>
 
-        <button class="btn btn-success" [disabled]="processandoOperacao" 
+        <button class="btn btn-success" [disabled]="processandoExclusao" 
             (click)="excluirHistoricoPatologiaFamiliaresPorData()">
-            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            <i class="fas " [ngClass]="processandoExclusao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
             Confirmar
         </button>
     </p-footer>

@@ -38,6 +38,7 @@ export class FieldsetHistoricoAlimentarComponent implements OnInit {
   public abrirDialogSuplemento: boolean = false;
   public abrirDialogExclusao: boolean = false;
   public processandoOperacao: boolean = false;
+  public processandoExclusao: boolean = false;
 
   constructor(private historicoAlimentarService: HistoricoAlimentarService) { }
 
@@ -91,16 +92,17 @@ export class FieldsetHistoricoAlimentarComponent implements OnInit {
   }
 
   public excluirHistoricoAlimentar(): void {
-    this.processandoOperacao = true;
+    this.processandoExclusao = true;
 
     this.historicoAlimentarService.excluirHistoricoAlimentar(this.previaHistoricoSelecionado.id)
       .subscribe(() => {
-        this.processandoOperacao = false;
+        this.processandoExclusao = false;
         this.resetarCampos();
+        this.buscarInformacoesPreviasHistoricosAlimentaresDoPaciente();
         this.toasty.success('Histórico alimentar excluído com sucesso!');
       },
       (errorResponse: HttpErrorResponse) => {
-        this.processandoOperacao = false;
+        this.processandoExclusao = false;
         this.toasty.error('Erro ao excluir histórico alimentar!');
       });
   }
