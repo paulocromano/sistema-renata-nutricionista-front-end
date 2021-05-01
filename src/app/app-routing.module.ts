@@ -9,6 +9,9 @@ import { CalendarioAtendimentoComponent } from './calendario-atendimento/calenda
 import { ConsultaRetornoComponent } from './consulta-retorno/consulta-retorno.component';
 import { TabelaPacientesComponent } from './paciente/tabela-pacientes/tabela-pacientes.component';
 import { InformacoesHistoricosComponent } from './paciente-historicos/informacoes-historicos/informacoes-historicos.component';
+import { MedicamentoComponent } from './medicamento/medicamento.component';
+import { SuplementoComponent } from './suplemento/suplemento.component';
+import { PatologiaComponent } from './patologia/patologia.component';
 
 const routes: Routes = [
   { path: 'inicio', component: PaginaInicialComponent, canActivate: [ LogadoGuard ] },
@@ -16,6 +19,9 @@ const routes: Routes = [
   { path: 'calendario-atendimento', component: CalendarioAtendimentoComponent, canActivate: [ AdminGuard ] },
   { path: 'pacientes', component: TabelaPacientesComponent, canActivate: [ LogadoGuard ] },
   { path: 'paciente/historicos/:id', component: InformacoesHistoricosComponent, canActivate: [ AdminGuard ] },
+  { path: 'medicamentos', component: MedicamentoComponent, canActivate: [ AdminGuard ] },
+  { path: 'suplementos', component: SuplementoComponent, canActivate: [ AdminGuard ] },
+  { path: 'patologias', component: PatologiaComponent, canActivate: [ AdminGuard ] },
   { path: 'login', component: LoginComponent }
 ];
 
