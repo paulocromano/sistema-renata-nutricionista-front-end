@@ -2,7 +2,6 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { ServidorService } from './../../../../shared/service/servidor.service';
 import { InformacoesHistoricosAtividadeFisica } from '../model/informacoes-historicos-atividade-fisica.model';
 
 @Injectable({
@@ -11,15 +10,14 @@ import { InformacoesHistoricosAtividadeFisica } from '../model/informacoes-histo
 
 export class HistoricoAtividadeFisicaService {
 
-  constructor(private http: HttpClient, private servidorService: ServidorService) { }
+  constructor(private http: HttpClient) { }
 
 
   public buscarInformacoesHistoricosAtividadeFisicaDoPaciente(idPaciente: number): Observable<InformacoesHistoricosAtividadeFisica> {
-    return this.http.get<InformacoesHistoricosAtividadeFisica>(
-      `${this.servidorService.getServidorBackEnd()}/atividade-fisica/informacoes-paciente/${idPaciente}`);
+    return this.http.get<InformacoesHistoricosAtividadeFisica>(`/atividade-fisica/informacoes-paciente/${idPaciente}`);
   }
 
   public excluirHistoricoAtividadeFisica(idHistoricoAtividadeFisica: number): Observable<any> {
-    return this.http.delete(`${this.servidorService.getServidorBackEnd()}/atividade-fisica/${idHistoricoAtividadeFisica}`);
+    return this.http.delete(`/atividade-fisica/${idHistoricoAtividadeFisica}`);
   }
 }

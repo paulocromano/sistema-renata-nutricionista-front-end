@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { HistoricoSocial } from './../model/historico-social.model';
-import { ServidorService } from './../../../../shared/service/servidor.service';
 import { InformacoesPreviasHistoricosSociais } from '../model/informacoes-previas-historicos-sociais.model';
 
 @Injectable({
@@ -12,19 +11,18 @@ import { InformacoesPreviasHistoricosSociais } from '../model/informacoes-previa
 
 export class HistoricoSocialService {
 
-  constructor(private http: HttpClient, private servidorService: ServidorService) { }
+  constructor(private http: HttpClient) { }
 
 
   public buscarInformacoesPreviasHistoricosSociaisDoPaciente(idPaciente: number): Observable<InformacoesPreviasHistoricosSociais> {
-    return this.http.get<InformacoesPreviasHistoricosSociais>(
-      `${this.servidorService.getServidorBackEnd()}/historico-social/previa-historicos-paciente/${idPaciente}`);
+    return this.http.get<InformacoesPreviasHistoricosSociais>(`/historico-social/previa-historicos-paciente/${idPaciente}`);
   }
 
   public buscarHistoricoSocialDoPaciente(idHistoricoSocial: number): Observable<HistoricoSocial> {
-    return this.http.get<HistoricoSocial>(`${this.servidorService.getServidorBackEnd()}/historico-social/${idHistoricoSocial}`);
+    return this.http.get<HistoricoSocial>(`/historico-social/${idHistoricoSocial}`);
   }
 
   public excluirHistoricoSocialDoPaciente(idHistoricoSocial: number): Observable<any> {
-    return this.http.delete(`${this.servidorService.getServidorBackEnd()}/historico-social/${idHistoricoSocial}`);
+    return this.http.delete(`/historico-social/${idHistoricoSocial}`);
   }
 }
