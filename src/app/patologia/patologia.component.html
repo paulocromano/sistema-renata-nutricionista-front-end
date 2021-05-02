@@ -1,5 +1,136 @@
+<div class="container">
+    <div class="borda-table">
+        <p-table #dataView [value]="patologias" [columns]="colunasTabela" [responsive]="true" 
+            [rows]="8" [paginator]="true" class="text-center">
 
+            <ng-template pTemplate="caption">
+                <div class="row">
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                        <input type="text" pInputText placeholder="Pesquisa" class="pesquisa" [(ngModel)]="inputPesquisa"
+                            (input)="dataView.filterGlobal($event.target.value, 'contains')">
+                        <i class="fas fa-search" style="font-size: 1.18em;"></i>
+                    </div>
 
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-8 text-right">
+                        <button class="btn btn-success px-5" (click)="abrirDialogCadastro()">
+                            <i class="fas fa-plus"></i>
+                            Cadastrar Patologia
+                        </button>
+                    </div>
+                </div>
+            </ng-template>
 
+            <ng-template pTemplate="header" let-colunas>
+                <tr>
+                    <th *ngFor="let coluna of colunas" [pSortableColumn]="coluna.field" [ngClass]="coluna.style" class="text-center">
+                        {{ coluna.header }}
+                        <p-sortIcon *ngIf="coluna.header !== 'Ações'" [field]="coluna.field" 
+                            ariaLabel="active to sort"
+                            ariaLabelDesc="Activate to sort in descending order"
+                            ariaLabelAsc="Activate to sort in ascending order">
+                        </p-sortIcon>
+                    </th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-patologia>
+                <tr>
+                    <td *ngFor="let coluna of colunasTabela" class="text-center">
+                        <span class="ui-column-title text-left"></span>
+                        {{ patologia[coluna.field] }}
+        
+                        <span *ngIf="coluna.header === 'Ações'">
+                            <button class="btn btn-warning" pTooltip="Editar" tooltipPosition="bottom"
+                                (click)="armazenarPatologiaParaEdicao(patologia)">
+                                <i class="fas fa-pen text-light"></i>
+                            </button>
+
+                            <button class="btn btn-danger ml-2" pTooltip="Excluir" tooltipPosition="bottom"
+                                (click)="armazenarPatologiaParaExclusao(patologia)">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </span>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage" class="text-center" let-patologias>
+                <tr>
+                    <td [attr.colspan]="patologias.length" class="text-center">
+                        <span *ngIf="!processandoOperacao">
+                            {{ inputPesquisa ? 'Nenhuma patologias corresponde à pesquisa!' : 'Nenhuma patologias encontrado!' }}
+                        </span>
+
+                        <span *ngIf="processandoOperacao && !inputPesquisa">
+                            <p-progressSpinner strokeWidth="3"></p-progressSpinner>
+                        </span>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="summary">
+                Patologias encontradas: {{ patologias ? patologias.length : 0 }}
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<!-- Dialog cadatro/alteração de Patologia -->
+<p-dialog [visible]="abrirDialogCadastroEdicao" [modal]="true" [resizable]="false" [blockScroll]="true" 
+    [draggable]="false" [closable]="false">
+
+    <p-header>
+        {{ operacaoEdicao ? 'Alterar patologia' : 'Cadastrar patologia' }}
+    </p-header>
+
+    <div class="mt-4">
+        <span class="p-float-label">
+            <input type="text" style="width: 250px;" maxlength="100" [(ngModel)]="formularioPatologia.descricao" pInputText> 
+            <label for="inputtext">Descrição</label>
+        </span>
+        <div class="text-right" style="font-size: 13px;" [ngClass]="formularioPatologia.descricao?.length === 100 ? 'text-danger' : ''">
+            {{ quantidadeLimiteCaracteresCampoDescricao() }}
+        </div>
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="resetarCampos()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+        
+        <button class="btn btn-success" [disabled]="processandoOperacao || patologiaNaoEstaValida()" 
+            (click)="salvarPatologia()">
+            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
+        </button>
+    </p-footer>
+</p-dialog>
+
+<!-- Dialog exclusão de Patologia -->
+<p-dialog [visible]="abrirDialogExclusao" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '60vh'}">
+
+    <p-header>
+        Excluir patologia
+    </p-header>
+
+    <div>
+        Tem certeza que deseja excluir a patologia <b>{{ patologiaSelecionada.descricao }}</b>?
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="resetarCampos()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+
+        <button class="btn btn-success" [disabled]="processandoOperacao" 
+            (click)="excluirPatologia()">
+            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
+        </button>
+    </p-footer>
+</p-dialog>
 
 <app-toasty #toastyComponent></app-toasty>

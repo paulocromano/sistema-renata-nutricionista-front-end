@@ -1,1 +1,158 @@
-<p>suplemento works!</p>
+<div class="container">
+    <div class="borda-table">
+        <p-table #dataView [value]="suplementos" [columns]="colunasTabela" [responsive]="true" 
+            [rows]="8" [paginator]="true" class="text-center">
+
+            <ng-template pTemplate="caption">
+                <div class="row">
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                        <input type="text" pInputText placeholder="Pesquisa" class="pesquisa" [(ngModel)]="inputPesquisa"
+                            (input)="dataView.filterGlobal($event.target.value, 'contains')">
+                        <i class="fas fa-search" style="font-size: 1.18em;"></i>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-8 text-right">
+                        <button class="btn btn-success px-5" (click)="abrirDialogCadastro()">
+                            <i class="fas fa-plus"></i>
+                            Cadastrar Suplemento
+                        </button>
+                    </div>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="header" let-colunas>
+                <tr>
+                    <th *ngFor="let coluna of colunas" [pSortableColumn]="coluna.field" [ngClass]="coluna.style" class="text-center">
+                        {{ coluna.header }}
+                        <p-sortIcon *ngIf="coluna.header !== 'Ações'" [field]="coluna.field" 
+                            ariaLabel="active to sort"
+                            ariaLabelDesc="Activate to sort in descending order"
+                            ariaLabelAsc="Activate to sort in ascending order">
+                        </p-sortIcon>
+                    </th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-suplemento>
+                <tr>
+                    <td *ngFor="let coluna of colunasTabela" class="text-center">
+                        <span class="ui-column-title text-left"></span>
+                        {{ suplemento[coluna.field] }}
+        
+                        <span *ngIf="coluna.header === 'Ações'">
+                            <button class="btn btn-warning" pTooltip="Editar" tooltipPosition="bottom"
+                                (click)="armazenarSuplementoParaEdicao(suplemento)">
+                                <i class="fas fa-pen text-light"></i>
+                            </button>
+
+                            <button class="btn btn-danger ml-2" pTooltip="Excluir" tooltipPosition="bottom"
+                                (click)="armazenarSuplementoParaExclusao(suplemento)">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </span>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage" class="text-center" let-suplementos>
+                <tr>
+                    <td [attr.colspan]="suplementos.length" class="text-center">
+                        <span *ngIf="!processandoOperacao">
+                            {{ inputPesquisa ? 'Nenhum suplemento corresponde à pesquisa!' : 'Nenhum suplemento encontrado!' }}
+                        </span>
+
+                        <span *ngIf="processandoOperacao && !inputPesquisa">
+                            <p-progressSpinner strokeWidth="3"></p-progressSpinner>
+                        </span>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="summary">
+                Suplementos encontrados: {{ suplementos ? suplementos.length : 0 }}
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<!-- Dialog cadatro/alteração de Suplemento -->
+<p-dialog [visible]="abrirDialogCadastroEdicao" [modal]="true" [resizable]="false" [blockScroll]="true" 
+    [draggable]="false" [closable]="false" [style]="{width: '60vh'}">
+
+    <p-header>
+        {{ operacaoEdicao ? 'Alterar suplemento' : 'Cadastrar suplemento' }}
+    </p-header>
+
+    <div class="mt-4">
+        <div>
+            <span class="p-float-label">
+                <input type="text" style="width: 100%;" maxlength="100" [(ngModel)]="formularioSuplemento.nome" pInputText> 
+                <label for="inputtext">Nome</label>
+            </span>
+            <div class="text-right" style="font-size: 13px;" [ngClass]="formularioSuplemento.nome?.length === 100 ? 'text-danger' : ''">
+                {{ quantidadeLimiteCaracteresCampo(formularioSuplemento.nome, 100) }}
+            </div>
+        </div>
+
+        <div class="mt-2">
+            <span class="p-float-label">
+                <input type="text" style="width: 100%;" maxlength="100" [(ngModel)]="formularioSuplemento.dose" pInputText> 
+                <label for="inputtext">Dose</label>
+            </span>
+            <div class="text-right" style="font-size: 13px;" [ngClass]="formularioSuplemento.dose?.length === 100 ? 'text-danger' : ''">
+                {{ quantidadeLimiteCaracteresCampo(formularioSuplemento.dose, 100) }}
+            </div>
+        </div>
+
+        <div class="mt-2">
+            <span class="p-float-label">
+                <textarea pInputTextarea maxlength="250" [rows]="4" [(ngModel)]="formularioSuplemento.formaPreparo" style="width: 100%;"></textarea>
+                <label for="inputtext">Forma de preparo</label>
+            </span>
+            <div class="text-right" style="font-size: 13px;" [ngClass]="formularioSuplemento.formaPreparo?.length === 250 ? 'text-danger' : ''">
+                {{ quantidadeLimiteCaracteresCampo(formularioSuplemento.formaPreparo, 250) }}
+            </div>
+        </div>
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="resetarCampos()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+        
+        <button class="btn btn-success" [disabled]="processandoOperacao || suplementoNaoEstaValido()" 
+            (click)="salvarSuplemento()">
+            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
+        </button>
+    </p-footer>
+</p-dialog>
+
+<!-- Dialog exclusão de Suplemento -->
+<p-dialog [visible]="abrirDialogExclusao" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '60vh'}">
+
+    <p-header>
+        Excluir suplemento
+    </p-header>
+
+    <div>
+        Tem certeza que deseja excluir o suplemento <b>{{ suplementoSelecionado.nome }}</b>?
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="resetarCampos()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+
+        <button class="btn btn-success" [disabled]="processandoOperacao" 
+            (click)="excluirSuplemento()">
+            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
+        </button>
+    </p-footer>
+</p-dialog>
+
+<app-toasty #toastyComponent></app-toasty>
