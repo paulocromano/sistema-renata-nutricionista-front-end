@@ -22,6 +22,7 @@ const routes: Routes = [
   { path: 'medicamentos', component: MedicamentoComponent, canActivate: [ AdminGuard ] },
   { path: 'suplementos', component: SuplementoComponent, canActivate: [ AdminGuard ] },
   { path: 'patologias', component: PatologiaComponent, canActivate: [ AdminGuard ] },
+  { path: 'calendario-atendimento', component: CalendarioAtendimentoComponent, canActivate: [ AdminGuard ] },
   { path: 'login', component: LoginComponent }
 ];
 
