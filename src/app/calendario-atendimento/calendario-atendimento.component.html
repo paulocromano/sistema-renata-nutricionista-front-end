@@ -1,3 +1,166 @@
+<div class="container">
+    <div class="borda-table">
+        <p-table #dataView [value]="periodos" [columns]="colunasTabela" [responsive]="true" 
+            [rows]="10" [paginator]="true" class="text-center">
 
+            <ng-template pTemplate="caption">
+                <div class="row">
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                        <input type="text" pInputText placeholder="Pesquisa" class="pesquisa" [(ngModel)]="inputPesquisa"
+                            (input)="dataView.filterGlobal($event.target.value, 'contains')">
+                        <i class="fas fa-search" style="font-size: 1.18em;"></i>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-8 text-right">
+                        <button class="btn btn-success px-5" (click)="abrirDialogCadastro()">
+                            <i class="fas fa-plus"></i>
+                            Cadastrar Período(s)
+                        </button>
+                    </div>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="header" let-colunas>
+                <tr>
+                    <th *ngFor="let coluna of colunas" [pSortableColumn]="coluna.field" [ngClass]="coluna.style" class="text-center">
+                        {{ coluna.header }}
+                        <p-sortIcon *ngIf="coluna.header !== 'Ações'" [field]="coluna.field" 
+                            ariaLabel="active to sort"
+                            ariaLabelDesc="Activate to sort in descending order"
+                            ariaLabelAsc="Activate to sort in ascending order">
+                        </p-sortIcon>
+                    </th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-periodo>
+                <tr>
+                    <td *ngFor="let coluna of colunasTabela" class="text-center">
+                        <span class="ui-column-title text-left"></span>
+                        {{ periodo[coluna.field] }}
+        
+                        <span *ngIf="coluna.header === 'Ações'">
+                            <button class="btn btn-danger" pTooltip="Excluir" tooltipPosition="bottom"
+                                (click)="armazenarPeriodoParaExclusao(periodo)">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </span>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage" class="text-center" let-periodos>
+                <tr>
+                    <td [attr.colspan]="periodos.length" class="text-center">
+                        <span *ngIf="!processandoOperacao">
+                            {{ inputPesquisa ? 'Nenhum periodo corresponde à pesquisa!' : 'Nenhum periodo encontrado!' }}
+                        </span>
+
+                        <span *ngIf="processandoOperacao && !inputPesquisa">
+                            <p-progressSpinner strokeWidth="3"></p-progressSpinner>
+                        </span>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="summary">
+                Períodos de Atendimento encontrados: {{ periodos ? periodos.length : 0 }}
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<!-- Dialog cadastro de Período(s) -->
+<p-dialog [visible]="exibirDialogCadastro" [modal]="true" [resizable]="false" [blockScroll]="true" 
+    [draggable]="false" [closable]="false">
+
+    <p-header>
+        Cadastrar Período(s)
+    </p-header>
+
+    <div class="mt-2">
+        <p-tabView (onChange)="abaTabViewSelecionada($event)">
+            <p-tabPanel header="Período" [selected]="true">
+    
+            </p-tabPanel>
+    
+            <p-tabPanel header="Períodos">
+                <div class="row mt-4">
+                    <div class="col-12 col-sm-6">
+                        <span class="p-float-label">
+                            <p-inputMask mask="99/99/9999" [style]="{width: '120px'}" [(ngModel)]="formularioCalendario.dataInicial"> 
+                            </p-inputMask>
+                            <label for="inputtext">Data inicial</label>
+                        </span>
+                    </div>
+        
+                    <div class="col-12 col-sm-6">
+                        <span class="p-float-label">
+                            <p-inputMask mask="99/99/9999" [style]="{width: '120px'}" [(ngModel)]="formularioCalendario.dataFinal"> 
+                            </p-inputMask>
+                            <label for="inputtext">Data final</label>
+                        </span>
+                    </div>
+                </div>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="resetarCampos()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+
+        <span *ngIf="indiceAbaTabViewSelecionada === 0">
+
+        </span>
+
+        <span *ngIf="indiceAbaTabViewSelecionada === 1">    
+            <button class="btn btn-info" pTooltip="Gerar períodos automaticamente" tooltipPosition="bottom"
+                (click)="cadastrarPeriodosAutomaticamente()" 
+                [disabled]="processandoOperacao  || desabilitarBotaoCadastroPeriodosAutomaticamente()">
+    
+                <i [ngClass]="cadastrandoPeriodosAutomaticamente ? 'fas fa-spin fa-circle-notch' : 'far fa-calendar-alt'"></i>
+                Gerar automaticamente
+            </button>
+    
+            <button class="btn" style="background-color: #814DBC; color: white;" pTooltip="Gerar períodos manualmente" 
+                tooltipPosition="bottom" (click)="cadastrarPeriodosManualmente()" 
+                [disabled]="processandoOperacao || desabilitarBotaoCadastroPeriodosManualmente()">
+    
+                <i class="fas " [ngClass]="cadastrandoPeriodosManualmente ? 'fa-spin fa-circle-notch' : 'fa-calendar-alt'"></i>
+                Gerar manualmente
+            </button>
+        </span>
+    </p-footer>
+</p-dialog>
+
+<!-- Dialog exclusão de Período -->
+<p-dialog [visible]="exibirDialogExclusao" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '60vh'}">
+
+    <p-header>
+        Excluir Período
+    </p-header>
+
+    <div>
+        Tem certeza que deseja excluir o período do dia <b>{{ periodoSelecionado.data }}</b>
+        às <b>{{ periodoSelecionado.horario }}h</b> ?
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="resetarCampos()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+
+        <button class="btn btn-success" [disabled]="processandoOperacao" 
+            (click)="excluirPeriodo()">
+            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
+        </button>
+    </p-footer>
+</p-dialog>
 
 <app-toasty #toastyComponent></app-toasty>

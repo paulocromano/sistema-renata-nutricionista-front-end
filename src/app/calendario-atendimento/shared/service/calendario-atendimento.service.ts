@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 
 import { CalendarioAtendimentoPacienteFORM } from './../model/calendario-atendimento-paciente.form';
 import { PeriodoAtendimentoFORM } from './../model/periodo-atendimento.form';
-import { CalendarioAtendimentoPaciente } from './../model/calendario-atendimento-paciente.model';
+import { PeriodoAtendimento } from '../model/periodo-atendimento.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +15,8 @@ export class CalendarioAtendimentoService {
   constructor(private http: HttpClient) { }
 
 
-  public listarHorariosAPartirDoDiaAtual(): Observable<CalendarioAtendimentoPaciente> {
-    return this.http.get<CalendarioAtendimentoPaciente>(`/calendario-atendimento-paciente`);
+  public listarPeriodosAPartirDoDiaAtual(): Observable<PeriodoAtendimento[]> {
+    return this.http.get<PeriodoAtendimento[]>(`/calendario-atendimento-paciente`);
   }
 
   public cadastrarUmPeriodoNoCalendario(periodo: PeriodoAtendimentoFORM): Observable<any> {

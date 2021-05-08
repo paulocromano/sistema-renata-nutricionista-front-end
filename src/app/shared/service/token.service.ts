@@ -41,6 +41,6 @@ export class TokenService {
     this.carregarInformacoesToken();
     const permissoesToken: any[] = this.jwtPayload.permissoes;
     
-    return permissoesToken.map(permissao => permissao.authority);
+    return permissoesToken ? permissoesToken.map(permissao => permissao.authority) : null;
   }
 }

@@ -8,7 +8,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { DialogModule } from 'primeng/dialog';
 import { TooltipModule } from 'primeng/tooltip';
-import { CalendarModule } from 'primeng/calendar';
+import { InputMaskModule } from 'primeng/inputmask';
+import { TabViewModule } from 'primeng/tabview';
 
 import { CalendarioAtendimentoComponent } from './calendario-atendimento.component';
 import { ToastyModule } from './../shared/toasty/toasty.module';
@@ -25,7 +26,8 @@ import { ToastyModule } from './../shared/toasty/toasty.module';
     ProgressSpinnerModule,
     DialogModule,
     TooltipModule,
-    CalendarModule,
+    InputMaskModule,
+    TabViewModule,
     ToastyModule
   ]
 })

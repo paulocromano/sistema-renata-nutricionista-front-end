@@ -1,4 +1,4 @@
-export class CalendarioAtendimentoPaciente {
+export class PeriodoAtendimento {
 
     id: number;
     data: string;
