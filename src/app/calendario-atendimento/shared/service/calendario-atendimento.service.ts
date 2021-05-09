@@ -35,10 +35,6 @@ export class CalendarioAtendimentoService {
     return this.http.delete(`/calendario-atendimento-paciente/excluir-periodo/${idPeriodo}`);
   }
 
-  public excluirTodosHorariosAnterioresAoPeriodoAtual(): Observable<any> {
-    return this.http.delete(`/calendario-atendimento-paciente/excluir-horarios-precedem-data-atual`);
-  }
-
   public excluirPeriodosConformeDataInicialFinal(dataInicio: string, dataFim: string): Observable<any> {
     return this.http.delete(`/calendario-atendimento-paciente/excluir-periodos?dataInicio=${dataInicio}&dataFim=${dataFim}`);
   }

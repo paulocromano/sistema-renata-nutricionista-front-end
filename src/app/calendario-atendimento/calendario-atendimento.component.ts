@@ -1,10 +1,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { CalendarioAtendimentoPacienteFORM } from './shared/model/calendario-atendimento-paciente.form';
-import { PeriodoAtendimento } from './shared/model/periodo-atendimento.model';
 import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { ToastyComponent } from './../shared/toasty/toasty.component';
 import { CalendarioAtendimentoService } from './shared/service/calendario-atendimento.service';
+import { PeriodoAtendimentoFORM } from './shared/model/periodo-atendimento.form';
+import { CalendarioAtendimentoPacienteFORM } from './shared/model/calendario-atendimento-paciente.form';
+import { PeriodoAtendimento } from './shared/model/periodo-atendimento.model';
 
 @Component({
   selector: 'app-calendario-atendimento',
@@ -19,7 +20,10 @@ export class CalendarioAtendimentoComponent implements OnInit {
 
   public periodos: PeriodoAtendimento[] = [];
   public formularioCalendario: CalendarioAtendimentoPacienteFORM = new CalendarioAtendimentoPacienteFORM();
+  public formularioPeriodo: PeriodoAtendimentoFORM = new PeriodoAtendimentoFORM();
   public periodoSelecionado: PeriodoAtendimento = new PeriodoAtendimento();
+  public dataInicialExclusaoPeriodos: string = '';
+  public dataFinalExclusaoPeriodos: string = '';
 
   public colunasTabela: any[];
   public inputPesquisa: string;
@@ -27,9 +31,10 @@ export class CalendarioAtendimentoComponent implements OnInit {
   public cadastrandoPeriodosAutomaticamente: boolean = false;
   public cadastrandoPeriodosManualmente: boolean = false;
   public exibirDialogCadastro: boolean = false;
-  public exibirDialogExclusao: boolean = false;
-  public formatoCalendario: any;
+  public exibirDialogExclusaoDeUmPeriodo: boolean = false;
+  public exibirDialogExclusaoDePeriodos: boolean = false;
   public indiceAbaTabViewSelecionada: number = 0;
+  public quantidadePeriodosDisponiveisIntervaloParaExclusao: number = 0;
 
   constructor(private calendarioAtendimentoService: CalendarioAtendimentoService) { }
 
@@ -40,31 +45,6 @@ export class CalendarioAtendimentoComponent implements OnInit {
       { header: 'Disponível', field: 'periodoDisponivel', style: 'col-periodo-disponivel' },
       { header: 'Ações', field: 'acoes', style: 'col-acoes' }
     ];
-
-    this.formatoCalendario = {
-      firstDayOfWeek: 0,
-      dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
-      dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
-      dayNamesMin: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
-      monthNames: [
-          'Janeiro',
-          'Fevereiro',
-          'Março',
-          'Abril',
-          'Maio',
-          'Junho',
-          'Julho',
-          'Agosto',
-          'Setembro',
-          'Outubro',
-          'Novembro',
-          'Dezembro'
-      ],
-      monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-      today: 'Hoje',
-      clear: 'Limpar',
-      dateFormat: 'mm/dd/yy'
-  };
 
     this.listarPeriodosAPartirDoDiaAtual();
   }
@@ -80,6 +60,28 @@ export class CalendarioAtendimentoComponent implements OnInit {
       (errorResponse: HttpErrorResponse) => {
         this.processandoOperacao = false;
         this.toasty.error('Erro ao listar períodos de atendimento!');
+      });
+  }
+
+  public cadastrarPeriodo(): void {
+    this.processandoOperacao = true;
+
+    this.calendarioAtendimentoService.cadastrarUmPeriodoNoCalendario(this.formularioPeriodo)
+      .subscribe(() => {
+        this.processandoOperacao = false;
+        this.resetarCampos();
+        this.listarPeriodosAPartirDoDiaAtual();
+        this.toasty.success('Período cadastrado com sucesso!');
+      },
+      (errorResponse: HttpErrorResponse) => {
+        this.processandoOperacao = false;
+
+        if (errorResponse.status === 400) {
+          this.toasty.error(errorResponse.error.message);
+        }
+        else {
+          this.toasty.error('Erro ao cadastrar período!');
+        }
       });
   }
 
@@ -153,13 +155,40 @@ export class CalendarioAtendimentoComponent implements OnInit {
       });
   }
 
+  public excluirPeriodos(): void {
+    this.processandoOperacao = true;
+
+    this.calendarioAtendimentoService.excluirPeriodosConformeDataInicialFinal(this.dataInicialExclusaoPeriodos, this.dataFinalExclusaoPeriodos)
+      .subscribe(() => {
+        this.processandoOperacao = false;
+        this.resetarCampos();
+        this.listarPeriodosAPartirDoDiaAtual();
+        this.toasty.success('Períodos excluídos com sucesso!');
+      },
+      (errorResponse: HttpErrorResponse) => {
+        this.processandoOperacao = false;
+
+        if (errorResponse.status === 400) {
+          this.toasty.error(errorResponse.error.message);
+        }
+        else {
+          this.toasty.error('Erro ao excluir períodos!');
+        }
+      });
+  }
+
   public armazenarPeriodoParaExclusao(periodo: PeriodoAtendimento): void {
     this.periodoSelecionado = periodo;
-    this.exibirDialogExclusao = true;
+    this.exibirDialogExclusaoDeUmPeriodo = true;
   }
 
   public abrirDialogCadastro(): void {
     this.exibirDialogCadastro = true;
+  }
+
+  public desabilitarBotaoConfirmarCadastroDePeriodo(): boolean {
+    return !((this.formularioPeriodo.data && !this.formularioPeriodo.data.includes('_')) 
+      && (this.formularioPeriodo.horario && !this.formularioPeriodo.horario.includes('_')));
   }
 
   public desabilitarBotaoCadastroPeriodosAutomaticamente(): boolean {
@@ -167,20 +196,58 @@ export class CalendarioAtendimentoComponent implements OnInit {
   }
 
   public desabilitarBotaoCadastroPeriodosManualmente(): boolean {
-    return !(this.formularioCalendario.dataInicial && this.formularioCalendario.dataFinal);
+    return !(this.formularioCalendario.dataInicial && !this.formularioCalendario.dataInicial.includes('_') 
+      && (this.formularioCalendario.dataFinal && !this.formularioCalendario.dataFinal.includes('_')));
   }
 
   public abaTabViewSelecionada(event): void {
     this.indiceAbaTabViewSelecionada = event.index;
   }
 
+  public abrirDialogExclusaoPeriodos(): void {
+    this.exibirDialogExclusaoDePeriodos = true;
+  }
+
+  public converterStringDataParaDate(data: string): Date {
+    let dataSeparadaPorBarra = data.split('/');
+    let dataFormatada = dataSeparadaPorBarra[2] + '-' + dataSeparadaPorBarra[1] + '-' + dataSeparadaPorBarra[0];
+
+    return new Date(dataFormatada);
+  }
+
+  public camposParaExclusaoDePeriodosEstaoValidos(): boolean {
+    let camposEstaoValidos: boolean = (this.dataInicialExclusaoPeriodos && !this.dataInicialExclusaoPeriodos.includes('_'))
+      && (this.dataFinalExclusaoPeriodos && !this.dataFinalExclusaoPeriodos.includes('_'));
+    
+    if (camposEstaoValidos) {
+      this.totalPeriodosDisponiveisParaExclusao();
+    }
+
+    return camposEstaoValidos;
+  }
+
+  public totalPeriodosDisponiveisParaExclusao(): void {
+    let dataInicialParaExclusao: Date = this.converterStringDataParaDate(this.dataInicialExclusaoPeriodos);
+    let dataFinalParaExclusao: Date = this.converterStringDataParaDate(this.dataFinalExclusaoPeriodos);
+
+    this.quantidadePeriodosDisponiveisIntervaloParaExclusao = this.periodos
+      .filter(periodo => {
+        let dataPeriodo: Date = this.converterStringDataParaDate(periodo.data);
+        return periodo.periodoDisponivel === 'Sim' && dataPeriodo >= dataInicialParaExclusao && dataPeriodo <= dataFinalParaExclusao
+      }).length;
+  }
+
   public resetarCampos(): void {
     this.exibirDialogCadastro = false;
-    this.exibirDialogExclusao = false;
+    this.exibirDialogExclusaoDeUmPeriodo = false;
+    this.exibirDialogExclusaoDePeriodos = false;
     this.cadastrandoPeriodosAutomaticamente = false;
     this.cadastrandoPeriodosManualmente = false;
 
     this.periodoSelecionado = new PeriodoAtendimento();
     this.formularioCalendario = new CalendarioAtendimentoPacienteFORM();
+    this.formularioPeriodo = new PeriodoAtendimentoFORM();
+    this.dataInicialExclusaoPeriodos = '';
+    this.dataFinalExclusaoPeriodos = '';
   }
 }
