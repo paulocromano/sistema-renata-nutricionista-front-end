@@ -1,18 +1,35 @@
-<div class="container">
+<div class="container-fluid">
     <div class="borda-table">
         <p-table #dataView [value]="atendimentos" [columns]="colunasTabela" [responsive]="true" 
             [rows]="8" [paginator]="true" class="text-center">
 
             <ng-template pTemplate="caption">
                 <div class="row">
-                    <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-3">
                         <input type="text" pInputText placeholder="Pesquisa" class="pesquisa" [(ngModel)]="inputPesquisa"
                             (input)="dataView.filterGlobal($event.target.value, 'contains')">
                         <i class="fas fa-search" style="font-size: 1.18em;"></i>
                     </div>
 
-                    <div class="col-12 col-sm-6 col-md-6 col-lg-8 text-right">
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-9">
+                        <div class="row ml-5">
+                            <span class="p-float-label">
+                                <p-inputMask mask="99/99/9999" [style]="{width: '120px'}" [(ngModel)]="dataInicialPesquisaPeriodoAtendimento"> 
+                                </p-inputMask>
+                                <label for="inputtext">Data inicial</label>
+                            </span>
+            
+                            <span class="p-float-label ml-3">
+                                <p-inputMask mask="99/99/9999" [style]="{width: '120px'}" [(ngModel)]="dataFinalPesquisaPeriodoAtendimento"> 
+                                </p-inputMask>
+                                <label for="inputtext">Data final</label>
+                            </span>
 
+                            <button class="btn btn-success ml-4" [disabled]="desabilitarBotaoPesquisa()">
+                                <i class="fas fa-search"></i>
+                                Pesquisar
+                            </button>
+                        </div>
                     </div>
                 </div>
             </ng-template>
@@ -37,8 +54,33 @@
                         {{ atendimento[coluna.field] }}
         
                         <span *ngIf="coluna.header === 'Ações'">
-                            <button class="btn btn-danger ml-2" pTooltip="Excluir" tooltipPosition="bottom"
-                                (click)="armazenarAtendimentoParaExclusao(atendimento)">
+                            <button class="btn btn-primary px-3" pTooltip="Informações" tooltipPosition="bottom"
+                                (click)="armazenarAtendimentoSelecionadoParaDialogInformacoes(atendimento)">
+                                <i class="fas fa-info"></i>
+                            </button>
+
+                            <button class="btn btn-secondary ml-2" pTooltip="Visualizar ficha" tooltipPosition="bottom">
+                                <i class="far fa-address-card"></i>
+                            </button>
+
+                            <button class="btn btn-warning ml-2" pTooltip="Reagendar" tooltipPosition="bottom">
+                                <i class="fas fa-pen text-white"></i>
+                            </button>
+
+                            <button class="btn btn-success ml-2" pTooltip="Agendar retorno" tooltipPosition="bottom">
+                                <i class="fas fa-plus-circle"></i>
+                            </button>
+
+                            <button class="btn btn-success ml-2" pTooltip="Confirmar" tooltipPosition="bottom">
+                                <i class="fas fa-check"></i>
+                            </button>
+
+                            <button class="btn btn-info ml-2" pTooltip="Iniciar" tooltipPosition="bottom">
+                                <i class="fas fa-notes-medical"></i>
+                            </button>
+
+                            <button class="btn btn-danger ml-2" pTooltip="Cancelar" tooltipPosition="bottom"
+                                (click)="armazenarAtendimentoParaCancelamento(atendimento)">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
                         </span>
@@ -66,5 +108,38 @@
         </p-table>
     </div>
 </div>
+
+<!-- Dialog informações do Paciente -->
+<p-dialog [visible]="exibirDialogInformacoesAtendimento" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '75vh'}">
+
+    <p-header>
+        Informações {{ atendimentoSelecionado.descricaoTipoAtendimento === 'Consulta' ? 'da consulta' : 'do retorno da consulta' }}
+    </p-header>
+
+    <div>
+        <div><b>Nome:</b> {{ atendimentoSelecionado.nomePaciente }}</div>
+        <div><b>Data:</b> {{ atendimentoSelecionado.dataAtendimento }}</div>
+        <div><b>Horário:</b> {{ atendimentoSelecionado.horarioAtendimento }}h</div>
+        <div><b>Tipo de atendimento:</b> {{ atendimentoSelecionado.descricaoTipoAtendimento }}</div>
+        <div><b>Situação:</b> {{ atendimentoSelecionado.situacaoAtendimento }}</div>
+
+        <div *ngIf="atendimentoSelecionado.descricaoTipoAtendimento === 'Consulta'">
+            <div><b>Forma de pagamento:</b> {{ atendimentoSelecionado.formaPagamentoConsulta }}</div>
+            <div *ngIf="atendimentoSelecionado.numeroParcelasConsulta"><b>Forma de pagamento:</b> 
+                {{ atendimentoSelecionado.numeroParcelasConsulta }}
+            </div>
+            <div><b>Valor R$:</b> {{ atendimentoSelecionado.valorConsulta }}</div>
+            <div><b>Motivo da consulta:</b> {{ atendimentoSelecionado.motivoConsulta }}</div>
+        </div>
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="resetarCampos()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+    </p-footer>
+</p-dialog>
 
 <app-toasty #toastyComponent></app-toasty>
