@@ -25,7 +25,7 @@
                                 <label for="inputtext">Data final</label>
                             </span>
 
-                            <button class="btn btn-success ml-4" [disabled]="desabilitarBotaoPesquisa()">
+                            <button class="btn btn-success ml-4 px-5" [disabled]="desabilitarBotaoPesquisa()">
                                 <i class="fas fa-search"></i>
                                 Pesquisar
                             </button>
@@ -59,29 +59,30 @@
                                 <i class="fas fa-info"></i>
                             </button>
 
-                            <button class="btn btn-secondary ml-2" pTooltip="Visualizar ficha" tooltipPosition="bottom">
+                            <button *ngIf="exibirBotaoVisualizarFichaDoAtendimento(atendimento)" class="btn btn-secondary ml-2" 
+                                pTooltip="Visualizar ficha" tooltipPosition="bottom">
                                 <i class="far fa-address-card"></i>
                             </button>
 
-                            <button class="btn btn-warning ml-2" pTooltip="Reagendar" tooltipPosition="bottom">
+                            <button *ngIf="exibirBotaoReagendamentoDoAtendimento(atendimento)" class="btn btn-warning ml-2" 
+                                [pTooltip]="definirMensagemTooltip('Reagendar', atendimento)" tooltipPosition="bottom">
                                 <i class="fas fa-pen text-white"></i>
                             </button>
 
-                            <button class="btn btn-success ml-2" pTooltip="Agendar retorno" tooltipPosition="bottom">
-                                <i class="fas fa-plus-circle"></i>
-                            </button>
-
-                            <button class="btn btn-success ml-2" pTooltip="Confirmar" tooltipPosition="bottom">
+                            <button *ngIf="exibirBotaoConfirmacaoDoAtendimento(atendimento)" class="btn btn-success ml-2" 
+                                [pTooltip]="definirMensagemTooltip('Confirmar', atendimento)" tooltipPosition="bottom">
                                 <i class="fas fa-check"></i>
                             </button>
 
-                            <button class="btn btn-info ml-2" pTooltip="Iniciar" tooltipPosition="bottom">
+                            <button *ngIf="exibirBotaoParaIniciarAtendimento(atendimento)" class="btn btn-info ml-2 px-3" 
+                                [pTooltip]="definirMensagemTooltip('Iniciar', atendimento)" tooltipPosition="bottom">
                                 <i class="fas fa-notes-medical"></i>
                             </button>
 
-                            <button class="btn btn-danger ml-2" pTooltip="Cancelar" tooltipPosition="bottom"
+                            <button *ngIf="exibirBotaoParaCancelarAtendimento(atendimento)" class="btn btn-danger ml-2" 
+                                [pTooltip]="definirMensagemTooltip('Cancelar', atendimento)" tooltipPosition="bottom" 
                                 (click)="armazenarAtendimentoParaCancelamento(atendimento)">
-                                <i class="fas fa-trash-alt"></i>
+                                <i class="far fa-times-circle"></i>
                             </button>
                         </span>
                     </td>
