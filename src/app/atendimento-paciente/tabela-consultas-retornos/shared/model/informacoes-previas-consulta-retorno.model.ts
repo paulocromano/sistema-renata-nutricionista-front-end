@@ -1,6 +1,7 @@
 export class InformacoesPreviasConsultaRetorno {
 
     idAtendimento: number;
+    idPaciente: number;
     nomePaciente: string;
     situacaoAtendimento: string;
     codigoTipoAtendimento: number;
