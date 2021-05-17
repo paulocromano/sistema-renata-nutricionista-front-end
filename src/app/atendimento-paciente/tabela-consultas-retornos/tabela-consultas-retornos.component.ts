@@ -1,7 +1,7 @@
-import { RetornoConsulta } from './../retorno-consulta/shared/model/retorno-consulta.model';
-import { Consulta } from './../consulta/shared/model/consulta.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
+
+import { SelectItem } from 'primeng/api';
 
 import { ToastyComponent } from './../../shared/toasty/toasty.component';
 import { InformacoesPreviasConsultaRetorno } from './shared/model/informacoes-previas-consulta-retorno.model';
@@ -9,6 +9,13 @@ import { ConsultaService } from './../consulta/shared/service/consulta.service';
 import { TipoAtendimento } from './shared/model/tipo-atendimento.enum';
 import { SituacaoConsulta } from './../consulta/shared/model/situacao-consulta.enum';
 import { SituacaoRetornoConsulta } from './../retorno-consulta/shared/model/situacao-retorno-consulta.enum';
+import { RetornoConsulta } from './../retorno-consulta/shared/model/retorno-consulta.model';
+import { Consulta } from './../consulta/shared/model/consulta.model';
+import { PacienteService } from './../../paciente/shared/service/paciente.service';
+import { PacienteAgendamentoAtendimento } from 'src/app/paciente/shared/model/paciente-agendamento-atendimento.model';
+import { CalendarioAtendimentoService } from './../../calendario-atendimento/shared/service/calendario-atendimento.service';
+import { PeriodoAtendimento } from './../../calendario-atendimento/shared/model/periodo-atendimento.model';
+import { RetornoConsultaService } from './../retorno-consulta/shared/service/retorno-consulta.service';
 
 @Component({
   selector: 'app-tabela-consultas-retornos',
@@ -25,6 +32,11 @@ export class TabelaConsultasRetornosComponent implements OnInit {
   public atendimentoSelecionado: InformacoesPreviasConsultaRetorno = new InformacoesPreviasConsultaRetorno();
   public consultaSelecionada: Consulta = new Consulta();
   public retornoConsultaSelecionado: RetornoConsulta = new RetornoConsulta();
+  public pacientes: SelectItem[] = [];
+  public pacienteSelecionadoParaAgendamentoAtendimento: PacienteAgendamentoAtendimento = new PacienteAgendamentoAtendimento();
+  public dataSelecionadaParaAgendamentoDeAtendimento: string;
+  public horariosDisponiveisParaAgendamento: SelectItem[] = [];
+  public horarioSelecionadoParaAgendamento: PeriodoAtendimento;
 
   public colunasTabela: any[];
   public inputPesquisa: string;
@@ -32,8 +44,17 @@ export class TabelaConsultasRetornosComponent implements OnInit {
   public dataFinalPesquisaPeriodoAtendimento: string;
   public processandoOperacao: boolean = false;
   public exibirDialogInformacoesAtendimento: boolean = false;
+  public exibirDialogAgendarAtendimento: boolean = false;
+  public formatoCalendario: any;
+  public dataMinimaParaAgendamento: Date = new Date();
+  public carregandoHorariosParaAgendamento: boolean = false;
+  public proximoTipoAtendimentoParaAgendarDoPacienteSelecionado: number = null;
 
-  constructor(private consultaService: ConsultaService) { }
+  constructor(
+    private consultaService: ConsultaService,
+    private retornoConsultaService: RetornoConsultaService,
+    private pacienteService: PacienteService,
+    private calendarioAtendimentoService: CalendarioAtendimentoService) { }
 
   ngOnInit(): void {
     this.colunasTabela = [
@@ -45,7 +66,103 @@ export class TabelaConsultasRetornosComponent implements OnInit {
       { header: 'Ações', field: 'acoes', style: 'col-acoes' }
     ];
 
+    this.formatoCalendario = {
+      firstDayOfWeek: 0,
+      dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+      dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+      dayNamesMin: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+      monthNames: [
+          'Janeiro',
+          'Fevereiro',
+          'Março',
+          'Abril',
+          'Maio',
+          'Junho',
+          'Julho',
+          'Agosto',
+          'Setembro',
+          'Outubro',
+          'Novembro',
+          'Dezembro'
+      ],
+      monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+      today: 'Hoje',
+      clear: 'Limpar',
+      dateFormat: 'mm/dd/yy'
+    };
+
+    this.dataMinimaParaAgendamento.setDate(this.dataMinimaParaAgendamento.getDate() + 1);
+
+    this.listarPacientesParaAgendarConsultaOuRetorno();
     this.listarAtendimentosPorPeriodoPadrao();
+  }
+
+  public verificarProximoTipoAtendimentoDoPacienteSelecionado(event: any): void {
+    if (this.pacienteSelecionadoParaAgendamentoAtendimento) {
+      
+      this.consultaService.verificarProximoTipoDeAtendimentoDoPaciente(this.pacienteSelecionadoParaAgendamentoAtendimento.id)
+        .subscribe((tipoAtendimento: TipoAtendimento) => {
+          this.proximoTipoAtendimentoParaAgendarDoPacienteSelecionado = tipoAtendimento.valueOf();
+          console.log(this.proximoTipoAtendimentoParaAgendarDoPacienteSelecionado)
+        },
+        (errorResponse: HttpErrorResponse) => {
+          this.carregandoHorariosParaAgendamento = false;
+          this.toasty.error('Erro ao verificar o próximo tipo de atendimento do paciente!');
+        });
+    }
+  }
+
+  public listarHorariosDisponiveisParaAgendamentoConformeData(data: Date): void {
+    this.horariosDisponiveisParaAgendamento = [];
+    this.horarioSelecionadoParaAgendamento = null;
+    this.carregandoHorariosParaAgendamento = true;
+    this.dataSelecionadaParaAgendamentoDeAtendimento = this.converterDataParaString(data);
+    
+    this.calendarioAtendimentoService.buscarHorariosDisponiveisParaDiaDoAgendamentoDeAtendimento(
+      this.dataSelecionadaParaAgendamentoDeAtendimento).subscribe((periodos: PeriodoAtendimento[]) => {
+
+        periodos.forEach(periodo => this.horariosDisponiveisParaAgendamento.push({ label: periodo.horario, value: periodo.id }));
+        this.carregandoHorariosParaAgendamento = false;
+      },
+      (errorResponse: HttpErrorResponse) => {
+        this.carregandoHorariosParaAgendamento = false;
+        this.toasty.error('Erro ao buscar horários disponíveis para agendamento!');
+      });
+  } 
+
+  private converterDataParaString(data: Date): string {
+    let dia: string = (data.getDate() < 10) ? `0${data.getDate()}` : `${data.getDate()}`;
+    let mes: string = ((data.getMonth() + 1) < 10) ? `0${data.getMonth() + 1}` : `${data.getMonth() + 1}`;
+
+    return `${dia}/${mes}/${data.getFullYear()}` ;
+  }
+
+  public listarPacientesParaAgendarConsultaOuRetorno(): void {
+    this.pacienteService.buscarPacientesParaAgendarAtendimento()
+      .subscribe((pacientes: PacienteAgendamentoAtendimento[]) => {
+        pacientes.forEach(paciente => this.pacientes.push({ label: paciente.nome, value: paciente.id }));
+      },
+      (errorResponse: HttpErrorResponse) => {
+        this.processandoOperacao = false;
+        this.toasty.error('Erro ao listar os pacientes para agendamento de consulta ou retorno!');
+      });
+  }
+
+  public agendarAtendimento(): void {
+    if (this.proximoTipoAtendimentoParaAgendarDoPacienteSelecionado === TipoAtendimento.CONSULTA.valueOf()) {
+      this.agendarConsulta();
+    }
+    else if (this.proximoTipoAtendimentoParaAgendarDoPacienteSelecionado === TipoAtendimento.RETORNO_CONSULTA.valueOf()) {
+      this.agendarRetornoDaConsulta();
+    }
+  }
+
+  private agendarConsulta(): void {
+    this.processandoOperacao = true;
+  }
+
+  private agendarRetornoDaConsulta(): void {
+    this.processandoOperacao = true;
   }
 
   public listarAtendimentosPorPeriodoPadrao(): void {
@@ -140,7 +257,13 @@ export class TabelaConsultasRetornosComponent implements OnInit {
 
   public resetarCampos(): void {
     this.exibirDialogInformacoesAtendimento = false;
+    this.exibirDialogAgendarAtendimento = false;
+    this.carregandoHorariosParaAgendamento = false;
 
     this.atendimentoSelecionado = new InformacoesPreviasConsultaRetorno();
+    this.pacienteSelecionadoParaAgendamentoAtendimento = new PacienteAgendamentoAtendimento();
+    this.horariosDisponiveisParaAgendamento = [];
+    this.horarioSelecionadoParaAgendamento = null;
+    this.proximoTipoAtendimentoParaAgendarDoPacienteSelecionado = null;
   }
 }

@@ -11,8 +11,8 @@
                         <i class="fas fa-search" style="font-size: 1.18em;"></i>
                     </div>
 
-                    <div class="col-12 col-sm-6 col-md-6 col-lg-9">
-                        <div class="row ml-5">
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+                        <div class="row">
                             <span class="p-float-label">
                                 <p-inputMask mask="99/99/9999" [style]="{width: '120px'}" [(ngModel)]="dataInicialPesquisaPeriodoAtendimento"> 
                                 </p-inputMask>
@@ -24,12 +24,20 @@
                                 </p-inputMask>
                                 <label for="inputtext">Data final</label>
                             </span>
-
+    
                             <button class="btn btn-success ml-4 px-5" [disabled]="desabilitarBotaoPesquisa()">
                                 <i class="fas fa-search"></i>
                                 Pesquisar
                             </button>
                         </div>
+                    </div>
+
+                    <div class="col-12 col-sm-12 col-lg-3">
+                        <button class="btn btn-success px-5" pTooltip="Agendar atendimento" tooltipPosition="bottom"
+                            (click)="exibirDialogAgendarAtendimento = true">
+                            <i class="fas fa-plus"></i>
+                            Agendar atendimento
+                        </button>
                     </div>
                 </div>
             </ng-template>
@@ -109,6 +117,66 @@
         </p-table>
     </div>
 </div>
+
+<!-- Dialog agendamento de atendimento -->
+<p-dialog [visible]="exibirDialogAgendarAtendimento" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '140vh'}">
+
+    <p-header>
+        <span *ngIf="proximoTipoAtendimentoParaAgendarDoPacienteSelecionado === null">Agendar atendimento</span>
+        <span *ngIf="proximoTipoAtendimentoParaAgendarDoPacienteSelecionado !== null">
+            Agendar {{ proximoTipoAtendimentoParaAgendarDoPacienteSelecionado === 0 ? 'consulta' : 'retorno da consulta' }}
+        </span>
+    </p-header>
+
+    <div class="container-fluid mt-3">
+        <p-dropdown [options]="pacientes" [(ngModel)]="pacienteSelecionadoParaAgendamentoAtendimento.id"
+            (onChange)="verificarProximoTipoAtendimentoDoPacienteSelecionado($event)"
+            placeholder="Selecione um paciente" filter="true" [style]="{width: '100%'}" [disabled]="carregandoHorariosParaAgendamento"
+            [emptyFilterMessage]="pacientes.length === 0 ? 'Nenhum paciente encontrado!' : 'Nenhum paciente corresponde à pesquisa!'">
+        </p-dropdown>
+
+        <div class="row mt-3">
+            <div class="col-12 col-lg-6">
+                <p-calendar dataType="string" [locale]="formatoCalendario"
+                    (onSelect)="listarHorariosDisponiveisParaAgendamentoConformeData($event)" [inline]="true" 
+                    [disabled]="carregandoHorariosParaAgendamento || !pacienteSelecionadoParaAgendamentoAtendimento.id" 
+                    [minDate]="dataMinimaParaAgendamento">
+                </p-calendar>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <p-dropdown [options]="horariosDisponiveisParaAgendamento" [(ngModel)]="horarioSelecionadoParaAgendamento" 
+                    placeholder="Horários disponíveis" filter="true" emptyFilterMessage="Horário não encontrado!" 
+                    [style]="{width: '90%'}" [disabled]="carregandoHorariosParaAgendamento || !dataSelecionadaParaAgendamentoDeAtendimento
+                    || horariosDisponiveisParaAgendamento.length === 0">
+                </p-dropdown>
+
+                <span class="mt-1 ml-2">
+                    <i [ngClass]="carregandoHorariosParaAgendamento ? 'fas fa-spin fa-circle-notch' : null"></i>
+                </span>
+
+                <div *ngIf="horariosDisponiveisParaAgendamento.length === 0 && !carregandoHorariosParaAgendamento
+                    && dataSelecionadaParaAgendamentoDeAtendimento" class="text-danger mt-1" style="font-size: 13px;">
+                    *Não há horários disponíveis para a data selecionada!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="resetarCampos()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+
+        <button class="btn btn-success" [disabled]="processandoOperacao || !horarioSelecionadoParaAgendamento"
+            (click)="agendarAtendimento()">
+            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
+        </button>
+    </p-footer>
+</p-dialog>
 
 <!-- Dialog informações do Paciente -->
 <p-dialog [visible]="exibirDialogInformacoesAtendimento" [modal]="true" [resizable]="false" 

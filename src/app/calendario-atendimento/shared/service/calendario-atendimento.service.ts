@@ -15,6 +15,10 @@ export class CalendarioAtendimentoService {
   constructor(private http: HttpClient) { }
 
 
+  public buscarHorariosDisponiveisParaDiaDoAgendamentoDeAtendimento(data: string): Observable<PeriodoAtendimento[]> {
+    return this.http.get<PeriodoAtendimento[]>(`/calendario-atendimento-paciente/horarios-disponiveis?data=${data}`);
+  }
+
   public listarPeriodosAPartirDoDiaAtual(): Observable<PeriodoAtendimento[]> {
     return this.http.get<PeriodoAtendimento[]>(`/calendario-atendimento-paciente`);
   }

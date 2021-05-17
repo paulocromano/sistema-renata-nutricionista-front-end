@@ -28,6 +28,10 @@ export class ConsultaService {
       ?dataInicial=${dataInicial}&dataFinal=${dataFinal}`);
   }
 
+  public verificarProximoTipoDeAtendimentoDoPaciente(idPaciente: number): Observable<TipoAtendimento> {
+    return this.http.get<TipoAtendimento>(`/consulta-paciente/proximo-tipo-atendimento/${idPaciente}`);
+  }
+
   public buscarConsultaDoPaciente(idConsulta: number): Observable<Consulta> {
     return this.http.get<Consulta>(`/consulta-paciente/buscar/${TipoAtendimento.CONSULTA.valueOf()}/${idConsulta}`);
   }

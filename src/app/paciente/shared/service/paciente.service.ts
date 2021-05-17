@@ -6,6 +6,7 @@ import { ListagemCadastroPaciente } from './../model/listagem-cadastro-paciente.
 import { PacienteFORM } from './../model/paciente.form';
 import { EdicaoPacienteFORM } from './../model/edicao-paciente.form';
 import { HistoricosPaciente } from './../../../paciente-historicos/informacoes-historicos/shared/model/historicos-paciente.model';
+import { PacienteAgendamentoAtendimento } from './../model/paciente-agendamento-atendimento.model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,10 @@ export class PacienteService {
   
   public buscarInformacoesListagemCadastroPaciente(): Observable<ListagemCadastroPaciente> {
     return this.http.get<ListagemCadastroPaciente>(`/paciente/informacoes-listagem-cadastro`);
+  }
+
+  public buscarPacientesParaAgendarAtendimento(): Observable<PacienteAgendamentoAtendimento[]> {
+    return this.http.get<PacienteAgendamentoAtendimento[]>(`/paciente/agendamento-atendimento`);
   }
 
   public buscarInformacoesHistoricosPaciente(idPaciente: number): Observable<HistoricosPaciente> {
