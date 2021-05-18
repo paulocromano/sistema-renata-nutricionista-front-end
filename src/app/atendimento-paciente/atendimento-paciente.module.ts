@@ -10,6 +10,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { InputMaskModule } from 'primeng/inputmask';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 import { ToastyModule } from '../shared/toasty/toasty.module';
 import { TabelaConsultasRetornosComponent } from './tabela-consultas-retornos/tabela-consultas-retornos.component';
@@ -29,6 +30,7 @@ import { RetornoConsultaComponent } from './retorno-consulta/retorno-consulta.co
     InputMaskModule,
     DropdownModule,
     CalendarModule,
+    InputTextareaModule,
     ToastyModule
   ]
 })

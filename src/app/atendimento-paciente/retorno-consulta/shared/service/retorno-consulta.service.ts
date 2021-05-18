@@ -22,8 +22,8 @@ export class RetornoConsultaService {
       ${TipoAtendimento.RETORNO_CONSULTA.valueOf()}/${idRetornoConsulta}`);
   }
 
-  public agendarRetorno(idPaciente: number, idConsulta: number, agendamentoRetorno: AgendamentoRetornoFORM): Observable<any> {
-    return this.http.post(`/retorno-consulta-paciente/agendar/${idPaciente}/${idConsulta}`, agendamentoRetorno);
+  public agendarRetorno(idPaciente: number, agendamentoRetorno: AgendamentoRetornoFORM): Observable<any> {
+    return this.http.post(`/retorno-consulta-paciente/agendar/${idPaciente}`, agendamentoRetorno);
   }
 
   public reagendarRetorno(idPaciente: number, idRetornoConsulta: number, reagendamentoRetorno: ReagendamentoRetornoFORM): Observable<any> {

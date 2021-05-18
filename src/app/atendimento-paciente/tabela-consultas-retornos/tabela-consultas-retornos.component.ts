@@ -16,6 +16,8 @@ import { PacienteAgendamentoAtendimento } from 'src/app/paciente/shared/model/pa
 import { CalendarioAtendimentoService } from './../../calendario-atendimento/shared/service/calendario-atendimento.service';
 import { PeriodoAtendimento } from './../../calendario-atendimento/shared/model/periodo-atendimento.model';
 import { RetornoConsultaService } from './../retorno-consulta/shared/service/retorno-consulta.service';
+import { AgendamentoConsultaFORM } from './../consulta/shared/model/agendamento-consulta.form';
+import { AgendamentoRetornoFORM } from './../retorno-consulta/shared/model/agendamento-retorno-consulta.form';
 
 @Component({
   selector: 'app-tabela-consultas-retornos',
@@ -36,7 +38,9 @@ export class TabelaConsultasRetornosComponent implements OnInit {
   public pacienteSelecionadoParaAgendamentoAtendimento: PacienteAgendamentoAtendimento = new PacienteAgendamentoAtendimento();
   public dataSelecionadaParaAgendamentoDeAtendimento: string;
   public horariosDisponiveisParaAgendamento: SelectItem[] = [];
-  public horarioSelecionadoParaAgendamento: PeriodoAtendimento;
+  public horarioSelecionadoParaAgendamento: string;
+  public formularioAgendamentoConsulta: AgendamentoConsultaFORM = new AgendamentoConsultaFORM();
+  public formularioAgendamentoRetornoConsulta: AgendamentoRetornoFORM = new AgendamentoRetornoFORM();
 
   public colunasTabela: any[];
   public inputPesquisa: string;
@@ -103,7 +107,6 @@ export class TabelaConsultasRetornosComponent implements OnInit {
       this.consultaService.verificarProximoTipoDeAtendimentoDoPaciente(this.pacienteSelecionadoParaAgendamentoAtendimento.id)
         .subscribe((tipoAtendimento: TipoAtendimento) => {
           this.proximoTipoAtendimentoParaAgendarDoPacienteSelecionado = tipoAtendimento.valueOf();
-          console.log(this.proximoTipoAtendimentoParaAgendarDoPacienteSelecionado)
         },
         (errorResponse: HttpErrorResponse) => {
           this.carregandoHorariosParaAgendamento = false;
@@ -117,11 +120,12 @@ export class TabelaConsultasRetornosComponent implements OnInit {
     this.horarioSelecionadoParaAgendamento = null;
     this.carregandoHorariosParaAgendamento = true;
     this.dataSelecionadaParaAgendamentoDeAtendimento = this.converterDataParaString(data);
+    this.salvarDataNoFormularioDeAgendamentoDeAtendimento(this.dataSelecionadaParaAgendamentoDeAtendimento);
     
     this.calendarioAtendimentoService.buscarHorariosDisponiveisParaDiaDoAgendamentoDeAtendimento(
       this.dataSelecionadaParaAgendamentoDeAtendimento).subscribe((periodos: PeriodoAtendimento[]) => {
 
-        periodos.forEach(periodo => this.horariosDisponiveisParaAgendamento.push({ label: periodo.horario, value: periodo.id }));
+        periodos.forEach(periodo => this.horariosDisponiveisParaAgendamento.push({ label: periodo.horario, value: periodo.horario }));
         this.carregandoHorariosParaAgendamento = false;
       },
       (errorResponse: HttpErrorResponse) => {
@@ -135,6 +139,24 @@ export class TabelaConsultasRetornosComponent implements OnInit {
     let mes: string = ((data.getMonth() + 1) < 10) ? `0${data.getMonth() + 1}` : `${data.getMonth() + 1}`;
 
     return `${dia}/${mes}/${data.getFullYear()}` ;
+  }
+
+  private salvarDataNoFormularioDeAgendamentoDeAtendimento(data: string): void {
+    if (this.proximoTipoAtendimentoParaAgendarDoPacienteSelecionado === TipoAtendimento.CONSULTA.valueOf()) {
+      this.formularioAgendamentoConsulta.data = data;
+    }
+    else if (this.proximoTipoAtendimentoParaAgendarDoPacienteSelecionado === TipoAtendimento.RETORNO_CONSULTA.valueOf()) {
+      this.formularioAgendamentoRetornoConsulta.data = data;
+    }
+  }
+
+  public salvarHorarioNoFormularioDeAgendamentoDeAtendimento(event: any): void {
+    if (this.proximoTipoAtendimentoParaAgendarDoPacienteSelecionado === TipoAtendimento.CONSULTA.valueOf()) {
+      this.formularioAgendamentoConsulta.horario = this.horarioSelecionadoParaAgendamento;
+    }
+    else if (this.proximoTipoAtendimentoParaAgendarDoPacienteSelecionado === TipoAtendimento.RETORNO_CONSULTA.valueOf()) {
+      this.formularioAgendamentoRetornoConsulta.horario = this.horarioSelecionadoParaAgendamento;
+    }
   }
 
   public listarPacientesParaAgendarConsultaOuRetorno(): void {
@@ -159,10 +181,61 @@ export class TabelaConsultasRetornosComponent implements OnInit {
 
   private agendarConsulta(): void {
     this.processandoOperacao = true;
+
+    this.consultaService.agendarConsulta(this.pacienteSelecionadoParaAgendamentoAtendimento.id, this.formularioAgendamentoConsulta)
+      .subscribe(() => {
+        this.resetarCampos();
+        this.processandoOperacao = false;
+        this.toasty.success('Consulta agendada com sucesso!');
+        this.listarAtendimentosPorPeriodoPadrao();
+        this.listarPacientesParaAgendarConsultaOuRetorno();
+      },
+      (errorResponse: HttpErrorResponse) => {
+        this.processandoOperacao = false;
+        
+        if(errorResponse.status === 400) {
+          this.toasty.error(errorResponse.error.message);
+        } 
+        else {
+          this.toasty.error('Erro ao agendar consulta!');
+        }
+      });
   }
 
   private agendarRetornoDaConsulta(): void {
     this.processandoOperacao = true;
+
+    this.retornoConsultaService.agendarRetorno(this.pacienteSelecionadoParaAgendamentoAtendimento.id, this.formularioAgendamentoRetornoConsulta)
+      .subscribe(() => {
+        this.resetarCampos();
+        this.processandoOperacao = false;
+        this.toasty.success('Retorno da consulta agendada com sucesso!');
+        this.listarAtendimentosPorPeriodoPadrao();
+        this.listarPacientesParaAgendarConsultaOuRetorno();
+      },
+      (errorResponse: HttpErrorResponse) => {
+        this.processandoOperacao = false;
+
+        if(errorResponse.status === 400) {
+          this.toasty.error(errorResponse.error.message);
+        } 
+        else {
+          this.toasty.error('Erro ao agendar retorno da consulta!');
+        }
+      });
+  }
+
+  public desabilitarBotaoConfirmarAgendamentoAtendimento(): boolean {
+    if (this.proximoTipoAtendimentoParaAgendarDoPacienteSelecionado === TipoAtendimento.CONSULTA.valueOf()) {
+      return !(this.formularioAgendamentoConsulta && this.formularioAgendamentoConsulta.data 
+        && this.formularioAgendamentoConsulta.horario && this.formularioAgendamentoConsulta.motivoConsulta);
+    }
+    else if (this.proximoTipoAtendimentoParaAgendarDoPacienteSelecionado === TipoAtendimento.RETORNO_CONSULTA.valueOf()) {
+      return !(this.formularioAgendamentoRetornoConsulta && this.formularioAgendamentoRetornoConsulta.data
+        && this.formularioAgendamentoRetornoConsulta.horario);
+    }
+
+    return true;
   }
 
   public listarAtendimentosPorPeriodoPadrao(): void {
@@ -244,7 +317,7 @@ export class TabelaConsultasRetornosComponent implements OnInit {
   }
 
   private tipoAtendimentoIgualConsulta(atendimento: InformacoesPreviasConsultaRetorno): boolean {
-    return atendimento.codigoTipoAtendimento === TipoAtendimento.CONSULTA;
+    return atendimento.codigoTipoAtendimento === TipoAtendimento.CONSULTA.valueOf();
   }
 
   public definirMensagemTooltip(mensagem: string, atendimento: InformacoesPreviasConsultaRetorno): string {
@@ -262,8 +335,11 @@ export class TabelaConsultasRetornosComponent implements OnInit {
 
     this.atendimentoSelecionado = new InformacoesPreviasConsultaRetorno();
     this.pacienteSelecionadoParaAgendamentoAtendimento = new PacienteAgendamentoAtendimento();
+    this.dataSelecionadaParaAgendamentoDeAtendimento = null;
     this.horariosDisponiveisParaAgendamento = [];
     this.horarioSelecionadoParaAgendamento = null;
     this.proximoTipoAtendimentoParaAgendarDoPacienteSelecionado = null;
+    this.formularioAgendamentoConsulta = new AgendamentoConsultaFORM();
+    this.formularioAgendamentoRetornoConsulta = new AgendamentoRetornoFORM();
   }
 }

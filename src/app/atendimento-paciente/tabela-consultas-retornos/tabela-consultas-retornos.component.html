@@ -90,7 +90,7 @@
                             <button *ngIf="exibirBotaoParaCancelarAtendimento(atendimento)" class="btn btn-danger ml-2" 
                                 [pTooltip]="definirMensagemTooltip('Cancelar', atendimento)" tooltipPosition="bottom" 
                                 (click)="armazenarAtendimentoParaCancelamento(atendimento)">
-                                <i class="far fa-times-circle"></i>
+                                <i class="fas fa-times"></i>
                             </button>
                         </span>
                     </td>
@@ -148,6 +148,7 @@
             <div class="col-12 col-lg-6">
                 <p-dropdown [options]="horariosDisponiveisParaAgendamento" [(ngModel)]="horarioSelecionadoParaAgendamento" 
                     placeholder="Horários disponíveis" filter="true" emptyFilterMessage="Horário não encontrado!" 
+                    (onChange)="salvarHorarioNoFormularioDeAgendamentoDeAtendimento($event)"
                     [style]="{width: '90%'}" [disabled]="carregandoHorariosParaAgendamento || !dataSelecionadaParaAgendamentoDeAtendimento
                     || horariosDisponiveisParaAgendamento.length === 0">
                 </p-dropdown>
@@ -160,6 +161,15 @@
                     && dataSelecionadaParaAgendamentoDeAtendimento" class="text-danger mt-1" style="font-size: 13px;">
                     *Não há horários disponíveis para a data selecionada!
                 </div>
+
+                <div *ngIf="proximoTipoAtendimentoParaAgendarDoPacienteSelecionado === 0 && horarioSelecionadoParaAgendamento" class="mt-5">
+                    <span class="p-float-label">
+                        <textarea pInputTextarea [(ngModel)]="formularioAgendamentoConsulta.motivoConsulta" [rows]="4" 
+                            [style]="{width: '100%'}">
+                        </textarea>
+                        <label for="inputtext">Motivo da consulta</label>
+                    </span>
+                </div>
             </div>
         </div>
     </div>
@@ -170,7 +180,7 @@
             Voltar
         </button>
 
-        <button class="btn btn-success" [disabled]="processandoOperacao || !horarioSelecionadoParaAgendamento"
+        <button class="btn btn-success" [disabled]="processandoOperacao || desabilitarBotaoConfirmarAgendamentoAtendimento()"
             (click)="agendarAtendimento()">
             <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
             Confirmar
