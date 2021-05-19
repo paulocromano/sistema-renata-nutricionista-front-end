@@ -48,7 +48,7 @@
         
                         <span *ngIf="coluna.header === 'Ações'">
                             <button class="btn btn-danger" pTooltip="Excluir" tooltipPosition="bottom"
-                                (click)="armazenarPeriodoParaExclusao(periodo)">
+                                [disabled]="periodo.periodoDisponivel === 'Não'" (click)="armazenarPeriodoParaExclusao(periodo)">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
                         </span>

@@ -25,7 +25,8 @@
                                 <label for="inputtext">Data final</label>
                             </span>
     
-                            <button class="btn btn-success ml-4 px-5" [disabled]="desabilitarBotaoPesquisa()">
+                            <button class="btn btn-success ml-4 px-5" [disabled]="desabilitarBotaoPesquisa()"
+                                (click)="listarAtendimentosPorPeriodo()">
                                 <i class="fas fa-search"></i>
                                 Pesquisar
                             </button>
@@ -34,7 +35,7 @@
 
                     <div class="col-12 col-sm-12 col-lg-3">
                         <button class="btn btn-success px-5" pTooltip="Agendar atendimento" tooltipPosition="bottom"
-                            (click)="exibirDialogAgendarAtendimento = true">
+                            (click)="exibirDialogAgendarAtendimento = true" [disabled]="buscandoPacientesParaAgendamentoDeAtendimento">
                             <i class="fas fa-plus"></i>
                             Agendar atendimento
                         </button>
@@ -78,7 +79,8 @@
                             </button>
 
                             <button *ngIf="exibirBotaoConfirmacaoDoAtendimento(atendimento)" class="btn btn-success ml-2" 
-                                [pTooltip]="definirMensagemTooltip('Confirmar', atendimento)" tooltipPosition="bottom">
+                                [pTooltip]="definirMensagemTooltip('Confirmar', atendimento)" tooltipPosition="bottom"
+                                (click)="armazenarAtendimentoParaConfirmacao(atendimento)">
                                 <i class="fas fa-check"></i>
                             </button>
 
@@ -217,6 +219,103 @@
         <button class="btn btn-danger" (click)="resetarCampos()">
             <i class="fas fa-arrow-circle-left"></i>
             Voltar
+        </button>
+    </p-footer>
+</p-dialog>
+
+<!-- Dialog confirmação de atendimento -->
+<p-dialog [visible]="exibirDialogConfirmacaoAtendimento" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '80vh'}">
+
+    <p-header>
+        <p-header>
+            Cancelar {{ atendimentoSelecionado.descricaoTipoAtendimento === 'Consulta' ? 'consulta' : 'retorno da consulta' }}
+        </p-header>
+    </p-header>
+
+    <div class="container-fluid">
+        <div>
+            <b>Paciente: </b>{{ atendimentoSelecionado.nomePaciente }}
+        </div>
+
+        <div *ngIf="atendimentoSelecionado.descricaoTipoAtendimento === 'Consulta'" class="mt-4" style="padding-bottom: 120px;">
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <p-dropdown [options]="formasPagamentoConfirmacaoConsulta" [(ngModel)]="formularioConfirmacaoConsulta.formaPagamento" 
+                        placeholder="Forma de pagamento" [style]="{width: '210px'}">
+                    </p-dropdown>
+                </div>
+    
+                <div *ngIf="formularioConfirmacaoConsulta.formaPagamento === '2'" class="col-12 col-md-6">
+                    <span class="p-float-label">
+                        <p-inputNumber [(ngModel)]="formularioConfirmacaoConsulta.numeroParcelas"></p-inputNumber>
+                        <label for="inputtext">Número de parcelas</label>
+                    </span>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <span class="p-float-label">
+                    <input type="text" style="width: 150px;" [(ngModel)]="formularioConfirmacaoConsulta.valorConsulta" pInputText> 
+                    <label for="inputtext">Valor da consulta</label>
+                </span>
+            </div>
+        </div>
+
+        <div *ngIf="atendimentoSelecionado.descricaoTipoAtendimento !== 'Consulta'" class="mt-2">
+            Deseja confirmar o <b>retorno da consulta</b> para o dia <b>{{ atendimentoSelecionado.dataAtendimento }}</b>
+                às <b>{{ atendimentoSelecionado.horarioAtendimento }}</b>?
+        </div>
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="resetarCampos()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+
+        <button class="btn btn-success" [disabled]="processandoOperacao" [disabled]="desabilitarBotaoConfirmacaoAtendimento()"
+            (click)="confirmarAtendimento()">
+            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
+        </button>
+    </p-footer>
+</p-dialog>
+
+<!-- Dialog cancelamento de atendimento -->
+<p-dialog [visible]="exibirDialogCancelamentoAtendimento" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '75vh'}">
+
+    <p-header>
+        Cancelar {{ atendimentoSelecionado.descricaoTipoAtendimento === 'Consulta' ? 'consulta' : 'retorno da consulta' }}
+    </p-header>
+
+    <div class="container-fluid">
+        <div class="mb-2">
+            <b>Paciente: </b>{{ atendimentoSelecionado.nomePaciente }}
+        </div>
+
+        <div *ngIf="atendimentoSelecionado.descricaoTipoAtendimento === 'Consulta'">
+            Tem certeza que deseja cancelar a <b>consulta</b> marcada para o dia
+                <b>{{ atendimentoSelecionado.dataAtendimento }}</b> às <b>{{ atendimentoSelecionado.horarioAtendimento }}</b>?
+        </div>
+        
+        <div *ngIf="atendimentoSelecionado.descricaoTipoAtendimento !== 'Consulta'">
+            Tem certeza que deseja cancelar o <b>retorno da consulta</b> marcado para o dia
+                <b>{{ atendimentoSelecionado.dataAtendimento }}</b> às <b>{{ atendimentoSelecionado.horarioAtendimento }}</b>?
+        </div>
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="resetarCampos()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+
+        <button class="btn btn-success" [disabled]="processandoOperacao"
+            (click)="cancelarAtendimento()">
+            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
         </button>
     </p-footer>
 </p-dialog>

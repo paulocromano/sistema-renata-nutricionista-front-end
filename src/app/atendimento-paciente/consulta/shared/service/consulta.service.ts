@@ -24,8 +24,8 @@ export class ConsultaService {
   }
 
   public listarAtendimentosPorPeriodo(dataInicial: string, dataFinal: string): Observable<InformacoesPreviasConsultaRetorno[]> {
-    return this.http.get<InformacoesPreviasConsultaRetorno[]>(`/consulta-paciente/listar-atendimentos-por-periodo
-      ?dataInicial=${dataInicial}&dataFinal=${dataFinal}`);
+    return this.http.get<InformacoesPreviasConsultaRetorno[]>(
+      `/consulta-paciente/listar-atendimentos-por-periodo?dataInicial=${dataInicial}&dataFinal=${dataFinal}`);
   }
 
   public verificarProximoTipoDeAtendimentoDoPaciente(idPaciente: number): Observable<TipoAtendimento> {
