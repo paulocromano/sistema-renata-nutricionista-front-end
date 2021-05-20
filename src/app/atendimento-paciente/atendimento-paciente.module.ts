@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
@@ -23,6 +24,7 @@ import { RetornoConsultaComponent } from './retorno-consulta/retorno-consulta.co
   imports: [
     CommonModule,
     FormsModule,
+    RouterModule,
     TableModule,
     InputTextModule,
     ProgressSpinnerModule,

@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { SelectItem } from 'primeng/api';
 
@@ -19,6 +20,7 @@ import { RetornoConsultaService } from './../retorno-consulta/shared/service/ret
 import { AgendamentoConsultaFORM } from './../consulta/shared/model/agendamento-consulta.form';
 import { AgendamentoRetornoFORM } from './../retorno-consulta/shared/model/agendamento-retorno-consulta.form';
 import { ConfirmacaoConsultaFORM } from './../consulta/shared/model/confirmacao-consulta.form';
+import { ConfirmacaoAtendimento } from './shared/model/confirmacao-atendimento.model';
 
 @Component({
   selector: 'app-tabela-consultas-retornos',
@@ -26,7 +28,7 @@ import { ConfirmacaoConsultaFORM } from './../consulta/shared/model/confirmacao-
   styleUrls: ['./tabela-consultas-retornos.component.css']
 })
 
-export class TabelaConsultasRetornosComponent implements OnInit {
+export class TabelaConsultasRetornosComponent implements OnInit, OnDestroy {
 
   @ViewChild('toastyComponent', { static: false })
   public toasty: ToastyComponent;
@@ -44,6 +46,8 @@ export class TabelaConsultasRetornosComponent implements OnInit {
   public formularioAgendamentoRetornoConsulta: AgendamentoRetornoFORM = new AgendamentoRetornoFORM();
   public formularioConfirmacaoConsulta: ConfirmacaoConsultaFORM = new ConfirmacaoConsultaFORM();
   public formasPagamentoConfirmacaoConsulta: SelectItem[] = [];
+  public parcelasParaPagarConsulta: SelectItem[] = [];
+  public valorConsulta: string = '';
 
   public colunasTabela: any[];
   public inputPesquisa: string;
@@ -54,6 +58,7 @@ export class TabelaConsultasRetornosComponent implements OnInit {
   public exibirDialogInformacoesAtendimento: boolean = false;
   public exibirDialogAgendarAtendimento: boolean = false;
   public exibirDialogConfirmacaoAtendimento: boolean = false;
+  public exibirDialogParaIniciarAtendimento: boolean = false;
   public exibirDialogCancelamentoAtendimento: boolean = false;
   public formatoCalendario: any;
   public dataMinimaParaAgendamento: Date = new Date();
@@ -64,7 +69,8 @@ export class TabelaConsultasRetornosComponent implements OnInit {
     private consultaService: ConsultaService,
     private retornoConsultaService: RetornoConsultaService,
     private pacienteService: PacienteService,
-    private calendarioAtendimentoService: CalendarioAtendimentoService) { }
+    private calendarioAtendimentoService: CalendarioAtendimentoService,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.colunasTabela = [
@@ -76,11 +82,7 @@ export class TabelaConsultasRetornosComponent implements OnInit {
       { header: 'Ações', field: 'acoes', style: 'col-acoes' }
     ];
 
-    this.formasPagamentoConfirmacaoConsulta.push(
-      { label: 'Dinheiro', value: '0' },
-      { label: 'Débito', value: '1' },
-      { label: 'Crédito', value: '2' }
-      );
+
 
     this.formatoCalendario = {
       firstDayOfWeek: 0,
@@ -110,6 +112,7 @@ export class TabelaConsultasRetornosComponent implements OnInit {
     this.dataMinimaParaAgendamento.setDate(this.dataMinimaParaAgendamento.getDate() + 1);
 
     this.listarPacientesParaAgendarConsultaOuRetorno();
+    this.buscarInformacoesParaConfirmacaoDeAtendimento();
     this.listarAtendimentosPorPeriodoPadrao();
   }
 
@@ -173,16 +176,32 @@ export class TabelaConsultasRetornosComponent implements OnInit {
 
   public listarPacientesParaAgendarConsultaOuRetorno(): void {
     this.buscandoPacientesParaAgendamentoDeAtendimento = true;
-    this.pacientes = [];
 
     this.pacienteService.buscarPacientesParaAgendarAtendimento()
       .subscribe((pacientes: PacienteAgendamentoAtendimento[]) => {
+        this.pacientes = [];
         pacientes.forEach(paciente => this.pacientes.push({ label: paciente.nome, value: paciente.id }));
         this.buscandoPacientesParaAgendamentoDeAtendimento = false;
       },
       (errorResponse: HttpErrorResponse) => {
+        this.pacientes = [];
         this.buscandoPacientesParaAgendamentoDeAtendimento = false;
         this.toasty.error('Erro ao listar os pacientes para agendamento de consulta ou retorno!');
+      });
+  }
+
+  private buscarInformacoesParaConfirmacaoDeAtendimento(): void {
+    this.consultaService.informacoesParaConfirmacaoDeAtendimento()
+      .subscribe((informacoes: ConfirmacaoAtendimento) => {
+        informacoes.formasPagamento.forEach(formaPagamento => 
+          this.formasPagamentoConfirmacaoConsulta.push({ label: formaPagamento.descricao, value: formaPagamento.codigo }));
+
+        informacoes.quantidadeParcelas.forEach(parcela => this.parcelasParaPagarConsulta.push({ label: parcela.toString(), value: parcela }));
+        this.valorConsulta = informacoes.precoConsulta;
+      },
+      (errorResponse: HttpErrorResponse) => {
+        this.buscandoPacientesParaAgendamentoDeAtendimento = false;
+        this.toasty.error('Erro ao buscar informações para confirmação de atendimento!');
       });
   }
 
@@ -293,6 +312,7 @@ export class TabelaConsultasRetornosComponent implements OnInit {
 
   private confirmarConsulta(): void {
     this.processandoOperacao = true;
+    this.formularioConfirmacaoConsulta.valorConsulta = this.valorConsulta.replace(',', '.');
 
     this.consultaService.confirmarConsulta(this.atendimentoSelecionado.idPaciente, 
       this.atendimentoSelecionado.idAtendimento, this.formularioConfirmacaoConsulta)
@@ -321,6 +341,45 @@ export class TabelaConsultasRetornosComponent implements OnInit {
       (errorResponse: HttpErrorResponse) => {
         this.processandoOperacao = false;
         this.toasty.error('Erro ao confirmar o retorno da consulta!');
+      });
+  }
+
+  public iniciarAtendimento(): void {
+    if (this.atendimentoSelecionado.idPaciente) {
+      if (this.tipoAtendimentoIgualConsulta(this.atendimentoSelecionado)) {
+        this.iniciarConsulta();
+      }
+      else {
+        this.iniciarRetornoConsulta();
+      }
+    }
+  }
+
+  private iniciarConsulta(): void {
+    this.processandoOperacao = true;
+
+    this.consultaService.iniciarConsulta(this.atendimentoSelecionado.idPaciente, this.atendimentoSelecionado.idAtendimento)
+      .subscribe(() => {
+        this.processandoOperacao = false;
+        this.router.navigate(['consulta', this.atendimentoSelecionado.idPaciente, this.atendimentoSelecionado.idAtendimento]);
+      },
+      (errorResponse: HttpErrorResponse) => {
+        this.processandoOperacao = false;
+        this.toasty.error('Erro ao iniciar a consulta!');
+      });
+  }
+
+  private iniciarRetornoConsulta(): void {
+    this.processandoOperacao = true;
+
+    this.retornoConsultaService.iniciarRetornoConsulta(this.atendimentoSelecionado.idPaciente, this.atendimentoSelecionado.idAtendimento)
+      .subscribe(() => {
+        this.processandoOperacao = false;
+        this.router.navigate(['retorno-consulta', this.atendimentoSelecionado.idPaciente, this.atendimentoSelecionado.idAtendimento]);
+      },
+      (errorResponse: HttpErrorResponse) => {
+        this.processandoOperacao = false;
+        this.toasty.error('Erro ao iniciar o retorno da consulta!');
       });
   }
 
@@ -377,6 +436,11 @@ export class TabelaConsultasRetornosComponent implements OnInit {
     this.exibirDialogConfirmacaoAtendimento = true;
   }
 
+  public armazenarAtendimentoParaIniciarConsultaOuRetorno(atendimento: InformacoesPreviasConsultaRetorno): void {
+    this.atendimentoSelecionado = atendimento;
+    this.exibirDialogParaIniciarAtendimento = true;
+  }
+
   public armazenarAtendimentoParaCancelamento(atendimento: InformacoesPreviasConsultaRetorno): void {
     this.atendimentoSelecionado = atendimento;
     this.exibirDialogCancelamentoAtendimento = true;
@@ -390,10 +454,14 @@ export class TabelaConsultasRetornosComponent implements OnInit {
 
   public desabilitarBotaoConfirmacaoAtendimento(): boolean {
     if (this.tipoAtendimentoIgualConsulta(this.atendimentoSelecionado)) {
-      return this.processandoOperacao || !(this.formularioConfirmacaoConsulta 
-        && this.formularioConfirmacaoConsulta.formaPagamento 
-        && this.formularioConfirmacaoConsulta.formaPagamento === '2' ? this.formularioConfirmacaoConsulta.numeroParcelas : true
-        && this.formularioConfirmacaoConsulta.valorConsulta);
+      let botaoDesabilitado: boolean = this.processandoOperacao || !(this.formularioConfirmacaoConsulta.formaPagamento && this.valorConsulta);
+
+      if (this.formularioConfirmacaoConsulta.formaPagamento === '2') {
+        return botaoDesabilitado && !this.formularioConfirmacaoConsulta.numeroParcelas;
+      }
+      else {
+        return botaoDesabilitado;
+      }
     }
     else {
       return this.processandoOperacao;
@@ -456,6 +524,7 @@ export class TabelaConsultasRetornosComponent implements OnInit {
     this.exibirDialogInformacoesAtendimento = false;
     this.exibirDialogAgendarAtendimento = false;
     this.exibirDialogConfirmacaoAtendimento = false;
+    this.exibirDialogParaIniciarAtendimento = false;
     this.exibirDialogCancelamentoAtendimento = false;
     this.carregandoHorariosParaAgendamento = false;
 
@@ -468,5 +537,9 @@ export class TabelaConsultasRetornosComponent implements OnInit {
     this.formularioAgendamentoConsulta = new AgendamentoConsultaFORM();
     this.formularioAgendamentoRetornoConsulta = new AgendamentoRetornoFORM();
     this.formularioConfirmacaoConsulta = new ConfirmacaoConsultaFORM();
+  }
+
+  ngOnDestroy(): void {
+    this.resetarCampos();
   }
 }

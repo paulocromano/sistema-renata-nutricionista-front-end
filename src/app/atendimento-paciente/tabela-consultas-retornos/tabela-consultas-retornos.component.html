@@ -85,7 +85,8 @@
                             </button>
 
                             <button *ngIf="exibirBotaoParaIniciarAtendimento(atendimento)" class="btn btn-info ml-2 px-3" 
-                                [pTooltip]="definirMensagemTooltip('Iniciar', atendimento)" tooltipPosition="bottom">
+                                [pTooltip]="definirMensagemTooltip('Iniciar', atendimento)" tooltipPosition="bottom"
+                                (click)="armazenarAtendimentoParaIniciarConsultaOuRetorno(atendimento)">
                                 <i class="fas fa-notes-medical"></i>
                             </button>
 
@@ -238,7 +239,7 @@
             <b>Paciente: </b>{{ atendimentoSelecionado.nomePaciente }}
         </div>
 
-        <div *ngIf="atendimentoSelecionado.descricaoTipoAtendimento === 'Consulta'" class="mt-4" style="padding-bottom: 120px;">
+        <div *ngIf="atendimentoSelecionado.descricaoTipoAtendimento === 'Consulta'" class="mt-4" style="padding-bottom: 90px;">
             <div class="row">
                 <div class="col-12 col-md-6">
                     <p-dropdown [options]="formasPagamentoConfirmacaoConsulta" [(ngModel)]="formularioConfirmacaoConsulta.formaPagamento" 
@@ -247,18 +248,14 @@
                 </div>
     
                 <div *ngIf="formularioConfirmacaoConsulta.formaPagamento === '2'" class="col-12 col-md-6">
-                    <span class="p-float-label">
-                        <p-inputNumber [(ngModel)]="formularioConfirmacaoConsulta.numeroParcelas"></p-inputNumber>
-                        <label for="inputtext">Número de parcelas</label>
-                    </span>
+                    <p-dropdown [options]="parcelasParaPagarConsulta" [(ngModel)]="formularioConfirmacaoConsulta.numeroParcelas" 
+                        placeholder="Parcelas" [style]="{width: '120px'}" scrollHeight="160px">
+                    </p-dropdown>
                 </div>
             </div>
 
             <div class="mt-4">
-                <span class="p-float-label">
-                    <input type="text" style="width: 150px;" [(ngModel)]="formularioConfirmacaoConsulta.valorConsulta" pInputText> 
-                    <label for="inputtext">Valor da consulta</label>
-                </span>
+                <b>Valor da consulta R$:</b> {{ valorConsulta }}
             </div>
         </div>
 
@@ -280,6 +277,39 @@
             Confirmar
         </button>
     </p-footer>
+</p-dialog>
+
+<!-- Dialog para iniciar atendimento -->
+<p-dialog [visible]="exibirDialogParaIniciarAtendimento" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '75vh'}">
+
+    <p-header>
+        Iniciar {{ atendimentoSelecionado.descricaoTipoAtendimento === 'Consulta' ? 'consulta' : 'retorno da consulta' }}
+    </p-header>
+
+    <div class="container-fluid">
+        <div *ngIf="atendimentoSelecionado.descricaoTipoAtendimento === 'Consulta'">
+            Deseja iniciar a <b>consulta</b> de <b>{{ atendimentoSelecionado.nomePaciente }}</b>?
+        </div>
+
+        <div *ngIf="atendimentoSelecionado.descricaoTipoAtendimento !== 'Consulta'">
+            Deseja iniciar o <b>retorno da consulta</b> de <b>{{ atendimentoSelecionado.nomePaciente }}</b>?
+        </div>
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="resetarCampos()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+
+        <button class="btn btn-success" [disabled]="processandoOperacao"
+            (click)="iniciarAtendimento()">
+            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
+        </button>
+    </p-footer>
+
 </p-dialog>
 
 <!-- Dialog cancelamento de atendimento -->

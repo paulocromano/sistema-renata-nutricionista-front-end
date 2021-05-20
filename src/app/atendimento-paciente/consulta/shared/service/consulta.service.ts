@@ -1,3 +1,4 @@
+import { ConfirmacaoAtendimento } from './../../../tabela-consultas-retornos/shared/model/confirmacao-atendimento.model';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -30,6 +31,10 @@ export class ConsultaService {
 
   public verificarProximoTipoDeAtendimentoDoPaciente(idPaciente: number): Observable<TipoAtendimento> {
     return this.http.get<TipoAtendimento>(`/consulta-paciente/proximo-tipo-atendimento/${idPaciente}`);
+  }
+
+  public informacoesParaConfirmacaoDeAtendimento(): Observable<ConfirmacaoAtendimento> {
+    return this.http.get<ConfirmacaoAtendimento>(`/consulta-paciente/informacoes-confirmacao-atendimento`);
   }
 
   public buscarConsultaDoPaciente(idConsulta: number): Observable<Consulta> {

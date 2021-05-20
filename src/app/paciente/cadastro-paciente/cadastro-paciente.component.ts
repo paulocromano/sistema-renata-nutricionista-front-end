@@ -8,7 +8,7 @@ import { PacienteService } from './../shared/service/paciente.service';
 import { EnderecoFORM } from './../shared/model/endereco.form';
 import { PacienteFORM } from './../shared/model/paciente.form';
 import { ToastyComponent } from './../../shared/toasty/toasty.component';
-import { DadosEnum } from './../../shared/model/dados-enum.mode';
+import { DadosEnum } from '../../shared/model/dados-enum.model';
 import { Endereco } from './../shared/model/endereco.model';
 import { EnderecoService } from './../shared/service/endereco.service';
 
