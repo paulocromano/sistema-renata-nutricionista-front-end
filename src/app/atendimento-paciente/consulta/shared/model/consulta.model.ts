@@ -1,4 +1,4 @@
-import { RegistroDieta } from './../../../shared/model/registro-dieta.model';
+import { RefeicoesRegistroDieta } from '../../../shared/model/refeicoes-registro-dieta.model';
 import { CondutaNutricional } from './../../../shared/model/conduta-nutricional.model';
 import { AvaliacaoMassaMuscularCorporea } from './../../../shared/model/avaliacao-massa-muscular-corporea.model';
 import { AvaliacaoComposicaoCorporal } from './../../../shared/model/avaliacao-composicao-corporal.model';
@@ -18,5 +18,5 @@ export class Consulta {
     avaliacaoComposicaoCorporal: AvaliacaoComposicaoCorporal = new AvaliacaoComposicaoCorporal();
     avaliacaoMassaMuscularCorporea: AvaliacaoMassaMuscularCorporea = new AvaliacaoMassaMuscularCorporea();
     condutaNutricional: CondutaNutricional = new CondutaNutricional();
-    registroDietaHabitual: RegistroDieta = new RegistroDieta();
+    refeicoesRegistroDietaHabitual: RefeicoesRegistroDieta[] = [];
 }

@@ -1,0 +1,36 @@
+<div *ngIf="visualizarAvaliacaoMassaMuscularCorporea">
+    <h5 class="text-center">Avaliação da massa muscular corporea (mm) por meio de medidas antropométricas</h5>
+
+    <div class="row mt-3">
+        <div class="col-12 col-lg-4">
+            <b>Circunferência de cintura:</b> {{ avaliacaoMassaMuscularCorporea.circunferenciaCinturaCentimetros }} cm
+        </div>
+        <div class="col-12 col-lg-4">
+            <b>Circunferência do braço:</b> {{ avaliacaoMassaMuscularCorporea.circunferenciaBracoCentimentros }} cm
+        </div>
+        <div class="col-12 col-lg-4">
+            <b>Circunferência da coxa:</b> {{ avaliacaoMassaMuscularCorporea.circunferenciaCoxaCentimetros }} cm
+        </div>
+    </div>
+
+    <div class="row mt-1">
+        <div class="col-12 col-lg-4">
+            <b>Circunferência da panturrilha:</b> {{ avaliacaoMassaMuscularCorporea.circunferenciaPanturrilhaCentimetros }} cm
+        </div>
+        <div class="col-12 col-lg-4">
+            <b>Circunferência do punho:</b> {{ avaliacaoMassaMuscularCorporea.circunferenciaPunhoCentrimetros }} cm
+        </div>
+    </div>
+
+    <div class="row mt-1">
+        <div class="col-12 col-lg-4">
+            <b>MM (Kg):</b> {{ avaliacaoMassaMuscularCorporea.massaMuscularKg }}
+        </div>
+        <div class="col-12 col-lg-4">
+            <b>MM (%):</b> {{ avaliacaoMassaMuscularCorporea.massaMuscularPorcentagem }}
+        </div>
+        <div class="col-12 col-lg-4">
+            <b>IMM:</b> {{ avaliacaoMassaMuscularCorporea.indiceMassaMuscularKgMetroQuadrado }} Kg/m²
+        </div>
+    </div>
+</div>

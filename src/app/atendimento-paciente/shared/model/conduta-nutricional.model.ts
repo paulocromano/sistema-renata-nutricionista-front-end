@@ -1,6 +1,7 @@
 export class CondutaNutricional {
 
     id: number;
+	prescricaoDietetica: string;
     energiaKcalTotal: string;
 	carboidratroTotalGramas: string;
 	carboidratoGramasKgPeso: string;

@@ -1,0 +1,56 @@
+<div *ngIf="visualizarCondutaNutricional">
+    <h5 class="text-center">Conduta nutricional</h5>
+
+    <div class="mt-3">
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <b>Prescrição dietética:</b> {{ condutaNutricional.prescricaoDietetica }}
+            </div>
+        </div>
+    </div>
+    <div class="mt-1">
+        <b>Energia/Kcal total:</b> {{ condutaNutricional.energiaKcalTotal }}
+    </div>
+
+    <div class="row mt-1">
+        <div class="col-12 col-lg-4">
+            <b>CHO Total (g):</b> {{ condutaNutricional.carboidratroTotalGramas }}
+        </div>
+        <div class="col-12 col-lg-4">
+            <b>CHO g/Kg peso:</b> {{ condutaNutricional.carboidratoGramasKgPeso }}
+        </div>
+        <div class="col-12 col-lg-4">
+            <b>CHO g/Kg MM:</b> {{ condutaNutricional.carboidratoGramasKgMassaMagra }}
+        </div>
+    </div>
+
+    <div class="row mt-1">
+        <div class="col-12 col-lg-4">
+            <b>Prot. Total (g):</b> {{ condutaNutricional.proteinaTotalGramas }}
+        </div>
+        <div class="col-12 col-lg-4">
+            <b>Prot. AVB (g):</b> {{ condutaNutricional.proteinaAVBGramas }}
+        </div>
+        <div class="col-12 col-lg-4">
+            <b>Prot. AVB g/Kg peso:</b> {{ condutaNutricional.proteinaAVBGramasKgPeso }}
+        </div>
+    </div>
+
+    <div class="row mt-1">
+        <div class="col-12 col-lg-2">
+            <b>Lip. Total:</b> {{ condutaNutricional.lipideoTotal }}
+        </div>
+        <div class="col-12 col-lg-2">
+            <b>Lip. Sat:</b> {{ condutaNutricional.lipideoSaturado }}
+        </div>
+        <div class="col-12 col-lg-2">
+            <b>Lip. Poli:</b> {{ condutaNutricional.lipideoPoiinsaturado }}
+        </div>
+        <div class="col-12 col-lg-2">
+            <b>Lip. Mono:</b> {{ condutaNutricional.lipideoMonoinsaturado }}
+        </div>
+        <div class="col-12 col-lg-2">
+            <b>Relação insat/sat:</b> {{ condutaNutricional.relacaoLipideoInsaturadoSaturado }}
+        </div>
+    </div>
+</div>

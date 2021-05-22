@@ -31,11 +31,13 @@
                                 Pesquisar
                             </button>
                         </div>
+
+                        <div class="text-danger mt-2" style="font-size: 13px;">{{ mensagemPeriodoDosAtendimentosConsultados }}</div>
                     </div>
 
                     <div class="col-12 col-sm-12 col-lg-3">
                         <button class="btn btn-success px-5" pTooltip="Agendar atendimento" tooltipPosition="bottom"
-                            (click)="exibirDialogAgendarAtendimento = true" [disabled]="buscandoPacientesParaAgendamentoDeAtendimento">
+                            (click)="exibirDialogAgendarReagendarAtendimento = true" [disabled]="buscandoPacientesParaAgendamentoDeAtendimento">
                             <i class="fas fa-plus"></i>
                             Agendar atendimento
                         </button>
@@ -69,12 +71,14 @@
                             </button>
 
                             <button *ngIf="exibirBotaoVisualizarFichaDoAtendimento(atendimento)" class="btn btn-secondary ml-2" 
-                                pTooltip="Visualizar ficha" tooltipPosition="bottom">
+                                pTooltip="Visualizar ficha" tooltipPosition="bottom" [disabled]="processandoOperacao"
+                                (click)="armazenarAtendimentoParaExibirFicha(atendimento)">
                                 <i class="far fa-address-card"></i>
                             </button>
 
                             <button *ngIf="exibirBotaoReagendamentoDoAtendimento(atendimento)" class="btn btn-warning ml-2" 
-                                [pTooltip]="definirMensagemTooltip('Reagendar', atendimento)" tooltipPosition="bottom">
+                                [pTooltip]="definirMensagemTooltip('Reagendar', atendimento)" tooltipPosition="bottom"
+                                (click)="armazenarAtendimentoParaReagendamento(atendimento)">
                                 <i class="fas fa-pen text-white"></i>
                             </button>
 
@@ -121,29 +125,48 @@
     </div>
 </div>
 
-<!-- Dialog agendamento de atendimento -->
-<p-dialog [visible]="exibirDialogAgendarAtendimento" [modal]="true" [resizable]="false" 
+<!-- Dialog agendamento/reagendamento de atendimento -->
+<p-dialog [visible]="exibirDialogAgendarReagendarAtendimento" [modal]="true" [resizable]="false" 
     [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '140vh'}">
 
     <p-header>
-        <span *ngIf="proximoTipoAtendimentoParaAgendarDoPacienteSelecionado === null">Agendar atendimento</span>
-        <span *ngIf="proximoTipoAtendimentoParaAgendarDoPacienteSelecionado !== null">
-            Agendar {{ proximoTipoAtendimentoParaAgendarDoPacienteSelecionado === 0 ? 'consulta' : 'retorno da consulta' }}
+        <span *ngIf="!reagendarAtendimento">
+            <span *ngIf="proximoTipoAtendimentoParaAgendarDoPacienteSelecionado === null">Agendar atendimento</span>
+            <span *ngIf="proximoTipoAtendimentoParaAgendarDoPacienteSelecionado !== null">
+                Agendar {{ proximoTipoAtendimentoParaAgendarDoPacienteSelecionado === 0 ? 'consulta' : 'retorno da consulta' }}
+            </span>
+        </span>
+
+        <span *ngIf="reagendarAtendimento">
+            <span *ngIf="atendimentoSelecionado.descricaoTipoAtendimento === 'Consulta'">
+                Reagendar consulta
+            </span>
+
+            <span *ngIf="atendimentoSelecionado.descricaoTipoAtendimento == 'Retorno'">
+                Reagendar retorno da consulta
+            </span>
         </span>
     </p-header>
 
     <div class="container-fluid mt-3">
-        <p-dropdown [options]="pacientes" [(ngModel)]="pacienteSelecionadoParaAgendamentoAtendimento.id"
+        <p-dropdown *ngIf="!reagendarAtendimento" [options]="pacientes" [(ngModel)]="pacienteSelecionadoParaAgendamentoAtendimento.id"
             (onChange)="verificarProximoTipoAtendimentoDoPacienteSelecionado($event)"
             placeholder="Selecione um paciente" filter="true" [style]="{width: '100%'}" [disabled]="carregandoHorariosParaAgendamento"
             [emptyFilterMessage]="pacientes.length === 0 ? 'Nenhum paciente encontrado!' : 'Nenhum paciente corresponde à pesquisa!'">
         </p-dropdown>
 
+        <div *ngIf="reagendarAtendimento" class="text-danger" style="font-size: 14px;">
+            {{ atendimentoSelecionado.descricaoTipoAtendimento === 'Consulta' ? 'Consulta' : 'Retorno da consulta' }} marcada
+                inicialmente para o dia <b>{{ atendimentoSelecionado.dataAtendimento }}</b> às 
+                <b>{{ atendimentoSelecionado.horarioAtendimento }}h</b>.
+        </div>
+
         <div class="row mt-3">
             <div class="col-12 col-lg-6">
                 <p-calendar dataType="string" [locale]="formatoCalendario"
-                    (onSelect)="listarHorariosDisponiveisParaAgendamentoConformeData($event)" [inline]="true" 
-                    [disabled]="carregandoHorariosParaAgendamento || !pacienteSelecionadoParaAgendamentoAtendimento.id" 
+                    (onSelect)="listarHorariosDisponiveisParaAgendamentoReagendamentoConformeData($event)" [inline]="true" 
+                    [disabled]="(carregandoHorariosParaAgendamento || !pacienteSelecionadoParaAgendamentoAtendimento.id)
+                        && !reagendarAtendimento" 
                     [minDate]="dataMinimaParaAgendamento">
                 </p-calendar>
             </div>
@@ -151,7 +174,7 @@
             <div class="col-12 col-lg-6">
                 <p-dropdown [options]="horariosDisponiveisParaAgendamento" [(ngModel)]="horarioSelecionadoParaAgendamento" 
                     placeholder="Horários disponíveis" filter="true" emptyFilterMessage="Horário não encontrado!" 
-                    (onChange)="salvarHorarioNoFormularioDeAgendamentoDeAtendimento($event)"
+                    (onChange)="salvarHorarioNoFormularioDeAgendamentoReagendamentoDeAtendimento($event)"
                     [style]="{width: '90%'}" [disabled]="carregandoHorariosParaAgendamento || !dataSelecionadaParaAgendamentoDeAtendimento
                     || horariosDisponiveisParaAgendamento.length === 0">
                 </p-dropdown>
@@ -183,8 +206,8 @@
             Voltar
         </button>
 
-        <button class="btn btn-success" [disabled]="processandoOperacao || desabilitarBotaoConfirmarAgendamentoAtendimento()"
-            (click)="agendarAtendimento()">
+        <button class="btn btn-success" [disabled]="desabilitarBotaoConfirmarAgendamentoReagendamentoAtendimento()"
+            (click)="agendarReagendarAtendimento()">
             <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
             Confirmar
         </button>
@@ -201,6 +224,7 @@
 
     <div>
         <div><b>Nome:</b> {{ atendimentoSelecionado.nomePaciente }}</div>
+        <div><b>Sexo:</b> {{ atendimentoSelecionado.sexoPaciente }}</div>
         <div><b>Data:</b> {{ atendimentoSelecionado.dataAtendimento }}</div>
         <div><b>Horário:</b> {{ atendimentoSelecionado.horarioAtendimento }}h</div>
         <div><b>Tipo de atendimento:</b> {{ atendimentoSelecionado.descricaoTipoAtendimento }}</div>
@@ -230,7 +254,7 @@
 
     <p-header>
         <p-header>
-            Cancelar {{ atendimentoSelecionado.descricaoTipoAtendimento === 'Consulta' ? 'consulta' : 'retorno da consulta' }}
+            Confirmar {{ atendimentoSelecionado.descricaoTipoAtendimento === 'Consulta' ? 'consulta' : 'retorno da consulta' }}
         </p-header>
     </p-header>
 
@@ -310,6 +334,183 @@
         </button>
     </p-footer>
 
+</p-dialog>
+
+<!-- Dialog ficha da consulta -->
+<p-dialog [visible]="exibirDialogFichaDaConsulta" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '96%'}">
+
+    <p-header>
+        Ficha da consulta
+    </p-header>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-sm-6 col-md-4">
+                <b>Paciente:</b> {{ atendimentoSelecionado.nomePaciente }}
+            </div>
+            <div class="col-12 col-sd-6 col-md-4">
+                <b>Sexo:</b> {{ atendimentoSelecionado.sexoPaciente }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-lg-2">
+                <b>Data:</b> {{ consultaSelecionada.data }}
+            </div>
+
+            <div class="col-12 col-lg-2">
+                <b>Horário:</b> {{ consultaSelecionada.horario }}h
+            </div>
+
+            <div class="col-12 col-lg-3">
+                <b>Situação da consulta:</b> {{ consultaSelecionada.situacaoConsulta }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-lg-3">
+                <b>Forma de pagamento:</b> {{ consultaSelecionada.formaPagamento }}
+            </div>
+
+            <div *ngIf="consultaSelecionada.numeroParcelas" class="col-12 col-lg-2">
+                <b>Parcelas:</b> {{ consultaSelecionada.numeroParcelas }}
+            </div>
+
+            <div class="col-12 col-lg-2">
+                <b>Valor R$:</b> {{ consultaSelecionada.valorConsulta }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <b>Motivo da consulta:</b> {{ consultaSelecionada.motivoConsulta }}
+            </div>
+        </div>
+        <hr>
+
+        <app-registro-dieta [tipoRegistro]="'Registro de dieta habitual'" 
+            [refeicoesRegistroDieta]="consultaSelecionada.refeicoesRegistroDietaHabitual" [visualizarRegistroDieta]="true">
+        </app-registro-dieta>
+        <hr>
+        
+        <div class="mt-4">
+            <app-avaliacao-consumo-habitual [visualizarAvaliacaoConsumoHabitual]="true"
+                [avaliacaoConsumoHabitual]="consultaSelecionada.avaliacaoConsumoHabitual">
+            </app-avaliacao-consumo-habitual>
+            <hr>
+        </div>
+
+        <div class="mt-4">
+            <app-avaliacao-composicao-corporal [visualizarAvaliacaoComposicaoCorporal]="true" 
+                [sexoPaciente]="atendimentoSelecionado.sexoPaciente"
+                [avaliacaoComposicaoCorporal]="consultaSelecionada.avaliacaoComposicaoCorporal">
+            </app-avaliacao-composicao-corporal>
+            <hr>
+        </div>
+        
+        <div class="mt-4">
+            <app-avaliacao-massa-muscular-corporea [visualizarAvaliacaoMassaMuscularCorporea]="true"
+                [avaliacaoMassaMuscularCorporea]="consultaSelecionada.avaliacaoMassaMuscularCorporea">
+            </app-avaliacao-massa-muscular-corporea>
+            <hr>
+        </div>
+
+        <div class="mt-4">
+            <app-conduta-nutricional [visualizarCondutaNutricional]="true"
+                [condutaNutricional]="consultaSelecionada.condutaNutricional">
+            </app-conduta-nutricional>
+        </div>
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="resetarCampos()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+    </p-footer>
+</p-dialog>
+
+<!-- Dialog ficha do retorno da consulta -->
+<p-dialog [visible]="exibirDialogFichaDoRetornoConsulta" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '96%'}">
+
+    <p-header>
+        Ficha do retorno da consulta
+    </p-header>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-sm-6 col-md-4">
+                <b>Paciente:</b> {{ atendimentoSelecionado.nomePaciente }}
+            </div>
+            <div class="col-12 col-sd-6 col-md-4">
+                <b>Sexo:</b> {{ atendimentoSelecionado.sexoPaciente }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-lg-2">
+                <b>Data:</b> {{ retornoConsultaSelecionado.data }}
+            </div>
+
+            <div class="col-12 col-lg-2">
+                <b>Horário:</b> {{ retornoConsultaSelecionado.horario }}h
+            </div>
+
+            <div class="col-12 col-lg-4">
+                <b>Situação do retorno da consulta:</b> {{ retornoConsultaSelecionado.situacaoRetorno }}
+            </div>
+        </div>
+        <hr>
+
+        <app-registro-dieta [tipoRegistro]="'Registro de dieta habitual'" 
+            [refeicoesRegistroDieta]="retornoConsultaSelecionado.refeicoesRegistroDietaHabitual" [visualizarRegistroDieta]="true">
+        </app-registro-dieta>
+        <hr>
+
+        <div class="mt-4">
+            <app-registro-dieta [tipoRegistro]="'Registro de dieta 24 horas'" 
+                [refeicoesRegistroDieta]="retornoConsultaSelecionado.refeicoesRegistroDieta24Horas" [visualizarRegistroDieta]="true">
+            </app-registro-dieta>
+            <hr>
+        </div>
+
+        <div class="mt-4">
+            <app-avaliacao-consumo-habitual [visualizarAvaliacaoConsumoHabitual]="true"
+                [avaliacaoConsumoHabitual]="retornoConsultaSelecionado.avaliacaoConsumoHabitual">
+            </app-avaliacao-consumo-habitual>
+            <hr>
+        </div>
+
+        <div class="mt-4">
+            <app-avaliacao-composicao-corporal [visualizarAvaliacaoComposicaoCorporal]="true" 
+                [sexoPaciente]="atendimentoSelecionado.sexoPaciente"
+                [avaliacaoComposicaoCorporal]="retornoConsultaSelecionado.avaliacaoComposicaoCorporal">
+            </app-avaliacao-composicao-corporal>
+            <hr>
+        </div>
+
+        <div class="mt-4">
+            <app-avaliacao-massa-muscular-corporea [visualizarAvaliacaoMassaMuscularCorporea]="true"
+                [avaliacaoMassaMuscularCorporea]="retornoConsultaSelecionado.avaliacaoMassaMuscularCorporea">
+            </app-avaliacao-massa-muscular-corporea>
+            <hr>
+        </div>
+
+        <div class="mt-4">
+            <app-conduta-nutricional [visualizarCondutaNutricional]="true"
+                [condutaNutricional]="retornoConsultaSelecionado.condutaNutricional">
+            </app-conduta-nutricional>
+        </div>
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="resetarCampos()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+    </p-footer>
 </p-dialog>
 
 <!-- Dialog cancelamento de atendimento -->

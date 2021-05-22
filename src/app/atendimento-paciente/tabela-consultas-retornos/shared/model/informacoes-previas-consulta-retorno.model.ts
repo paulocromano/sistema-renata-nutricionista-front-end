@@ -3,6 +3,7 @@ export class InformacoesPreviasConsultaRetorno {
     idAtendimento: number;
     idPaciente: number;
     nomePaciente: string;
+    sexoPaciente: string;
     situacaoAtendimento: string;
     codigoTipoAtendimento: number;
     descricaoTipoAtendimento: string;
