@@ -76,8 +76,11 @@ export class FieldsetHistoricoPatologiaFamiliaresComponent implements OnInit {
       });
   }
 
-  public buscarHistoricoPatologiaFamiliaresPorDataDoPaciente(): void {
+  public buscarHistoricoPatologiaFamiliaresPorDataDoPaciente(
+    previaHistoricoPatologiaFamiliares: PreviaHistoricoPatologiaFamiliaresPorData): void {
+      
     this.processandoOperacao = true;
+    previaHistoricoPatologiaFamiliares.processandoOperacao = true;
 
     this.historicoPatologiaFamiliaresService.buscarHistoricoPatologiaFamiliaresPorDataDoPaciente(this.previaHistoricoPorDataSelecionado.id)
       .subscribe((historico: HistoricoPatologiaFamiliaresPorData) => {
@@ -85,9 +88,11 @@ export class FieldsetHistoricoPatologiaFamiliaresComponent implements OnInit {
         this.patologiasFamiliares = historico.patologiasFamiliares;
         this.processandoOperacao = false;
         this.abrirDialogInformacoes = true;
+        previaHistoricoPatologiaFamiliares.processandoOperacao = false;
       },
       (errorResponse: HttpErrorResponse) => {
         this.processandoOperacao = false;
+        previaHistoricoPatologiaFamiliares.processandoOperacao = false;
         this.toasty.error('Erro ao buscar histórico de patologia dos familiares!');
       });
   }
@@ -112,7 +117,7 @@ export class FieldsetHistoricoPatologiaFamiliaresComponent implements OnInit {
     previaHistoricoPatologiaFamiliares: PreviaHistoricoPatologiaFamiliaresPorData): void {
 
     this.previaHistoricoPorDataSelecionado = previaHistoricoPatologiaFamiliares;
-    this.buscarHistoricoPatologiaFamiliaresPorDataDoPaciente();
+    this.buscarHistoricoPatologiaFamiliaresPorDataDoPaciente(previaHistoricoPatologiaFamiliares);
   }
 
   public armazenarHistoricoSelecionadoParaDialogExclusao(
@@ -120,10 +125,6 @@ export class FieldsetHistoricoPatologiaFamiliaresComponent implements OnInit {
 
       this.previaHistoricoPorDataSelecionado = previaHistoricoPatologiaFamiliares;
       this.abrirDialogExclusao = true;
-  }
-
-  public habilitarSpinnerBotaoInformacoes(previaHistoricoPatologiaFamiliares: PreviaHistoricoPatologiaFamiliaresPorData): boolean {
-    return this.processandoOperacao && this.previaHistoricoPorDataSelecionado.id === previaHistoricoPatologiaFamiliares.id;
   }
 
   public resetarCampos(): void {

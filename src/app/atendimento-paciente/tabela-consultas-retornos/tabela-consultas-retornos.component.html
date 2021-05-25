@@ -73,7 +73,9 @@
                             <button *ngIf="exibirBotaoVisualizarFichaDoAtendimento(atendimento)" class="btn btn-secondary ml-2" 
                                 pTooltip="Visualizar ficha" tooltipPosition="bottom" [disabled]="processandoOperacao"
                                 (click)="armazenarAtendimentoParaExibirFicha(atendimento)">
-                                <i class="far fa-address-card"></i>
+                                
+                                <i [ngClass]="atendimento.processandoOperacao ? 'fas fa-spin fa-circle-notch' : 'far fa-address-card'">
+                                </i>
                             </button>
 
                             <button *ngIf="exibirBotaoReagendamentoDoAtendimento(atendimento)" class="btn btn-warning ml-2" 

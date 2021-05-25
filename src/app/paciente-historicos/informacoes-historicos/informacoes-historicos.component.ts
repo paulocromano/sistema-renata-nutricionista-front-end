@@ -49,7 +49,6 @@ export class InformacoesHistoricosComponent implements OnInit, OnDestroy {
       .subscribe((informacoesHistoricos: HistoricosPaciente) => {
         this.historicosPaciente = informacoesHistoricos;
         this.paciente = this.historicosPaciente.paciente;
-        console.log(this.historicosPaciente);
         this.processandoOperacao = false;
       },
       (errorResponse: HttpErrorResponse) => {

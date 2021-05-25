@@ -40,9 +40,9 @@
                         <span *ngIf="coluna.header === 'Ações'">
                             <button class="btn btn-primary" pTooltip="Informações" tooltipPosition="bottom" [disabled]="processandoOperacao"
                                 (click)="armazenarHistoricoQuestionarioSelecionadoParaDialogInformacoes(previaQuestionario)"
-                                [ngClass]="habilitarSpinnerBotaoInformacoes(previaQuestionario) ? '' : 'px-3'">
+                                [ngClass]="previaQuestionario.processandoOperacao ? '' : 'px-3'">
 
-                                <i class="fas " [ngClass]="habilitarSpinnerBotaoInformacoes(previaQuestionario) ? 'fa-spin fa-circle-notch' : 'fa-info'"></i>
+                                <i class="fas " [ngClass]="previaQuestionario.processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-info'"></i>
                             </button>
                             <button class="btn btn-danger ml-2" pTooltip="Excluir" tooltipPosition="bottom"
                                 (click)="armazenarHistoricoQuestionarioSelecionadoParaDialogExclusao(previaQuestionario)">

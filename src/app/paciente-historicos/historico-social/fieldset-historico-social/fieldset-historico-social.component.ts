@@ -55,7 +55,8 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
 
   public armazenarHistoricoSocialSelecionadoParaDialogInformacoes(previaHistoricoSelecionado: PreviaHistoricoSocial): void {
     this.previaHistoricoSelecionado = previaHistoricoSelecionado;
-    this.buscarHistoricoSocialDoPaciente();
+
+    this.buscarHistoricoSocialDoPaciente(previaHistoricoSelecionado);
   }
 
 
@@ -74,17 +75,20 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
       });
   }
 
-  public buscarHistoricoSocialDoPaciente(): void {
+  public buscarHistoricoSocialDoPaciente(previaHistoricoSelecionado: PreviaHistoricoSocial): void {
     this.processandoOperacao = true;
+    previaHistoricoSelecionado.processandoOperacao = true;
 
     this.historicoSocialService.buscarHistoricoSocialDoPaciente(this.previaHistoricoSelecionado.id)
       .subscribe((historicoSocial: HistoricoSocial) => {
         this.historicoSocial = historicoSocial;
         this.processandoOperacao = false;
         this.abrirDialogInformacoes = true;
+        previaHistoricoSelecionado.processandoOperacao = false;
       },
       (errorResponse: HttpErrorResponse) => {
         this.processandoOperacao = false;
+        previaHistoricoSelecionado.processandoOperacao = false;
         this.toasty.error('Erro ao buscar histórico social!');
       });
   }
@@ -92,10 +96,6 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
   public armazenarHistoricoSocialSelecionadoParaDialogExclusao(previaHistoricoSelecionado: PreviaHistoricoSocial): void {
     this.previaHistoricoSelecionado = previaHistoricoSelecionado;
     this.abrirDialogExclusao = true;
-  }
-
-  public habilitarSpinnerBotaoInformacoes(previaHistoricoTabela: PreviaHistoricoSocial): boolean {
-    return this.processandoOperacao && this.previaHistoricoSelecionado.id === previaHistoricoTabela.id;
   }
 
   public excluirHistoricoSocial(): void {

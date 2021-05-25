@@ -527,32 +527,38 @@ export class TabelaConsultasRetornosComponent implements OnInit, OnDestroy {
       });
   }
 
-  private buscarConsultaDoPaciente(): void {
+  private buscarConsultaDoPaciente(atendimento: InformacoesPreviasConsultaRetorno): void {
     this.processandoOperacao = true;
+    atendimento.processandoOperacao = true;
 
     this.consultaService.buscarConsultaDoPaciente(this.atendimentoSelecionado.idAtendimento)
       .subscribe((consulta: Consulta) => {
         this.consultaSelecionada = consulta;
         this.processandoOperacao = false;
         this.exibirDialogFichaDaConsulta = true;
+        atendimento.processandoOperacao = false;
       },
       (errorResponse: HttpErrorResponse) => {
         this.processandoOperacao = false;
+        atendimento.processandoOperacao = false;
         this.toasty.error('Erro ao buscar a consulta do paciente!');
       });
   }
 
-  private buscarRetornoConsultaDoPaciente(): void {
+  private buscarRetornoConsultaDoPaciente(atendimento: InformacoesPreviasConsultaRetorno): void {
     this.processandoOperacao = true;
+    atendimento.processandoOperacao = true;
 
     this.retornoConsultaService.buscarRetornoConsultaDoPaciente(this.atendimentoSelecionado.idAtendimento)
       .subscribe((retornoConsulta: RetornoConsulta) => {
         this.retornoConsultaSelecionado = retornoConsulta;
         this.exibirDialogFichaDoRetornoConsulta = true;
-        this.processandoOperacao;
+        this.processandoOperacao = false;
+        atendimento.processandoOperacao = false;
       },
       (errorResponse: HttpErrorResponse) => {
         this.processandoOperacao = false;
+        atendimento.processandoOperacao = false;
         this.toasty.error('Erro ao buscar o retorno da consulta do paciente!');
       });
   }
@@ -564,12 +570,13 @@ export class TabelaConsultasRetornosComponent implements OnInit, OnDestroy {
 
   public armazenarAtendimentoParaExibirFicha(atendimento: InformacoesPreviasConsultaRetorno): void {
     this.atendimentoSelecionado = atendimento;
+    this.atendimentoSelecionado.processandoOperacao = true;
 
     if (this.tipoAtendimentoIgualConsulta(atendimento)) {
-      this.buscarConsultaDoPaciente();
+      this.buscarConsultaDoPaciente(atendimento);
     }
     else {
-      this.buscarRetornoConsultaDoPaciente();
+      this.buscarRetornoConsultaDoPaciente(atendimento);
     }
   }
 

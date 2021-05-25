@@ -17,11 +17,11 @@ import { PatologiaModule } from './patologia/patologia.module';
 import { SuplementoModule } from './suplemento/suplemento.module';
 import { MedicamentoModule } from './medicamento/medicamento.module';
 import { AtendimentoPacienteModule } from './atendimento-paciente/atendimento-paciente.module';
+import { ParametrosAtendimentoModule } from './parametros-atendimento/parametros-atendimento.module';
 import { ToastyModule } from './shared/toasty/toasty.module';
 import { InterceptorModule } from './interceptor/interceptor.module';
 import { LogadoGuard } from './shared/guard/logado.guard';
 import { AdminGuard } from './shared/guard/admin.guard';
-
 
 
 @NgModule({
@@ -42,6 +42,7 @@ import { AdminGuard } from './shared/guard/admin.guard';
     SuplementoModule,
     MedicamentoModule,
     AtendimentoPacienteModule,
+    ParametrosAtendimentoModule,
     ToastyModule,
     InterceptorModule,
     JwtModule.forRoot({})

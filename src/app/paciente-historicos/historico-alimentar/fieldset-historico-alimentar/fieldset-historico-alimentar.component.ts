@@ -45,7 +45,6 @@ export class FieldsetHistoricoAlimentarComponent implements OnInit {
   ngOnInit(): void {
     this.previaHistoricosAlimentares = this.informacoesPreviasHistoricosAlimentares.previaHistoricosAlimentares;
     this.dataProximaAtualizacao = this.informacoesPreviasHistoricosAlimentares.dataProximaAtualizacaoHistoricoAlimentar;
-    console.log(this.informacoesPreviasHistoricosAlimentares)
 
     this.colunasTabelaPreviaHistoricos = [
       { header: 'Cadastrado em', field: 'dataHoraCadastroHistoricoAlimentar', style: 'col-data-hora-cadastro' },
@@ -75,8 +74,9 @@ export class FieldsetHistoricoAlimentarComponent implements OnInit {
       });
   }
 
-  public buscarHistoricoAlimentarDoPaciente(): void {
+  public buscarHistoricoAlimentarDoPaciente(previaHistoricoAlimentar: PreviaHistoricoAlimentar): void {
     this.processandoOperacao = true;
+    previaHistoricoAlimentar.processandoOperacao = true;
 
     this.historicoAlimentarService.buscarHistoricoAlimentarDoPaciente(this.previaHistoricoSelecionado.id) 
       .subscribe((historicoAlimentar: HistoricoAlimentar) => {
@@ -84,9 +84,11 @@ export class FieldsetHistoricoAlimentarComponent implements OnInit {
         this.suplementosPaciente = historicoAlimentar.suplementosPaciente;
         this.processandoOperacao = false;
         this.abrirDialogInformacoes = true;
+        previaHistoricoAlimentar.processandoOperacao = false;
       },
       (errorResponse: HttpErrorResponse) => {
         this.processandoOperacao = false;
+        previaHistoricoAlimentar.processandoOperacao = false;
         this.toasty.error('Erro ao buscar histórico alimentar!');
       });
   }
@@ -109,7 +111,7 @@ export class FieldsetHistoricoAlimentarComponent implements OnInit {
 
   public armazenarPreviaHistoricoSelecionadoParaDialogInformacoes(previaHistoricoAlimentar: PreviaHistoricoAlimentar): void {
     this.previaHistoricoSelecionado = previaHistoricoAlimentar;
-    this.buscarHistoricoAlimentarDoPaciente();
+    this.buscarHistoricoAlimentarDoPaciente(previaHistoricoAlimentar);
   }
 
   public armazenarPreviaHistoricoSelecionadoParaDialogExclusao(previaHistoricoAlimentar: PreviaHistoricoAlimentar): void {
@@ -120,10 +122,6 @@ export class FieldsetHistoricoAlimentarComponent implements OnInit {
   public armazenarSuplementoSelecionado(suplementoPaciente: SuplementoPaciente): void {
     this.suplementoSelecionado = suplementoPaciente;
     this.abrirDialogSuplemento = true;
-  }
-
-  public habilitarSpinnerBotaoInformacoes(previaHistoricoAlimentar: PreviaHistoricoAlimentar): boolean {
-    return this.processandoOperacao && this.previaHistoricoSelecionado.id === previaHistoricoAlimentar.id;
   }
 
   public resetarCampos(): void {

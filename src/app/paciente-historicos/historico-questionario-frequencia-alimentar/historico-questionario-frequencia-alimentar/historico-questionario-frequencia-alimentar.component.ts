@@ -70,8 +70,9 @@ export class HistoricoQuestionarioFrequenciaAlimentarComponent implements OnInit
       });
   }
 
-  public buscarQuestionarioFrequenciaAlimentarDoPaciente(): void {
+  public buscarQuestionarioFrequenciaAlimentarDoPaciente(previaQuestionario: PreviaQuestionarioFrequenciaAlimentar): void {
     this.processandoOperacao = true;
+    previaQuestionario.processandoOperacao = true;
 
     this.questionarioService.buscarQuestionarioFrequenciaAlimentarDoPaciente(this.previaQuestionarioSelecionado.id)
       .subscribe((questionario: QuestionarioFrequenciaAlimentar) => {
@@ -79,9 +80,11 @@ export class HistoricoQuestionarioFrequenciaAlimentarComponent implements OnInit
         this.frequenciaAlimentar = questionario.frequenciaConsumoAlimentos;
         this.abrirDialogInformacoes = true;
         this.processandoOperacao = false;
+        previaQuestionario.processandoOperacao = false;
       },
       (errorResponse: HttpErrorResponse) => {
         this.processandoOperacao = false;
+        previaQuestionario.processandoOperacao = false;
         this.toasty.error('Erro ao buscar questionário de frequência alimentar!');
       });
   }
@@ -104,16 +107,12 @@ export class HistoricoQuestionarioFrequenciaAlimentarComponent implements OnInit
 
   public armazenarHistoricoQuestionarioSelecionadoParaDialogInformacoes(previaQuestionario: PreviaQuestionarioFrequenciaAlimentar): void {
     this.previaQuestionarioSelecionado = previaQuestionario;
-    this.buscarQuestionarioFrequenciaAlimentarDoPaciente();
+    this.buscarQuestionarioFrequenciaAlimentarDoPaciente(previaQuestionario);
   }
 
   public armazenarHistoricoQuestionarioSelecionadoParaDialogExclusao(previaQuestionario: PreviaQuestionarioFrequenciaAlimentar): void {
     this.previaQuestionarioSelecionado = previaQuestionario;
     this.abrirDialogExclusao = true;
-  }
-
-  public habilitarSpinnerBotaoInformacoes(previaQuestionario: PreviaQuestionarioFrequenciaAlimentar): boolean {
-    return this.processandoOperacao && this.previaQuestionarioSelecionado.id === previaQuestionario.id; 
   }
 
   public resetarCampos(): void {

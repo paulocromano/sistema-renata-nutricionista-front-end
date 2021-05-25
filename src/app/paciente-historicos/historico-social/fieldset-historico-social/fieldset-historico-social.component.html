@@ -39,9 +39,9 @@
                         <span *ngIf="coluna.header === 'Ações'">
                             <button class="btn btn-primary" pTooltip="Informações" tooltipPosition="bottom" [disabled]="processandoOperacao"
                                 (click)="armazenarHistoricoSocialSelecionadoParaDialogInformacoes(previaHistoricoSocial)"
-                                [ngClass]="habilitarSpinnerBotaoInformacoes(previaHistoricoSocial) ? '' : 'px-3'">
+                                [ngClass]="previaHistoricoSocial.processandoOperacao ? '' : 'px-3'">
 
-                                <i class="fas " [ngClass]="habilitarSpinnerBotaoInformacoes(previaHistoricoSocial) ? 'fa-spin fa-circle-notch' : 'fa-info'"></i>
+                                <i class="fas " [ngClass]="previaHistoricoSocial.processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-info'"></i>
                             </button>
                             <button class="btn btn-danger ml-2" pTooltip="Excluir" tooltipPosition="bottom"
                                 (click)="armazenarHistoricoSocialSelecionadoParaDialogExclusao(previaHistoricoSocial)">
@@ -153,7 +153,7 @@
                 <div class="col-12 col-md-6 col-lg-4">
                     <b>Menopausa: </b> {{ historicoSocial.menopausa }}
                 </div>
-                <div class="col-12 col-md-6 col-lg-4">
+                <div *ngIf="historicoSocial.menopausa === 'Sim'" class="col-12 col-md-6 col-lg-4">
                     <b>Tempo de menopausa: </b> {{ historicoSocial.quantosAnosEstaNaMenopausa }}
                 </div>
             </div>

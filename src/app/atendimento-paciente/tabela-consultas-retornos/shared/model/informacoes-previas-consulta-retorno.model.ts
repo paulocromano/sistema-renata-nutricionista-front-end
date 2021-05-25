@@ -13,4 +13,6 @@ export class InformacoesPreviasConsultaRetorno {
     numeroParcelasConsulta: number;
     valorConsulta: string;
     motivoConsulta: string;
+
+    processandoOperacao: boolean;
 }

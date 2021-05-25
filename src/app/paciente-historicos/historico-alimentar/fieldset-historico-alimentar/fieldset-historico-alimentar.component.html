@@ -39,9 +39,11 @@
                         <span *ngIf="coluna.header === 'Ações'">
                             <button class="btn btn-primary" pTooltip="Informações" tooltipPosition="bottom" [disabled]="processandoOperacao"
                                 (click)="armazenarPreviaHistoricoSelecionadoParaDialogInformacoes(previaHistoricoAlimentar)"
-                                [ngClass]="habilitarSpinnerBotaoInformacoes(previaHistoricoAlimentar) ? '' : 'px-3'">
+                                [ngClass]="previaHistoricoAlimentar.processandoOperacao ? '' : 'px-3'">
 
-                                <i class="fas " [ngClass]="habilitarSpinnerBotaoInformacoes(previaHistoricoAlimentar) ? 'fa-spin fa-circle-notch' : 'fa-info'"></i>
+                                <i class="fas " [ngClass]="previaHistoricoAlimentar.processandoOperacao 
+                                    ? 'fa-spin fa-circle-notch' : 'fa-info'">
+                                </i>
                             </button>
                             
                             <button class="btn btn-danger ml-2" pTooltip="Excluir" tooltipPosition="bottom"
