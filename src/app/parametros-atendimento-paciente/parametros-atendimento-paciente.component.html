@@ -1,0 +1,145 @@
+<div class="bg-carregando-dados" *ngIf="processandoOperacao">
+    <div class="info-carregando-dados">
+      <p-progressSpinner [style]="{width: '120px', height: '120px'}"></p-progressSpinner>
+      <p class="h5">Carregando parâmetros de atendimento...</p>
+    </div>
+</div>
+
+<div class="container-fluid mt-3">
+    <div class="row">
+        <div class="col-12 col-sm-6 col-md-4">
+            <div>Preço da consulta</div>
+            <p-inputNumber [(ngModel)]="precoConsulta" mode="currency" currency="BRL" locale="pt-BR" [disabled]="!editarParametros"
+                (ngModelChange)="verificarSeCampoSofreuAlteracao($event)">
+            </p-inputNumber>
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-4">
+            <div>Parcelas</div>
+            <p-inputNumber [(ngModel)]="formularioParametrosAtendimento.quantidadeParcelas" [minFractionDigits]="0" [min]="1" [max]="12" 
+                [showButtons]="true" [disabled]="!editarParametros" (ngModelChange)="verificarSeCampoSofreuAlteracao($event)">
+            </p-inputNumber>
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-4">
+            <div>Geração de horários de atendimento (meses)</div>
+            <p-inputNumber [(ngModel)]="formularioParametrosAtendimento.tempoMesesGeracaoAutomaticaHorariosAtendimento" 
+                [minFractionDigits]="0" [min]="1" [max]="6" [showButtons]="true" [disabled]="!editarParametros"
+                (ngModelChange)="verificarSeCampoSofreuAlteracao($event)">
+            </p-inputNumber>
+        </div>
+    </div>
+    <hr>
+
+    <div class="row mt-3">
+        <div class="col-12 col-sm-6 col-md-4">
+            <div>Intervalo entre atendimentos (minutos)</div>
+            <p-inputNumber [(ngModel)]="formularioParametrosAtendimento.intervaloMinutosEntreAtendimentos" 
+                [minFractionDigits]="0" [min]="1" [max]="240" [showButtons]="true" [disabled]="!editarParametros"
+                (ngModelChange)="verificarSeCampoSofreuAlteracao($event)">
+            </p-inputNumber>
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-4">
+            <div>Intervalo entre primeira consulta e retorno (dias)</div>
+            <p-inputNumber [(ngModel)]="formularioParametrosAtendimento.intervaloDiasEntrePrimeiraConsultaRetorno" 
+                [minFractionDigits]="0" [min]="1" [max]="365" [showButtons]="true" [disabled]="!editarParametros"
+                (ngModelChange)="verificarSeCampoSofreuAlteracao($event)">
+            </p-inputNumber>
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-4">
+            <div>Intervalo entre consulta e retorno (dias)</div>
+            <p-inputNumber [(ngModel)]="formularioParametrosAtendimento.intervaloDiasEntreConsultaRetorno" 
+                [minFractionDigits]="0" [min]="1" [max]="365" [showButtons]="true" [disabled]="!editarParametros"
+                (ngModelChange)="verificarSeCampoSofreuAlteracao($event)">
+            </p-inputNumber>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-12 col-sm-6 col-md-4">
+            <div>Intervalo entre retorno e consulta (dias)</div>
+            <p-inputNumber [(ngModel)]="formularioParametrosAtendimento.intervaloDiasEntreRetornoConsulta" 
+                [minFractionDigits]="0" [min]="1" [max]="365" [showButtons]="true" [disabled]="!editarParametros"
+                (ngModelChange)="verificarSeCampoSofreuAlteracao($event)">
+            </p-inputNumber>
+        </div>
+    </div>
+    <hr>
+
+    <h5 class="text-center">Atualização dos Históricos do Paciente</h5>
+    <div class="row mt-3">
+        <div class="col-12 col-sm-6 col-md-4">
+            <div>Questionário de Frequência Alimentar (meses)</div>
+            <p-inputNumber [(ngModel)]="formularioParametrosAtendimento.tempoMesesAtualizarQuestionarioFrequenciaAlimentar" 
+                [minFractionDigits]="0" [min]="1" [max]="12" [showButtons]="true" [disabled]="!editarParametros"
+                (ngModelChange)="verificarSeCampoSofreuAlteracao($event)">
+            </p-inputNumber>
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-4">
+            <div>Histórico Social (meses)</div>
+            <p-inputNumber [(ngModel)]="formularioParametrosAtendimento.tempoMesesAtualizarHistoricoSocial" 
+                [minFractionDigits]="0" [min]="1" [max]="12" [showButtons]="true" [disabled]="!editarParametros"
+                (ngModelChange)="verificarSeCampoSofreuAlteracao($event)">
+            </p-inputNumber>
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-4">
+            <div>Histórico de Patologia dos Familiares (meses)</div>
+            <p-inputNumber [(ngModel)]="formularioParametrosAtendimento.tempoMesesAtualizarHistoricoPatologiaFamiliares" 
+                [minFractionDigits]="0" [min]="1" [max]="12" [showButtons]="true" [disabled]="!editarParametros"
+                (ngModelChange)="verificarSeCampoSofreuAlteracao($event)">
+            </p-inputNumber>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-12 col-sm-6 col-md-4">
+            <div>Histórico de Atividade Física (meses)</div>
+            <p-inputNumber [(ngModel)]="formularioParametrosAtendimento.tempoMesesAtualizarHistoricoAtividadeFisica" 
+                [minFractionDigits]="0" [min]="1" [max]="12" [showButtons]="true" [disabled]="!editarParametros"
+                (ngModelChange)="verificarSeCampoSofreuAlteracao($event)">
+            </p-inputNumber>
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-4">
+            <div>Histórico Alimentar (meses)</div>
+            <p-inputNumber [(ngModel)]="formularioParametrosAtendimento.tempoMesesAtualizarHistoricoAlimentar" 
+                [minFractionDigits]="0" [min]="1" [max]="12" [showButtons]="true" [disabled]="!editarParametros"
+                (ngModelChange)="verificarSeCampoSofreuAlteracao($event)">
+            </p-inputNumber>
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-4">
+            <div>Histórico de Frequência Alimentar (meses)</div>
+            <p-inputNumber [(ngModel)]="formularioParametrosAtendimento.tempoMesesAtualizarHistoricoFrequenciaAlimentar" 
+                [minFractionDigits]="0" [min]="1" [max]="12" [showButtons]="true" [disabled]="!editarParametros"
+                (ngModelChange)="verificarSeCampoSofreuAlteracao($event)">
+            </p-inputNumber>
+        </div>
+    </div>
+
+    <div class="mt-5 text-center">
+        <button class="btn btn-warning px-5" [disabled]="editarParametros" pTooltip="Editar parâmetros" tooltipPosition="bottom"
+            (click)="editarParametros = true">
+            <i class="fas fa-pen"></i>
+            Editar
+        </button>
+
+        <button *ngIf="editarParametros" class="btn btn-danger px-5 mx-4" (click)="cancelarAlteracao()"
+            pTooltip="Cancelar" tooltipPosition="bottom">
+            <i class="fas fa-times"></i>
+            Cancelar
+        </button>
+
+        <button *ngIf="editarParametros" class="btn btn-success px-5" pTooltip="Confirmar" tooltipPosition="bottom"
+            (click)="atualizarParametrosAtendimentoDoPaciente()" [disabled]="desabilitarBotaoConfirmarAlteracao()">
+            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
+        </button>
+    </div>
+</div>
+
+<app-toasty #toastyComponent></app-toasty>

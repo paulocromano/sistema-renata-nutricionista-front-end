@@ -1,0 +1,25 @@
+.bg-carregando-dados {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(71, 66, 66, 0.411);
+    z-index: 9999;
+}
+
+.info-carregando-dados {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 800;
+    text-align: center;
+}
+
+.borda-table {
+    border: 2px solid rgba(209, 209, 209, 0.774);
+    border-radius: 2px;
+}

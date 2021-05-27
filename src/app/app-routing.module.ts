@@ -1,4 +1,3 @@
-
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
@@ -13,9 +12,9 @@ import { InformacoesHistoricosComponent } from './paciente-historicos/informacoe
 import { MedicamentoComponent } from './medicamento/medicamento.component';
 import { SuplementoComponent } from './suplemento/suplemento.component';
 import { PatologiaComponent } from './patologia/patologia.component';
-import { PaginaParametrosAtendimentoComponent } from './parametros-atendimento/pagina-parametros-atendimento/pagina-parametros-atendimento.component';
 import { RetornoConsultaComponent } from './atendimento-paciente/retorno-consulta/retorno-consulta.component';
 import { ConsultaComponent } from './atendimento-paciente/consulta/consulta.component';
+import { ParametrosAtendimentoPacienteComponent } from './parametros-atendimento-paciente/parametros-atendimento-paciente.component';
 
 const routes: Routes = [
   { path: 'inicio', component: PaginaInicialComponent, canActivate: [ LogadoGuard ] },
@@ -28,7 +27,7 @@ const routes: Routes = [
   { path: 'medicamentos', component: MedicamentoComponent, canActivate: [ AdminGuard ] },
   { path: 'suplementos', component: SuplementoComponent, canActivate: [ AdminGuard ] },
   { path: 'patologias', component: PatologiaComponent, canActivate: [ AdminGuard ] },
-  { path: 'parametros-atendimento', component: PaginaParametrosAtendimentoComponent, canActivate: [ AdminGuard ] },
+  { path: 'parametros-atendimento', component: ParametrosAtendimentoPacienteComponent, canActivate: [ AdminGuard ] },
   { path: 'login', component: LoginComponent }
 ];
 
