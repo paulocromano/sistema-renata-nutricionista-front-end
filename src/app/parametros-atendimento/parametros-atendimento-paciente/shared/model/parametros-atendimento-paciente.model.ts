@@ -8,4 +8,11 @@ export class ParametrosAtendimentoPaciente {
     intervaloDiasEntreConsultaRetorno: number;
     intervaloDiasEntreRetornoConsulta: number;
     precoConsulta: string;
+
+    tempoMesesAtualizarQuestionarioFrequenciaAlimentar: number;
+	tempoMesesAtualizarHistoricoSocial: number;
+	tempoMesesAtualizarHistoricoPatologiaFamiliares: number;
+	tempoMesesAtualizarHistoricoAtividadeFisica: number;
+	tempoMesesAtualizarHistoricoAlimentar: number;
+	tempoMesesAtualizarHistoricoFrequenciaAlimentar: number;
 }

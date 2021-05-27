@@ -1,1 +1,6 @@
-<p>pagina-parametros-atendimento works!</p>
+<div *ngIf="!processandoOperacao">
+    <app-parametros-atendimento-paciente [parametrosAtendimentoPaciente]="parametrosAtendimento.atendimentoPacienteParametro">
+    </app-parametros-atendimento-paciente>
+</div>
+
+<app-toasty #toastyComponent></app-toasty>
