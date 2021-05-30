@@ -6,6 +6,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ToastyComponent } from './../../shared/toasty/toasty.component';
 import { InformacoesCadastroConsulta } from './shared/model/informacoes-cadastro-consulta.model';
 import { ConsultaService } from './shared/service/consulta.service';
+import { RegistroDietaFORM } from './../ficha-consulta-retorno/shared/model/registro-dieta.form';
 
 @Component({
   selector: 'app-consulta',
@@ -23,6 +24,7 @@ export class ConsultaComponent implements OnInit {
   private idConsulta: number;
 
   public informacoesCadastroConsulta: InformacoesCadastroConsulta = new InformacoesCadastroConsulta();
+  private formularioRegistroDietaHabitual: RegistroDietaFORM = new RegistroDietaFORM();
 
   public carregandoPagina: boolean = true;
   public processandoOperacao: boolean = true;
@@ -60,5 +62,10 @@ export class ConsultaComponent implements OnInit {
         this.carregandoPagina = false;
         this.toasty.error('Erro ao buscar as informações para cadastro de consulta!')
       })
+  }
+
+  public salvarFormularioRegistroDietaHabitual(formularioRegistroDietaHabitual: RegistroDietaFORM): void {
+    this.formularioRegistroDietaHabitual = formularioRegistroDietaHabitual;
+    console.log(this.formularioRegistroDietaHabitual)
   }
 }

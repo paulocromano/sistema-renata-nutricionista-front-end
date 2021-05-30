@@ -1,7 +1,7 @@
-import { DadosEnum } from './../../../shared/model/dados-enum.model';
+import { DadosEnum } from '../../../shared/model/dados-enum.model';
 import { AlimentoFrequenciaAlimentar } from './alimento-frequencia-alimentar.model';
 
-export class InformacoesCadastroConsumoQuestionario {
+export class InformacoesCadastroQuestionario {
 
     alimentosFrequenciaAlimentar: AlimentoFrequenciaAlimentar = new AlimentoFrequenciaAlimentar();
     consumoCarneVermelha: DadosEnum[] = [];

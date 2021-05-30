@@ -13,6 +13,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { FieldsetModule } from 'primeng/fieldset';
 
 import { ToastyModule } from '../shared/toasty/toasty.module';
 import { TabelaConsultasRetornosComponent } from './tabela-consultas-retornos/tabela-consultas-retornos.component';
@@ -49,6 +50,7 @@ import { CondutaNutricionalComponent } from './ficha-consulta-retorno/conduta-nu
     CalendarModule,
     InputTextareaModule,
     InputNumberModule,
+    FieldsetModule,
     ToastyModule
   ]
 })
