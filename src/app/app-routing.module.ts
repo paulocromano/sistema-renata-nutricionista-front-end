@@ -15,6 +15,7 @@ import { PatologiaComponent } from './patologia/patologia.component';
 import { RetornoConsultaComponent } from './atendimento-paciente/retorno-consulta/retorno-consulta.component';
 import { ConsultaComponent } from './atendimento-paciente/consulta/consulta.component';
 import { ParametrosAtendimentoPacienteComponent } from './parametros-atendimento-paciente/parametros-atendimento-paciente.component';
+import { HorarioAtendimentoComponent } from './horario-atendimento/horario-atendimento.component';
 
 const routes: Routes = [
   { path: 'inicio', component: PaginaInicialComponent, canActivate: [ LogadoGuard ] },
@@ -28,6 +29,7 @@ const routes: Routes = [
   { path: 'suplementos', component: SuplementoComponent, canActivate: [ AdminGuard ] },
   { path: 'patologias', component: PatologiaComponent, canActivate: [ AdminGuard ] },
   { path: 'parametros-atendimento', component: ParametrosAtendimentoPacienteComponent, canActivate: [ AdminGuard ] },
+  { path: 'horario-atendimento', component: HorarioAtendimentoComponent, canActivate: [ LogadoGuard ] },
   { path: 'login', component: LoginComponent }
 ];
 

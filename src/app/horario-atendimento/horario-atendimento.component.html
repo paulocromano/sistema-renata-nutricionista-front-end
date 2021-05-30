@@ -1,1 +1,220 @@
-<p>horario-atendimento works!</p>
+<div class="container-fluid">
+    <div class="borda-table">
+        <p-table [value]="diasDeAtendimento" [columns]="colunasTabela" [responsive]="true" class="text-center">
+            <ng-template pTemplate="caption">
+                <div style="float: right;">
+                    <button class="btn btn-success px-5" (click)="abrirDialogCadastro()" 
+                        [disabled]="!this.diasDisponiveisDaSemanaParaCadastro || this.diasDisponiveisDaSemanaParaCadastro.length === 0">
+                        <i class="fas fa-plus"></i>
+                        Cadastrar dia de atendimento
+                    </button>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="header" let-colunas>
+                <tr>
+                    <th *ngFor="let coluna of colunas" [ngClass]="coluna.style" class="text-center">
+                        {{ coluna.header }}
+                    </th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-diaAtendimento>
+                <tr>
+                    <td *ngFor="let coluna of colunasTabela" class="text-center">
+                        <span class="ui-column-title text-left"></span>
+                        {{ diaAtendimento[coluna.field] }}
+        
+                        <span *ngIf="coluna.header === 'Ações'">
+                            <button class="btn btn-warning" pTooltip="Editar" tooltipPosition="bottom"
+                                (click)="armazenarDiaAtendimentoParaEdicao(diaAtendimento)">
+                                <i class="fas fa-pen text-light"></i>
+                            </button>
+
+                            <button class="btn btn-danger ml-2" pTooltip="Excluir" tooltipPosition="bottom"
+                                (click)="armazenarDiaAtendimentoParaExclusao(diaAtendimento)">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </span>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage" class="text-center" let-diasAtendimento>
+                <tr>
+                    <td [attr.colspan]="diasAtendimento.length" class="text-center">
+                        <span *ngIf="!processandoOperacao">Nenhum medicamento encontrado!</span>
+
+                        <span *ngIf="processandoOperacao">
+                            <p-progressSpinner strokeWidth="3"></p-progressSpinner>
+                        </span>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="summary">
+                Dias de atendimento: {{ diasDeAtendimento ? diasDeAtendimento.length : 0 }}
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<!-- Dialog cadastro de dia de atendimento -->
+<p-dialog [visible]="exibirDialogCadastro" [modal]="true" [resizable]="false" [blockScroll]="true" 
+    [draggable]="false" [closable]="false" [style]="{width: '70vh'}">
+
+    <p-header>
+        Cadastrar dia de atendimento
+    </p-header>
+
+    <div class="container-fluid">
+        <div class="mt-2">
+            <p-dropdown [options]="diasDisponiveisDaSemanaParaCadastro" [(ngModel)]="codigoDiaDaSemanaParaCadastro"
+                placeholder="Selecione um dia" [style]="{width: '180px'}">
+            </p-dropdown>
+        </div>
+
+        <h6 class="text-center mt-3">Entrada/Saída antes do almoço</h6>
+        <div class="row mt-4">
+            <div class="col-12 col-sm-6">
+                <span class="p-float-label">
+                    <p-inputMask [(ngModel)]="novoDiaDeAtendimento.horarioEntradaAntesAlmoco" mask="99:99" [style]="{width: '100px'}">
+                    </p-inputMask>
+                    <label for="inputtext">Entrada</label>
+                </span>
+            </div>
+
+            <div class="col-12 col-sm-6">
+                <span class="p-float-label">
+                    <p-inputMask [(ngModel)]="novoDiaDeAtendimento.horarioSaidaAntesAlmoco" mask="99:99" [style]="{width: '100px'}">
+                    </p-inputMask>
+                    <label for="inputtext">Saída</label>
+                </span>
+            </div>
+        </div>
+
+        <h6 class="text-center mt-3">Entrada/Saída depois do almoço</h6>
+        <div class="row mt-4">
+            <div class="col-12 col-sm-6">
+                <span class="p-float-label">
+                    <p-inputMask [(ngModel)]="novoDiaDeAtendimento.horarioEntradaDepoisAlmoco" mask="99:99" [style]="{width: '100px'}">
+                    </p-inputMask>
+                    <label for="inputtext">Entrada</label>
+                </span>
+            </div>
+
+            <div class="col-12 col-sm-6">
+                <span class="p-float-label">
+                    <p-inputMask [(ngModel)]="novoDiaDeAtendimento.horarioSaidaDepoisAlmoco" mask="99:99" [style]="{width: '100px'}">
+                    </p-inputMask>
+                    <label for="inputtext">Saída</label>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="resetarCampos()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+        
+        <button class="btn btn-success" [disabled]="desabilitarBotaoCadastroDiaDeAtendimento()" 
+            (click)="salvarDiaDeAtendimento()">
+            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
+        </button>
+    </p-footer>
+</p-dialog>
+
+<!-- Dialog edição de dia de atendimento -->
+<p-dialog [visible]="exibirDialogEdicao" [modal]="true" [resizable]="false" [blockScroll]="true" 
+    [draggable]="false" [closable]="false" [style]="{width: '78vh'}">
+
+    <p-header>
+        Alterar horários de atendimento de <b>{{ diaDeAtendimentoSelecionado.diaDaSemana }}</b>
+    </p-header>
+
+    <div class="container-fluid">
+        <h6 class="text-center mt-3">Entrada/Saída antes do almoço</h6>
+        <div class="row mt-4">
+            <div class="col-12 col-sm-6">
+                <span class="p-float-label">
+                    <p-inputMask [(ngModel)]="edicaoDiaDeAtendimento.horarioEntradaAntesAlmoco" mask="99:99" [style]="{width: '100px'}">
+                    </p-inputMask>
+                    <label for="inputtext">Entrada</label>
+                </span>
+            </div>
+
+            <div class="col-12 col-sm-6">
+                <span class="p-float-label">
+                    <p-inputMask [(ngModel)]="edicaoDiaDeAtendimento.horarioSaidaAntesAlmoco" mask="99:99" [style]="{width: '100px'}">
+                    </p-inputMask>
+                    <label for="inputtext">Saída</label>
+                </span>
+            </div>
+        </div>
+
+        <h6 class="text-center mt-3">Entrada/Saída depois do almoço</h6>
+        <div class="row mt-4">
+            <div class="col-12 col-sm-6">
+                <span class="p-float-label">
+                    <p-inputMask [(ngModel)]="edicaoDiaDeAtendimento.horarioEntradaDepoisAlmoco" mask="99:99" [style]="{width: '100px'}">
+                    </p-inputMask>
+                    <label for="inputtext">Entrada</label>
+                </span>
+            </div>
+
+            <div class="col-12 col-sm-6">
+                <span class="p-float-label">
+                    <p-inputMask [(ngModel)]="edicaoDiaDeAtendimento.horarioSaidaDepoisAlmoco" mask="99:99" [style]="{width: '100px'}">
+                    </p-inputMask>
+                    <label for="inputtext">Saída</label>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="resetarCampos()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+        
+        <button class="btn btn-success" [disabled]="desabilitarBotaoEdicaoDiaDeAtendimento()" 
+            (click)="editarDiaDeAtendimento()">
+            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
+        </button>
+    </p-footer>
+</p-dialog>
+
+<!-- Dialog exclusão de dia de atendimento -->
+<p-dialog [visible]="exibirDialogExclusao" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '60vh'}">
+
+    <p-header>
+        Excluir dia de atendimento
+    </p-header>
+
+    <div class="container-fluid">
+        Tem certeza que deseja excluir os horários de atendimento de <b>{{ diaDeAtendimentoSelecionado.diaDaSemana }}</b>?
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="resetarCampos()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+
+        <button class="btn btn-success" [disabled]="processandoOperacao" 
+            (click)="excluirDiaDeAtendimento()">
+            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
+        </button>
+    </p-footer>
+</p-dialog>
+
+
+
+<app-toasty #toastyComponent></app-toasty>
