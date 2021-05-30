@@ -1,8 +1,8 @@
-import { RefeicoesRegistroDieta } from '../../../shared/model/refeicoes-registro-dieta.model';
-import { CondutaNutricional } from './../../../shared/model/conduta-nutricional.model';
-import { AvaliacaoMassaMuscularCorporea } from './../../../shared/model/avaliacao-massa-muscular-corporea.model';
-import { AvaliacaoComposicaoCorporal } from './../../../shared/model/avaliacao-composicao-corporal.model';
-import { AvaliacaoConsumoHabitual } from './../../../shared/model/avaliacao-consumo-habitual.model';
+import { RefeicoesRegistroDieta } from '../../../ficha-consulta-retorno/shared/model/refeicoes-registro-dieta.model';
+import { CondutaNutricional } from '../../../ficha-consulta-retorno/shared/model/conduta-nutricional.model';
+import { AvaliacaoMassaMuscularCorporea } from '../../../ficha-consulta-retorno/shared/model/avaliacao-massa-muscular-corporea.model';
+import { AvaliacaoComposicaoCorporal } from '../../../ficha-consulta-retorno/shared/model/avaliacao-composicao-corporal.model';
+import { AvaliacaoConsumoHabitual } from '../../../ficha-consulta-retorno/shared/model/avaliacao-consumo-habitual.model';
 
 export class Consulta {
 

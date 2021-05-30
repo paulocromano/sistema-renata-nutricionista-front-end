@@ -417,6 +417,10 @@ export class TabelaConsultasRetornosComponent implements OnInit, OnDestroy {
     this.processandoOperacao = true;
     this.formularioConfirmacaoConsulta.valorConsulta = this.valorConsulta.replace(',', '.');
 
+    if (this.formularioConfirmacaoConsulta.formaPagamento !== '2') {
+      this.formularioConfirmacaoConsulta.numeroParcelas = null;
+    }
+
     this.consultaService.confirmarConsulta(this.atendimentoSelecionado.idPaciente, 
       this.atendimentoSelecionado.idAtendimento, this.formularioConfirmacaoConsulta)
       .subscribe(() => {
@@ -612,7 +616,7 @@ export class TabelaConsultasRetornosComponent implements OnInit, OnDestroy {
       let botaoDesabilitado: boolean = this.processandoOperacao || !(this.formularioConfirmacaoConsulta.formaPagamento && this.valorConsulta);
 
       if (this.formularioConfirmacaoConsulta.formaPagamento === '2') {
-        return botaoDesabilitado && !this.formularioConfirmacaoConsulta.numeroParcelas;
+        return botaoDesabilitado || !this.formularioConfirmacaoConsulta.numeroParcelas;
       }
       else {
         return botaoDesabilitado;

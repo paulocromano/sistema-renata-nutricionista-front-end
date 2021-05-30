@@ -2,7 +2,7 @@
     <div class="borda-table">
         <p-table [value]="diasDeAtendimento" [columns]="colunasTabela" [responsive]="true" class="text-center">
             <ng-template pTemplate="caption">
-                <div style="float: right;">
+                <div style="text-align: right;">
                     <button class="btn btn-success px-5" (click)="abrirDialogCadastro()" 
                         [disabled]="!this.diasDisponiveisDaSemanaParaCadastro || this.diasDisponiveisDaSemanaParaCadastro.length === 0">
                         <i class="fas fa-plus"></i>

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { RefeicoesRegistroDieta } from '../../shared/model/refeicoes-registro-dieta.model';
+import { RefeicoesRegistroDieta } from '../shared/model/refeicoes-registro-dieta.model';
 
 @Component({
   selector: 'app-registro-dieta',

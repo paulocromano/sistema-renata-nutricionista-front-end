@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { CondutaNutricional } from './../../shared/model/conduta-nutricional.model';
+import { CondutaNutricional } from '../shared/model/conduta-nutricional.model';
 
 @Component({
   selector: 'app-conduta-nutricional',

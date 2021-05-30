@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { AvaliacaoComposicaoCorporal } from '../../shared/model/avaliacao-composicao-corporal.model';
+import { AvaliacaoComposicaoCorporal } from '../shared/model/avaliacao-composicao-corporal.model';
 
 @Component({
   selector: 'app-avaliacao-composicao-corporal',

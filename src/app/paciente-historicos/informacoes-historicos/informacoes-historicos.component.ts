@@ -33,6 +33,11 @@ export class InformacoesHistoricosComponent implements OnInit, OnDestroy {
     ) { }
 
   ngOnInit(): void {
+    this.capturarParametroDaRota();
+    this.buscarHistoricosPaciente();
+  }
+
+  private capturarParametroDaRota(): void {
     this.subscription = this.activatedRoute.params.subscribe((params: any) => {
       this.idPaciente = parseInt(params['id'])
     
@@ -40,8 +45,6 @@ export class InformacoesHistoricosComponent implements OnInit, OnDestroy {
         this.router.navigate(['/pacientes']);
       }
     });
-
-    this.buscarHistoricosPaciente();
   }
 
   public buscarHistoricosPaciente(): void {

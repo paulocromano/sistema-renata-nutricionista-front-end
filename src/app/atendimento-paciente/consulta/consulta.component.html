@@ -1,1 +1,13 @@
-<p>consulta works!</p>
+<div class="bg-carregando-dados" *ngIf="carregandoPagina">
+    <div class="info-carregando-dados">
+      <p-progressSpinner [style]="{width: '120px', height: '120px'}"></p-progressSpinner>
+      <p class="h5">Carregando informações para a consulta...</p>
+    </div>
+</div>
+
+<div *ngIf="!carregandoPagina" class="container-fluid">
+
+</div>
+
+
+<app-toasty #toastyComponent></app-toasty>

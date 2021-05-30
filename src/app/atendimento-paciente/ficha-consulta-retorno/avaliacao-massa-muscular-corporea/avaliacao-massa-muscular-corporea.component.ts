@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { AvaliacaoMassaMuscularCorporea } from './../../shared/model/avaliacao-massa-muscular-corporea.model';
+import { AvaliacaoMassaMuscularCorporea } from '../shared/model/avaliacao-massa-muscular-corporea.model';
 
 @Component({
   selector: 'app-avaliacao-massa-muscular-corporea',

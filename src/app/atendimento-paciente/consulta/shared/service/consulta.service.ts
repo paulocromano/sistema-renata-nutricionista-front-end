@@ -1,3 +1,4 @@
+import { InformacoesCadastroConsulta } from './../model/informacoes-cadastro-consulta.model';
 import { ConfirmacaoAtendimento } from './../../../tabela-consultas-retornos/shared/model/confirmacao-atendimento.model';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -59,6 +60,10 @@ export class ConsultaService {
 
   public iniciarConsulta(idPaciente: number, idConsulta: number): Observable<any> {
     return this.http.put(`/consulta-paciente/iniciar/${idPaciente}/${idConsulta}`, null);
+  }
+
+  public informacoesParaCadastrarConsulta(idPaciente: number, idConsulta: number): Observable<InformacoesCadastroConsulta> {
+    return this.http.get<InformacoesCadastroConsulta>(`/consulta-paciente/informacoes-cadastro-consulta/${idPaciente}/${idConsulta}`);
   }
 
   public finalizarConsulta(idPaciente: number, idConsulta: number, formularioConsulta: ConsultaFORM): Observable<any> {

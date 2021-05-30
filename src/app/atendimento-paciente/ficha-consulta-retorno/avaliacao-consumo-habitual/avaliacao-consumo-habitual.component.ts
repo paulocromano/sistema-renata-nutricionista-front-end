@@ -1,4 +1,4 @@
-import { AvaliacaoConsumoHabitual } from './../../shared/model/avaliacao-consumo-habitual.model';
+import { AvaliacaoConsumoHabitual } from '../shared/model/avaliacao-consumo-habitual.model';
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
