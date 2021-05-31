@@ -34,3 +34,71 @@
         </div>
     </div>
 </div>
+
+<div *ngIf="cadastrarAvaliacaoMassaMuscularCorporea">
+    <p-fieldset [toggleable]="true" [collapsed]="true">
+        <p-header>
+            Avaliação da massa muscular corporea (mm) por meio de medidas Antropométricas
+
+            <span *ngIf="!formularioCadastroEstaValido">
+                <i class="fas fa-exclamation-circle text-warning"></i>
+            </span>
+
+            <span *ngIf="formularioCadastroEstaValido">
+                <i class="fas fa-check-circle text-success"></i>
+            </span>
+        </p-header>
+
+        <div class="text-center">
+            <div class="mt-2">
+                <span>Circunferência de cintura </span>
+                <input type="text" [style]="{width: '100px'}" [(ngModel)]="formularioCadastro.circunferenciaCinturaCentimetros" 
+                    pInputText (ngModelChange)="validarFormulario($event)"> 
+                cm
+            </div>
+            <div class="mt-2">
+                <span>Circunferência do braço </span>
+                <input type="text" [style]="{width: '100px'}" [(ngModel)]="formularioCadastro.circunferenciaBracoCentimentros" 
+                    pInputText (ngModelChange)="validarFormulario($event)"> 
+                cm
+            </div>
+            <div class="mt-2">
+                <span>Circunferência da coxa </span>
+                <input type="text" [style]="{width: '100px'}" [(ngModel)]="formularioCadastro.circunferenciaCoxaCentimetros" 
+                    pInputText (ngModelChange)="validarFormulario($event)"> 
+                cm
+            </div>
+            <div class="mt-2">
+                <span>Circunferência da panturrilha </span>
+                <input type="text" [style]="{width: '100px'}" [(ngModel)]="formularioCadastro.circunferenciaPanturrilhaCentimetros" 
+                    pInputText (ngModelChange)="validarFormulario($event)"> 
+                cm
+            </div>
+            <div class="mt-2">
+                <span>Circunferência do punho </span>
+                <input type="text" [style]="{width: '100px'}" [(ngModel)]="formularioCadastro.circunferenciaPunhoCentrimetros" 
+                    pInputText (ngModelChange)="validarFormulario($event)"> 
+                cm
+            </div>
+
+            <div class="mt-3">
+                <span>Massa Muscular </span>
+                <input type="text" [style]="{width: '100px'}" [(ngModel)]="formularioCadastro.massaMuscularKg" 
+                    pInputText (ngModelChange)="validarFormulario($event)">
+                Kg
+            </div>
+            <div class="mt-2">
+                <span>Massa Muscular </span>
+                <input type="text" [style]="{width: '100px'}" [(ngModel)]="formularioCadastro.massaMuscularPorcentagem" 
+                    pInputText (ngModelChange)="validarFormulario($event)">
+                %
+            </div>
+            <div class="mt-2">
+                <span>Índice de Massa Muscular </span>
+                <input type="text" [style]="{width: '100px'}" [(ngModel)]="formularioCadastro.indiceMassaMuscularKgMetroQuadrado" 
+                    pInputText (ngModelChange)="validarFormulario($event)">
+                Kg/m²
+            </div>
+        </div>
+    </p-fieldset>
+</div>

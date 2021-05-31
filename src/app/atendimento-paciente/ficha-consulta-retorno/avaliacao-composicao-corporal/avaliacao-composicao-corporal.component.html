@@ -72,3 +72,105 @@
         </div>
     </div>
 </div>
+
+<div *ngIf="cadastrarAvaliacaoComposicaoCorporal && sexoPaciente">
+    <p-fieldset [toggleable]="true" [collapsed]="true">
+        <p-header>
+            Avaliação da composição corporal
+
+            <span *ngIf="!formularioCadastroEstaValido">
+                <i class="fas fa-exclamation-circle text-warning"></i>
+            </span>
+
+            <span *ngIf="formularioCadastroEstaValido">
+                <i class="fas fa-check-circle text-success"></i>
+            </span>
+        </p-header>
+
+        <div class="row mt-2">
+            <div class="col-12 col-sm-6 col-md-4">
+                <span class="p-float-label">
+                    <input type="text" [style]="{width: '150px'}" [(ngModel)]="formularioCadastro.pesoAtualKg" pInputText
+                        (ngModelChange)="validarFormulario($event)"> 
+                    <label for="inputtext">Peso atual (kg)</label>
+                </span>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4">
+                <span class="p-float-label">
+                    <input type="text" [style]="{width: '150px'}" [(ngModel)]="formularioCadastro.estaturaMetros" pInputText
+                        (ngModelChange)="validarFormulario($event)"> 
+                    <label for="inputtext">Estatura (m)</label>
+                </span>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4">
+                <span class="p-float-label">
+                    <input type="text" [style]="{width: '150px'}" [(ngModel)]="formularioCadastro.indiceMassaCorporalKgMetrosQuadrado" 
+                        pInputText (ngModelChange)="validarFormulario($event)"> 
+                    <label for="inputtext">IMC (Kg/m²)</label>
+                </span>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <div>
+                <span>Dobra Cutânea Tricipital (DCTRI) </span>
+                <input type="text" [style]="{width: '100px'}" [(ngModel)]="formularioCadastro.dobraCutaneaTricipitalMilimetros" 
+                    pInputText (ngModelChange)="validarFormulario($event)"> 
+                mm
+            </div>
+
+            <div *ngIf="sexoPaciente === 'Masculino'">
+                <div class="mt-2">
+                    <span>Dobra Cutânea Peitoral (DCPE) </span>
+                    <input type="text" [style]="{width: '100px'}" [(ngModel)]="formularioCadastro.dobraCutaneaPeitoralHomemMilimetros" 
+                        pInputText (ngModelChange)="validarFormulario($event)"> 
+                    mm
+                </div>
+                <div class="mt-2">
+                    <span>Dobra Cutânea Abdominal (DCAB) </span>
+                    <input type="text" [style]="{width: '100px'}" [(ngModel)]="formularioCadastro.dobraCutaneaAbdominalHomemMilimetros" 
+                        pInputText (ngModelChange)="validarFormulario($event)"> 
+                    mm
+                </div>
+            </div>
+
+            <div *ngIf="sexoPaciente === 'Feminino'" class="mt-2">
+                <span>Dobra Cutânea Supra ilíaca (DCSI) </span>
+                <input type="text" [style]="{width: '100px'}" [(ngModel)]="formularioCadastro.dobraCutaneaSupraIliacaMulherMilimetros" 
+                    pInputText (ngModelChange)="validarFormulario($event)"> 
+                mm
+            </div>
+
+            <div class="mt-2">
+                <span>Dobra Cutânea Coxa (DCCO) </span>
+                <input type="text" [style]="{width: '100px'}" [(ngModel)]="formularioCadastro.dobraCutaneaCoxaMilimetros" 
+                    pInputText (ngModelChange)="validarFormulario($event)"> 
+                mm
+            </div>
+            <div class="mt-2">
+                <span>Dobra Cutânea Panturrilha (DCPA) </span>
+                <input type="text" [style]="{width: '100px'}" [(ngModel)]="formularioCadastro.dobraCutaneaPanturrilhaMilimetros" 
+                    pInputText (ngModelChange)="validarFormulario($event)"> 
+                mm
+            </div>
+
+            <div class="mt-4">
+                <span class="mr-1"><b>Densidade Corporal</b> </span>
+                <input type="text" [style]="{width: '100px'}" [(ngModel)]="formularioCadastro.resultadoCalculoDensidadeCorporal" 
+                    pInputText (ngModelChange)="validarFormulario($event)"> 
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <h5>Avaliação % de gordura a partir da densidade corporal</h5>
+
+            <div class="mt-4">
+                <span class="p-float-label">
+                    <input type="text" [style]="{width: '150px'}" [(ngModel)]="formularioCadastro.porcentagemGorduraDensidadeCorporal" 
+                        pInputText (ngModelChange)="validarFormulario($event)"> 
+                    <label for="inputtext">% Gordura</label>
+                </span>
+            </div>
+        </div>
+    </p-fieldset>
+</div>

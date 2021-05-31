@@ -24,6 +24,7 @@ export class RegistroDietaComponent implements OnInit {
 
   public colunasTabela: any[];
   public refeicoesParaCadastro: RefeicaoRegistroDieta[] = [];
+  public formularioCadastroEstaValido: boolean = false;
 
   constructor() { }
 
@@ -53,17 +54,18 @@ export class RegistroDietaComponent implements OnInit {
         const refeicaoInvalida: RefeicaoRegistroDieta = this.refeicoesParaCadastro.find(refeicao => !refeicao.camposEstaoValidos);
 
         if (refeicaoInvalida) {
+            this.formularioCadastroEstaValido = false;
             this.formularioRegistroDieta.emit(null);
         }
         else {
+            this.formularioCadastroEstaValido = true;
             this.formularioRegistroDieta.emit(this.gerarFormularioParaEmissaoDeEvento());
         }
     }
     else {
+        this.formularioCadastroEstaValido = false;
         this.formularioRegistroDieta.emit(null);
     }
-
-    console.log(this.refeicoesParaCadastro)
   }
 
 
@@ -111,5 +113,9 @@ export class RegistroDietaComponent implements OnInit {
     });
  
     return formulario;
+  }
+
+  public quantidadeCaracteres(campo: string): number {
+    return campo ? campo.length : 0;
   }
 }

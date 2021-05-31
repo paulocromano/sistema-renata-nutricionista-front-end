@@ -1,5 +1,6 @@
 export class CondutaNutricionalFORM {
 
+    prescricaoDietetica: string;
     energiaKcalTotal: string;
     carboidratroTotalGramas: string;
     carboidratoGramasKgPeso: string;

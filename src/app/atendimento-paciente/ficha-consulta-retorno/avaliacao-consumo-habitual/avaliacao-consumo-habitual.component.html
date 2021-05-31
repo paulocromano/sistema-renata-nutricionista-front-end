@@ -68,3 +68,164 @@
         <b>Leucina (mg):</b> {{ avaliacaoConsumoHabitual.leucinaMiligramas }}
     </div>
 </div>
+
+<div *ngIf="cadastrarAvaliacaoConsumoHabitual">
+    <p-fieldset [toggleable]="true" [collapsed]="true">
+        <p-header>
+            Avaliação do consumo habitual
+
+            <span *ngIf="!formularioCadastroEstaValido">
+                <i class="fas fa-exclamation-circle text-warning"></i>
+            </span>
+
+            <span *ngIf="formularioCadastroEstaValido">
+                <i class="fas fa-check-circle text-success"></i>
+            </span>
+        </p-header>
+
+        <div class="row mt-2">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                <span class="p-float-label">
+                    <input type="text" [style]="{width: '150px'}" [(ngModel)]="formularioAvaliacao.energiaKcal" pInputText
+                        (ngModelChange)="validarFormulario($event)"> 
+                    <label for="inputtext">Energia (Kcal)</label>
+                </span>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                <span class="p-float-label">
+                    <input type="text" [style]="{width: '150px'}" [(ngModel)]="formularioAvaliacao.proteinaTotalGramas" pInputText
+                        (ngModelChange)="validarFormulario($event)"> 
+                    <label for="inputtext">Prot. Total (g)</label>
+                </span>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                <span class="p-float-label">
+                    <input type="text" [style]="{width: '150px'}" [(ngModel)]="formularioAvaliacao.proteinaAVBGramas" pInputText
+                        (ngModelChange)="validarFormulario($event)"> 
+                    <label for="inputtext">Prot. AVB (g)</label>
+                </span>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                <span class="p-float-label">
+                    <input type="text" [style]="{width: '150px'}" [(ngModel)]="formularioAvaliacao.carboidratoGramas" pInputText
+                        (ngModelChange)="validarFormulario($event)"> 
+                    <label for="inputtext">CHO (g)</label>
+                </span>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                <span class="p-float-label">
+                    <input type="text" [style]="{width: '150px'}" [(ngModel)]="formularioAvaliacao.lipideoTotalGramas" pInputText
+                        (ngModelChange)="validarFormulario($event)"> 
+                    <label for="inputtext">Lip. Total. (g)</label>
+                </span>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                <span class="p-float-label">
+                    <input type="text" [style]="{width: '150px'}" [(ngModel)]="formularioAvaliacao.lipideoSaturadoGramas" pInputText
+                        (ngModelChange)="validarFormulario($event)"> 
+                    <label for="inputtext">Lip. Sat. (g)</label>
+                </span>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                <span class="p-float-label">
+                    <input type="text" [style]="{width: '150px'}" [(ngModel)]="formularioAvaliacao.lipideoPoliinsaturadoGramas" pInputText
+                        (ngModelChange)="validarFormulario($event)"> 
+                    <label for="inputtext">Lip. Poli. (g)</label>
+                </span>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                <span class="p-float-label">
+                    <input type="text" [style]="{width: '150px'}" [(ngModel)]="formularioAvaliacao.lipideoMonoinsaturadoGramas" pInputText
+                        (ngModelChange)="validarFormulario($event)"> 
+                    <label for="inputtext">Lip. Mono (g)</label>
+                </span>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                <span class="p-float-label">
+                    <input type="text" [style]="{width: '150px'}" [(ngModel)]="formularioAvaliacao.colesterolMiligramas" pInputText
+                        (ngModelChange)="validarFormulario($event)"> 
+                    <label for="inputtext">Col (mg)</label>
+                </span>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                <span class="p-float-label">
+                    <input type="text" [style]="{width: '150px'}" [(ngModel)]="formularioAvaliacao.fibraGramas" pInputText
+                        (ngModelChange)="validarFormulario($event)"> 
+                    <label for="inputtext">Fibra (g)</label>
+                </span>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                <span class="p-float-label">
+                    <input type="text" [style]="{width: '150px'}" [(ngModel)]="formularioAvaliacao.calcioGramas" pInputText
+                        (ngModelChange)="validarFormulario($event)"> 
+                    <label for="inputtext">Cálcio (mg)</label>
+                </span>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                <span class="p-float-label">
+                    <input type="text" [style]="{width: '150px'}" [(ngModel)]="formularioAvaliacao.fosforoGramas" pInputText
+                        (ngModelChange)="validarFormulario($event)"> 
+                    <label for="inputtext">Fósforo (mg)</label>
+                </span>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                <span class="p-float-label">
+                    <input type="text" [style]="{width: '150px'}" [(ngModel)]="formularioAvaliacao.ferroMiligramas" pInputText
+                        (ngModelChange)="validarFormulario($event)"> 
+                    <label for="inputtext">Ferro (mg)</label>
+                </span>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                <span class="p-float-label">
+                    <input type="text" [style]="{width: '150px'}" [(ngModel)]="formularioAvaliacao.zincoMiligramas" pInputText
+                        (ngModelChange)="validarFormulario($event)"> 
+                    <label for="inputtext">Zinco (mg)</label>
+                </span>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                <span class="p-float-label">
+                    <input type="text" [style]="{width: '150px'}" [(ngModel)]="formularioAvaliacao.magnesioMiligramas" pInputText
+                        (ngModelChange)="validarFormulario($event)"> 
+                    <label for="inputtext">Magnésio (mg)</label>
+                </span>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                <span class="p-float-label">
+                    <input type="text" [style]="{width: '150px'}" [(ngModel)]="formularioAvaliacao.potassioMiligramas" pInputText
+                        (ngModelChange)="validarFormulario($event)"> 
+                    <label for="inputtext">Potássio (mg)</label>
+                </span>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                <span class="p-float-label">
+                    <input type="text" [style]="{width: '150px'}" [(ngModel)]="formularioAvaliacao.vitaminaB6Miligramas" pInputText
+                        (ngModelChange)="validarFormulario($event)"> 
+                    <label for="inputtext">B6 (mg)</label>
+                </span>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                <span class="p-float-label">
+                    <input type="text" [style]="{width: '150px'}" [(ngModel)]="formularioAvaliacao.vitaminaCMiligramas" pInputText
+                        (ngModelChange)="validarFormulario($event)"> 
+                    <label for="inputtext">Vit. C (mg)</label>
+                </span>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                <span class="p-float-label">
+                    <input type="text" [style]="{width: '150px'}" [(ngModel)]="formularioAvaliacao.leucinaMiligramas" pInputText
+                        (ngModelChange)="validarFormulario($event)"> 
+                    <label for="inputtext">Leucina (mg)</label>
+                </span>
+            </div>
+        </div>
+    </p-fieldset>
+</div>

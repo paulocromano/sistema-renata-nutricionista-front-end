@@ -26,39 +26,63 @@
     </div>
 </div>
 
-<div *ngIf="cadastrarRegistroDieta && tiposDeRefeicoesParaCadastro && tiposDeRefeicoesParaCadastro.length > 0">
-    <div class="borda-table">
-        <p-table class="text-center" [value]="tiposDeRefeicoesParaCadastro" [columns]="colunasTabela">
-            <ng-template pTemplate="header" let-colunas>
-                <tr>
-                    <th *ngFor="let coluna of colunas" [ngClass]="coluna.style" class="text-center">
-                        {{ coluna.header }}
-                    </th>
-                </tr>
-            </ng-template>
+<div *ngIf="cadastrarRegistroDieta && tipoRegistro && tiposDeRefeicoesParaCadastro?.length > 0">
+    <p-fieldset [toggleable]="true" [collapsed]="true">
+        <p-header>
+            {{ tipoRegistro }}
 
-            <ng-template pTemplate="body" let-refeicao>
-                <tr>
-                    <td *ngFor="let coluna of colunasTabela" class="text-center">
-                        <span class="ui-column-title text-left"></span>
-                        <span *ngIf="coluna.field === 'tipoRefeicao'">{{ refeicao }}</span>
+            <span *ngIf="!formularioCadastroEstaValido">
+                <i class="fas fa-exclamation-circle text-warning"></i>
+            </span>
 
-                        <span *ngIf="coluna.field === 'alimentos'">
-                            <textarea pInputTextarea [rows]="3" autoResize="autoResize" [style]="{width: '100%'}"
-                                [(ngModel)]="refeicoesParaCadastro[tiposDeRefeicoesParaCadastro.indexOf(refeicao)].alimentos"
-                                (ngModelChange)="validarCampos($event, tiposDeRefeicoesParaCadastro.indexOf(refeicao))">
-                            </textarea>
-                        </span>
+            <span *ngIf="formularioCadastroEstaValido">
+                <i class="fas fa-check-circle text-success"></i>
+            </span>
+        </p-header>
 
-                        <span *ngIf="coluna.field === 'quantidadeMedidaCaseira'">
-                            <textarea pInputTextarea [rows]="3" autoResize="autoResize" [style]="{width: '100%'}"
-                                [(ngModel)]="refeicoesParaCadastro[tiposDeRefeicoesParaCadastro.indexOf(refeicao)].quantidadeMedidaCaseira"
-                                (ngModelChange)="validarCampos($event, tiposDeRefeicoesParaCadastro.indexOf(refeicao))">
-                            </textarea>
-                        </span>
-                    </td>
-                </tr>
-            </ng-template>
-        </p-table>
-    </div>
+        <div class="borda-table">
+            <p-table class="text-center" [value]="tiposDeRefeicoesParaCadastro" [columns]="colunasTabela">
+                <ng-template pTemplate="header" let-colunas>
+                    <tr>
+                        <th *ngFor="let coluna of colunas" [ngClass]="coluna.style" class="text-center">
+                            {{ coluna.header }}
+                        </th>
+                    </tr>
+                </ng-template>
+    
+                <ng-template pTemplate="body" let-refeicao>
+                    <tr>
+                        <td *ngFor="let coluna of colunasTabela" class="text-center">
+                            <span class="ui-column-title text-left"></span>
+                            <span *ngIf="coluna.field === 'tipoRefeicao'">{{ refeicao }}</span>
+    
+                            <span *ngIf="coluna.field === 'alimentos'">
+                                <textarea pInputTextarea [rows]="3" autoResize="autoResize" [style]="{width: '100%'}" maxlength="500"
+                                    [(ngModel)]="refeicoesParaCadastro[tiposDeRefeicoesParaCadastro.indexOf(refeicao)].alimentos"
+                                    (ngModelChange)="validarCampos($event, tiposDeRefeicoesParaCadastro.indexOf(refeicao))">
+                                </textarea>
+    
+                                <div class="text-right" style="font-size: 13px;">
+                                    {{ quantidadeCaracteres(refeicoesParaCadastro[tiposDeRefeicoesParaCadastro.indexOf(refeicao)].alimentos) 
+                                        + '/500' }}
+                                </div>
+                            </span>
+    
+                            <span *ngIf="coluna.field === 'quantidadeMedidaCaseira'">
+                                <textarea pInputTextarea [rows]="3" autoResize="autoResize" [style]="{width: '100%'}" maxlength="500"
+                                    [(ngModel)]="refeicoesParaCadastro[tiposDeRefeicoesParaCadastro.indexOf(refeicao)].quantidadeMedidaCaseira"
+                                    (ngModelChange)="validarCampos($event, tiposDeRefeicoesParaCadastro.indexOf(refeicao))">
+                                </textarea>
+    
+                                <div class="text-right" style="font-size: 13px;">
+                                    {{ quantidadeCaracteres(refeicoesParaCadastro[tiposDeRefeicoesParaCadastro.indexOf(refeicao)].quantidadeMedidaCaseira) 
+                                        + '/500' }}
+                                </div>
+                            </span>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </p-fieldset>
 </div>

@@ -2,7 +2,7 @@ export enum TipoRefeicao {
 
     DESJEJUM = 'Desjejum',
     LANCHE_MANHA = 'Lanche da manhã',
-    ALMOCO = 'Lanche da tarde',
+    ALMOCO = 'Almoço',
     LANCHE_TARDE = 'Lanche da tarde',
     JANTAR = 'Jantar',
     CEIA = 'Ceia',
