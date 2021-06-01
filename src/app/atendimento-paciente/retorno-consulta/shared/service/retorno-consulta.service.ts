@@ -1,3 +1,4 @@
+import { InformacoesCadastroRetornoConsulta } from './../model/informacoes-cadastro-retorno.model';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -40,6 +41,11 @@ export class RetornoConsultaService {
 
   public iniciarRetornoConsulta(idPaciente: number, idRetornoConsulta: number): Observable<any> {
     return this.http.put(`/retorno-consulta-paciente/iniciar/${idPaciente}/${idRetornoConsulta}`, null);
+  }
+
+  public informacoesParaCadastrarRetornoConsulta(idPaciente: number, idRetornoConsulta: number): Observable<InformacoesCadastroRetornoConsulta> {
+    return this.http.get<InformacoesCadastroRetornoConsulta>(
+      `/retorno-consulta-paciente/informacoes-cadastro-retorno-consulta/${idPaciente}/${idRetornoConsulta}`);
   }
 
   public finalizarRetornoConsulta(idPaciente: number, idRetornoConsulta: number, 

@@ -3,7 +3,7 @@ import { InformacoesCadastroHistoricoSocial } from './informacoes-cadastro-histo
 import { DadosEnum } from './../../../shared/model/dados-enum.model';
 import { Paciente } from './../../../paciente/shared/model/paciente.model';
 
-export class InformacoesCadastroAtendimento {
+export abstract class InformacoesCadastroAtendimento {
 
     paciente: Paciente = new Paciente();
     dataAtendimento: string;

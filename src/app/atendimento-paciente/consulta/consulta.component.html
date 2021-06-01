@@ -81,7 +81,77 @@
             </app-conduta-nutricional>
         </div>
     </div>
+
+    <div class="mt-5">
+        <div class="row">
+            <div class="col-12 col-sm-6">
+                <button class="btn btn-danger" style="width: 100%;" (click)="exibirDialogCancelarConsulta = true"
+                    [disabled]="processandoOperacao">
+                    <i class="fas fa-times-circle"></i>
+                    Cancelar consulta
+                </button>
+            </div>
+            <div class="col-12 col-sm-6">
+                <button class="btn btn-success" style="width: 100%;" (click)="exibirDialogFinalizarConsulta = true" 
+                    [disabled]="botaoFinalizarConsultaNaoEstaValido()">
+                    <i class="fas fa-clipboard-list"></i>
+                    Finalizar consulta
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
+<!-- Dialog cancelar consulta -->
+<p-dialog [visible]="exibirDialogCancelarConsulta" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '65vh'}">
+
+    <p-header>
+        Cancelar consulta
+    </p-header>
+
+    <div class="container-fluid">
+        Tem certeza que deseja cancelar a consulta de <b>{{ informacoesCadastroConsulta.paciente.nome }}</b>?
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="exibirDialogCancelarConsulta = false">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+
+        <button class="btn btn-success" [disabled]="processandoOperacao"
+            (click)="cancelarConsulta()">
+            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
+        </button>
+    </p-footer>
+</p-dialog>
+
+<!-- Dialog finalizar consulta -->
+<p-dialog [visible]="exibirDialogFinalizarConsulta" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '70vh'}">
+
+    <p-header>
+        Finalizar consulta
+    </p-header>
+
+    <div class="container-fluid">
+        Tem certeza que deseja finalizar a consulta de <b>{{ informacoesCadastroConsulta.paciente.nome }}</b>?
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="exibirDialogFinalizarConsulta = false">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+
+        <button class="btn btn-success" [disabled]="processandoOperacao"
+            (click)="finalizarConsulta()">
+            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
+        </button>
+    </p-footer>
+</p-dialog>
 
 <app-toasty #toastyComponent></app-toasty>

@@ -152,7 +152,7 @@
 
     <div class="container-fluid mt-3">
         <p-dropdown *ngIf="!reagendarAtendimento" [options]="pacientes" [(ngModel)]="pacienteSelecionadoParaAgendamentoAtendimento.id"
-            (onChange)="verificarProximoTipoAtendimentoDoPacienteSelecionado($event)"
+            (onChange)="verificarProximoTipoAtendimentoDoPacienteSelecionado($event)" appendTo="body"
             placeholder="Selecione um paciente" filter="true" [style]="{width: '100%'}" [disabled]="carregandoHorariosParaAgendamento"
             [emptyFilterMessage]="pacientes.length === 0 ? 'Nenhum paciente encontrado!' : 'Nenhum paciente corresponde à pesquisa!'">
         </p-dropdown>

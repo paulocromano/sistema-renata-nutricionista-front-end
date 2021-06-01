@@ -19,11 +19,6 @@
     text-align: center;
 }
 
-.pesquisa {
-    margin-right: 8px;
-    width: calc(100% - 28px);
-}
-
 .borda-table {
     border: 2px solid rgba(209, 209, 209, 0.774);
     border-radius: 2px;

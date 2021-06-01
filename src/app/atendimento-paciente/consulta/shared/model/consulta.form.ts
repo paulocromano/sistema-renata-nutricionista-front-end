@@ -6,9 +6,9 @@ import { RegistroDietaFORM } from '../../../ficha-consulta-retorno/shared/model/
 
 export class ConsultaFORM {
     
-    registroDietaHabitual: RegistroDietaFORM = new RegistroDietaFORM();
-    avaliacaoConsumoHabitual: AvaliacaoConsumoHabitualFORM = new AvaliacaoConsumoHabitualFORM();
-    avaliacaoComposicaoCorporal: AvaliacaoComposicaoCorporalFORM = new AvaliacaoComposicaoCorporalFORM();
-    avaliacaoMassaMuscularCorporea: AvaliacaoMassaMuscularCorporeaFORM = new AvaliacaoMassaMuscularCorporeaFORM();
-    condutaNutricional: CondutaNutricionalFORM = new CondutaNutricionalFORM();
+    registroDietaHabitual: RegistroDietaFORM;
+    avaliacaoConsumoHabitual: AvaliacaoConsumoHabitualFORM;
+    avaliacaoComposicaoCorporal: AvaliacaoComposicaoCorporalFORM;
+    avaliacaoMassaMuscularCorporea: AvaliacaoMassaMuscularCorporeaFORM;
+    condutaNutricional: CondutaNutricionalFORM;
 }

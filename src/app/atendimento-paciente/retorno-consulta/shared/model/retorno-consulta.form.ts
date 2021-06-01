@@ -10,10 +10,10 @@ export class RetornoConsultaFORM {
     alteracoesSintomas: string;
     alteracoesQueimacoes: string;
     alteracoesMedicamentos: string;
-    registroDietaHabitual: RegistroDietaFORM = new RegistroDietaFORM();
-    registroDieta24Horas: RegistroDietaFORM = new RegistroDietaFORM();
-    avaliacaoConsumoHabitual: AvaliacaoConsumoHabitualFORM = new AvaliacaoConsumoHabitualFORM();
-    avaliacaoComposicaoCorporal: AvaliacaoComposicaoCorporalFORM = new AvaliacaoComposicaoCorporalFORM();
-    avaliacaoMassaMuscularCorporea: AvaliacaoMassaMuscularCorporeaFORM = new AvaliacaoMassaMuscularCorporeaFORM();
-    condutaNutricional: CondutaNutricionalFORM = new CondutaNutricionalFORM();
+    registroDietaHabitual: RegistroDietaFORM;
+    registroDieta24Horas: RegistroDietaFORM;
+    avaliacaoConsumoHabitual: AvaliacaoConsumoHabitualFORM;
+    avaliacaoComposicaoCorporal: AvaliacaoComposicaoCorporalFORM;
+    avaliacaoMassaMuscularCorporea: AvaliacaoMassaMuscularCorporeaFORM;
+    condutaNutricional: CondutaNutricionalFORM;
 }

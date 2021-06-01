@@ -1,1 +1,165 @@
-<p>retorno-consulta works!</p>
+<div class="bg-carregando-dados" *ngIf="carregandoPagina">
+    <div class="info-carregando-dados">
+      <p-progressSpinner [style]="{width: '120px', height: '120px'}"></p-progressSpinner>
+      <p class="h5">Carregando informações para o retorno da consulta...</p>
+    </div>
+</div>
+
+<div *ngIf="!carregandoPagina" class="container-fluid">
+  <div class="col-12 col-sm-8 mt-4">
+    <p-fieldset [toggleable]="true">
+        <p-header>
+            Ficha de identificação
+        </p-header>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div><b>Nome: </b>{{ informacoesCadastroRetornoConsulta.paciente.nome }}</div>
+
+                <div>
+                    <span><b>Sexo: </b>{{ informacoesCadastroRetornoConsulta.paciente.sexo }}</span>
+                    <span class="px-3"><b>Etnia: </b>{{ informacoesCadastroRetornoConsulta.paciente.etnia }}</span>      
+                </div>
+                
+                <div><b>Data de Nascimento: </b>{{ informacoesCadastroRetornoConsulta.paciente.dataNascimento }}</div>
+                <div><b>Telefone: </b>{{ informacoesCadastroRetornoConsulta.paciente.telefone }}</div>
+                <div *ngIf="informacoesCadastroRetornoConsulta.paciente.telefoneRecado">
+                    <b>Telefone para Recado: </b>{{ informacoesCadastroRetornoConsulta.paciente.telefoneRecado }}
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <div><b>Logradouro: </b>{{ informacoesCadastroRetornoConsulta.paciente.endereco.logradouro }}</div>
+                <div><b>Número: </b>{{ informacoesCadastroRetornoConsulta.paciente.endereco.numero }}</div>
+                <div *ngIf="informacoesCadastroRetornoConsulta.paciente.endereco.complemento">
+                    <b>Complemento: </b>{{ informacoesCadastroRetornoConsulta.paciente.endereco.complemento }}
+                </div>
+                <div><b>Bairro: </b>{{ informacoesCadastroRetornoConsulta.paciente.endereco.bairro }}</div>
+                <div><b>Cidade: </b>{{ informacoesCadastroRetornoConsulta.paciente.endereco.cidade }}</div>
+
+                <div>
+                    <span><b>CEP: </b>{{ informacoesCadastroRetornoConsulta.paciente.endereco.cep }}</span>
+                    <span class="pl-3"><b>UF: </b>{{ informacoesCadastroRetornoConsulta.paciente.endereco.uf }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-2">
+          <div><b>Informações da consulta: </b>{{ informacoesCadastroRetornoConsulta.dataHorarioConsultaDoRetorno }}</div>
+            <div><b>Motivo da consulta: </b>{{ informacoesCadastroRetornoConsulta.motivoConsultaDoRetorno }}</div>
+        </div>
+    </p-fieldset>
+  </div>
+
+  <div class="mt-3">
+    <app-registro-dieta [cadastrarRegistroDieta]="true" [tipoRegistro]="'Registro de dieta habitual'"
+      [tiposDeRefeicoesParaCadastro]="informacoesCadastroRetornoConsulta.tiposDeRefeicoesParaCadastroRegistroDieta"
+      (formularioRegistroDieta)="salvarFormularioRegistroDietaHabitual($event)">
+    </app-registro-dieta>
+
+    <div class="mt-3">
+      <app-registro-dieta [cadastrarRegistroDieta]="true" [tipoRegistro]="'Registro de dieta 24h'"
+        [tiposDeRefeicoesParaCadastro]="informacoesCadastroRetornoConsulta.tiposDeRefeicoesParaCadastroRegistroDieta"
+        (formularioRegistroDieta)="salvarFormularioRegistroDieta24h($event)">
+      </app-registro-dieta>
+    </div>
+
+    <div class="mt-3">
+        <app-avaliacao-consumo-habitual [cadastrarAvaliacaoConsumoHabitual]="true"
+            (formularioAvaliacaoConsumoHabitual)="salvarFormularioAvaliacaoConsumoHabitual($event)">
+        </app-avaliacao-consumo-habitual>
+    </div>
+
+    <div class="mt-3">
+        <app-avaliacao-composicao-corporal [cadastrarAvaliacaoComposicaoCorporal]="true" 
+            [sexoPaciente]="informacoesCadastroRetornoConsulta.paciente.sexo"
+            (formularioAvaliacaoComposicaoCorporal)="salvarFormularioAvaliacaoComposicaoCorporal($event)">
+        </app-avaliacao-composicao-corporal>
+    </div>
+
+    <div class="mt-3">
+        <app-avaliacao-massa-muscular-corporea [cadastrarAvaliacaoMassaMuscularCorporea]="true"
+            (formularioAvaliacaoMassaMuscularCorporea)="salvarFormularioAvaliacaoMassaMuscularCorporea($event)">
+        </app-avaliacao-massa-muscular-corporea>
+    </div>
+
+    <div class="mt-3">
+        <app-conduta-nutricional [cadastrarCondutaNutricional]="true"
+            (formularioCondutaNutricional)="salvarFormularioCondutaNutricional($event)">
+        </app-conduta-nutricional>
+    </div>
+
+    <div class="mt-5">
+      <div class="row">
+          <div class="col-12 col-sm-6">
+              <button class="btn btn-danger" style="width: 100%;" (click)="exibirDialogCancelarRetornoConsulta = true"
+                  [disabled]="processandoOperacao">
+                  <i class="fas fa-times-circle"></i>
+                  Cancelar retorno
+              </button>
+          </div>
+          <div class="col-12 col-sm-6">
+              <button class="btn btn-success" style="width: 100%;" (click)="exibirDialogFinalizarRetornoConsulta = true" 
+                  [disabled]="botaoFinalizarRetornoConsultaNaoEstaValido()">
+                  <i class="fas fa-clipboard-list"></i>
+                  Finalizar retorno
+              </button>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Dialog cancelar retorno da consulta -->
+<p-dialog [visible]="exibirDialogCancelarRetornoConsulta" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '65vh'}">
+
+    <p-header>
+        Cancelar retorno da consulta
+    </p-header>
+
+    <div class="container-fluid">
+        Tem certeza que deseja cancelar o retorno da consulta de <b>{{ informacoesCadastroRetornoConsulta.paciente.nome }}</b>?
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="exibirDialogCancelarRetornoConsulta = false">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+
+        <button class="btn btn-success" [disabled]="processandoOperacao"
+            (click)="cancelarRetornoConsulta()">
+            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
+        </button>
+    </p-footer>
+</p-dialog>
+
+<!-- Dialog finalizar retorno da consulta -->
+<p-dialog [visible]="exibirDialogFinalizarRetornoConsulta" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '70vh'}">
+
+    <p-header>
+        Finalizar retorno da consulta
+    </p-header>
+
+    <div class="container-fluid">
+        Tem certeza que deseja finalizar o retorno da consulta de <b>{{ informacoesCadastroRetornoConsulta.paciente.nome }}</b>?
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="exibirDialogFinalizarRetornoConsulta = false">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+
+        <button class="btn btn-success" [disabled]="processandoOperacao"
+            (click)="finalizarRetornoConsulta()">
+            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
+        </button>
+    </p-footer>
+</p-dialog>
+
+<app-toasty #toastyComponent></app-toasty>

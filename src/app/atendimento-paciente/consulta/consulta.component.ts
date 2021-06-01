@@ -11,6 +11,7 @@ import { AvaliacaoComposicaoCorporalFORM } from './../ficha-consulta-retorno/sha
 import { AvaliacaoConsumoHabitualFORM } from './../ficha-consulta-retorno/shared/model/avaliacao-consumo-habitual.form';
 import { AvaliacaoMassaMuscularCorporeaFORM } from '../ficha-consulta-retorno/shared/model/avaliacao-massa-muscular-corporea.form';
 import { CondutaNutricionalFORM } from '../ficha-consulta-retorno/shared/model/conduta-nutricional.form';
+import { ConsultaFORM } from './shared/model/consulta.form';
 
 @Component({
   selector: 'app-consulta',
@@ -28,14 +29,12 @@ export class ConsultaComponent implements OnInit, OnDestroy {
   private idConsulta: number;
 
   public informacoesCadastroConsulta: InformacoesCadastroConsulta = new InformacoesCadastroConsulta();
-  private formularioRegistroDietaHabitual: RegistroDietaFORM = null;
-  private formularioAvaliacaoConsumoHabitual: AvaliacaoConsumoHabitualFORM = null;
-  private formularioAvaliacaoComposicaoCorporal: AvaliacaoComposicaoCorporalFORM = null;
-  private formularioAvaliacaoMassaMuscularCorporea: AvaliacaoMassaMuscularCorporeaFORM = null;
-  private formularioCondutaNutricional: CondutaNutricionalFORM = null;
+  public formularioConsulta: ConsultaFORM = new ConsultaFORM();
 
   public carregandoPagina: boolean = true;
-  public processandoOperacao: boolean = true;
+  public processandoOperacao: boolean = false;
+  public exibirDialogCancelarConsulta: boolean = false;
+  public exibirDialogFinalizarConsulta: boolean = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -63,7 +62,6 @@ export class ConsultaComponent implements OnInit, OnDestroy {
     this.consultaService.informacoesParaCadastrarConsulta(this.idPaciente, this.idConsulta)
       .subscribe((informacoesCadastroConsulta: InformacoesCadastroConsulta) => {
         this.informacoesCadastroConsulta = informacoesCadastroConsulta;
-        console.log(this.informacoesCadastroConsulta);
         this.carregandoPagina = false;
       },
       (errorResponse: HttpErrorResponse) => {
@@ -73,30 +71,63 @@ export class ConsultaComponent implements OnInit, OnDestroy {
   }
 
   public salvarFormularioRegistroDietaHabitual(formularioRegistroDietaHabitual: RegistroDietaFORM): void {
-    this.formularioRegistroDietaHabitual = formularioRegistroDietaHabitual;
+    this.formularioConsulta.registroDietaHabitual = formularioRegistroDietaHabitual;
   }
 
   public salvarFormularioAvaliacaoConsumoHabitual(formularioAvaliacaoConsumoHabitual: AvaliacaoConsumoHabitualFORM): void {
-    this.formularioAvaliacaoConsumoHabitual = formularioAvaliacaoConsumoHabitual;
+    this.formularioConsulta.avaliacaoConsumoHabitual = formularioAvaliacaoConsumoHabitual;
   }
 
   public salvarFormularioAvaliacaoComposicaoCorporal(formularioAvaliacaoComposicaoCorporal: AvaliacaoComposicaoCorporalFORM): void {
-    this.formularioAvaliacaoComposicaoCorporal = formularioAvaliacaoComposicaoCorporal;
+    this.formularioConsulta.avaliacaoComposicaoCorporal = formularioAvaliacaoComposicaoCorporal;
   }
 
   public salvarFormularioAvaliacaoMassaMuscularCorporea(formularioAvaliacaoMassaMuscularCorporea: AvaliacaoMassaMuscularCorporeaFORM): void {
-    this.formularioAvaliacaoMassaMuscularCorporea = formularioAvaliacaoMassaMuscularCorporea;
+    this.formularioConsulta.avaliacaoMassaMuscularCorporea = formularioAvaliacaoMassaMuscularCorporea;
   }
 
   public salvarFormularioCondutaNutricional(formularioCondutaNutricional: CondutaNutricionalFORM): void {
-    this.formularioCondutaNutricional = formularioCondutaNutricional;
+    this.formularioConsulta.condutaNutricional = formularioCondutaNutricional;
+  }
+
+  public cancelarConsulta(): void {
+    this.processandoOperacao = true;
+
+    this.consultaService.cancelarConsulta(this.idPaciente, this.idConsulta)
+      .subscribe(() => {
+        this.processandoOperacao = false;
+        this.router.navigate(['/consultas-retornos']);
+      },
+      (errorResponse: HttpErrorResponse) => {
+        this.processandoOperacao = false;
+        this.toasty.error('Erro ao cancelar a consulta!');
+      });
+  }
+
+  public finalizarConsulta(): void {
+    this.processandoOperacao = true;
+
+    this.consultaService.finalizarConsulta(this.idPaciente, this.idConsulta, this.formularioConsulta)
+      .subscribe(() => {
+        this.processandoOperacao = false;
+        this.router.navigate(['/consultas-retornos']);
+      },
+      (errorResponse: HttpErrorResponse) => {
+        this.processandoOperacao = false;
+        this.toasty.error('Erro ao finalizar a consulta!');
+      });
+  }
+
+  public botaoFinalizarConsultaNaoEstaValido(): boolean {
+    return this.processandoOperacao || !(this.formularioConsulta && this.formularioConsulta.registroDietaHabitual
+      && this.formularioConsulta.avaliacaoConsumoHabitual && this.formularioConsulta.avaliacaoComposicaoCorporal
+      && this.formularioConsulta.avaliacaoMassaMuscularCorporea && this.formularioConsulta.condutaNutricional);
   }
 
   public ngOnDestroy(): void {
-    this.formularioRegistroDietaHabitual = null;
-    this.formularioAvaliacaoConsumoHabitual = null;
-    this.formularioAvaliacaoComposicaoCorporal = null;
-    this.formularioAvaliacaoMassaMuscularCorporea = null;
-    this.formularioCondutaNutricional = null;
+    this.subscription.unsubscribe();
+    this.idPaciente = null;
+    this.idConsulta = null;
+    this.formularioConsulta = null;
   }
 }
