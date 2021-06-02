@@ -60,7 +60,7 @@
     <div class="row mt-4">
         <div class="col-12 col-md-6">
             <app-fieldset-historico-atividade-fisica [paciente]="paciente"
-                [informacoesHistoricosAtividadeFisica]="historicosPaciente.informacoesHistoricosAtividadeFisica">>
+                [informacoesHistoricosAtividadeFisica]="historicosPaciente.informacoesHistoricosAtividadeFisica">
             </app-fieldset-historico-atividade-fisica>
         </div>
         <div class="col-12 col-md-6">
@@ -70,10 +70,12 @@
         </div>
     </div>
 
-    <div class="col-12 col-md-6 mt-3">
-        <app-historico-questionario-frequencia-alimentar [paciente]="paciente"
-            [informacoesPreviasQuestionarios]="historicosPaciente.informacoesPreviasQuestionariosFrequenciaAlimentar">
-        </app-historico-questionario-frequencia-alimentar>
+    <div class="row">
+        <div class="col-12 col-md-6 mt-3">
+            <app-historico-questionario-frequencia-alimentar [paciente]="paciente"
+                [informacoesPreviasQuestionarios]="historicosPaciente.informacoesPreviasQuestionariosFrequenciaAlimentar">
+            </app-historico-questionario-frequencia-alimentar>
+        </div>
     </div>
 </div>
 

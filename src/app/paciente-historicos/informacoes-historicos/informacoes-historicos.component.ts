@@ -56,7 +56,7 @@ export class InformacoesHistoricosComponent implements OnInit, OnDestroy {
       },
       (errorResponse: HttpErrorResponse) => {
         this.processandoOperacao = false;
-        this.toasty.error('Erro ao buscar os hitóricos do paciente!');
+        this.toasty.error('Erro ao buscar os históricos do paciente!');
       });
   }
 

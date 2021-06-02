@@ -4,4 +4,5 @@ export class InformacoesHistoricosAtividadeFisica {
 
     historicosAtividadesFisicas: HistoricoAtividadeFisica[] = [];
     dataProximaAtualizacaoHistoricoAtividadeFisica: string;
+    historicoEstaDesatualizado: boolean;
 }

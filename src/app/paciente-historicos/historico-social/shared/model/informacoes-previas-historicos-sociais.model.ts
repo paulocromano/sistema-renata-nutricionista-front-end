@@ -4,4 +4,5 @@ export class InformacoesPreviasHistoricosSociais {
 
     previaHistoricosSociais: PreviaHistoricoSocial[] = [];
     dataProximaAtualizacaoHistoricoSocial: string;
+    historicoEstaDesatualizado: boolean;
 }

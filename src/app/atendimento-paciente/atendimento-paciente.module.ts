@@ -1,3 +1,4 @@
+import { PacienteHistoricosModule } from './../paciente-historicos/paciente-historicos.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -51,6 +52,7 @@ import { CondutaNutricionalComponent } from './ficha-consulta-retorno/conduta-nu
     InputTextareaModule,
     InputNumberModule,
     FieldsetModule,
+    PacienteHistoricosModule,
     ToastyModule
   ]
 })

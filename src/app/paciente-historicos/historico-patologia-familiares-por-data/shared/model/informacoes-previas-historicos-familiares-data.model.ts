@@ -4,4 +4,5 @@ export class InformacoesPreviasHistoricosFamiliaresPorData {
 
     previaHistoricosPatologiaFamiliaresPorData: PreviaHistoricoPatologiaFamiliaresPorData[] = [];
     dataProximaAtualizacaoHistoricoPatologiasFamiliares: string;
+    historicoEstaDesatualizado: boolean;
 }

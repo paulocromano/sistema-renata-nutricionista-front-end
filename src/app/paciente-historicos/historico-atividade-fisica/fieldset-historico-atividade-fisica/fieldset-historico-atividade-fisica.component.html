@@ -1,6 +1,10 @@
 <p-fieldset [toggleable]="true" [collapsed]="true">
     <p-header>
         Histórico Atividade Física
+
+        <span *ngIf="informacoesHistoricosAtividadeFisica.historicoEstaDesatualizado">
+            <i class="fas fa-exclamation-circle text-warning"></i>
+        </span>
     </p-header>
 
     <div class="borda-table">
@@ -72,7 +76,14 @@
                 </div>
                 
                 <div *ngIf="historicosAtividadeFisica && historicosAtividadeFisica.length > 0" class="col-12">
-                    Data prevista para próxima atualização: {{ dataProximaAtualizacao }}
+                    <span *ngIf="!informacoesHistoricosAtividadeFisica.historicoEstaDesatualizado">
+                        Data prevista para próxima atualização: {{ dataProximaAtualizacao }}
+                    </span>
+
+                    <span *ngIf="informacoesHistoricosAtividadeFisica.historicoEstaDesatualizado"
+                        [ngClass]="informacoesHistoricosAtividadeFisica.historicoEstaDesatualizado ? 'text-danger' : ''">
+                        {{ dataProximaAtualizacao }}
+                    </span>
                 </div>
             </ng-template>
         </p-table>

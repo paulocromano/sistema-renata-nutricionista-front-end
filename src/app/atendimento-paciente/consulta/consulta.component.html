@@ -1,11 +1,11 @@
-<div class="bg-carregando-dados" *ngIf="carregandoPagina">
+<div class="bg-carregando-dados" *ngIf="carregandoInformacoesDosHistoricosDoPaciente || carregandoInformacoesParaCadastroConsulta">
     <div class="info-carregando-dados">
       <p-progressSpinner [style]="{width: '120px', height: '120px'}"></p-progressSpinner>
       <p class="h5">Carregando informações para a consulta...</p>
     </div>
 </div>
 
-<div *ngIf="!carregandoPagina" class="container-fluid">
+<div *ngIf="!carregandoInformacoesDosHistoricosDoPaciente && !carregandoInformacoesParaCadastroConsulta" class="container-fluid">
     <div class="col-12 col-sm-8 mt-4">
         <p-fieldset [toggleable]="true">
             <p-header>
@@ -14,32 +14,32 @@
 
             <div class="row">
                 <div class="col-12 col-md-6">
-                    <div><b>Nome: </b>{{ informacoesCadastroConsulta.paciente.nome }}</div>
+                    <div><b>Nome: </b>{{ paciente.nome }}</div>
 
                     <div>
-                        <span><b>Sexo: </b>{{ informacoesCadastroConsulta.paciente.sexo }}</span>
-                        <span class="px-3"><b>Etnia: </b>{{ informacoesCadastroConsulta.paciente.etnia }}</span>      
+                        <span><b>Sexo: </b>{{ paciente.sexo }}</span>
+                        <span class="px-3"><b>Etnia: </b>{{ paciente.etnia }}</span>      
                     </div>
                     
-                    <div><b>Data de Nascimento: </b>{{ informacoesCadastroConsulta.paciente.dataNascimento }}</div>
-                    <div><b>Telefone: </b>{{ informacoesCadastroConsulta.paciente.telefone }}</div>
-                    <div *ngIf="informacoesCadastroConsulta.paciente.telefoneRecado">
-                        <b>Telefone para Recado: </b>{{ informacoesCadastroConsulta.paciente.telefoneRecado }}
+                    <div><b>Data de Nascimento: </b>{{ paciente.dataNascimento }}</div>
+                    <div><b>Telefone: </b>{{ paciente.telefone }}</div>
+                    <div *ngIf="paciente.telefoneRecado">
+                        <b>Telefone para Recado: </b>{{ paciente.telefoneRecado }}
                     </div>
                 </div>
 
                 <div class="col-12 col-md-6">
-                    <div><b>Logradouro: </b>{{ informacoesCadastroConsulta.paciente.endereco.logradouro }}</div>
-                    <div><b>Número: </b>{{ informacoesCadastroConsulta.paciente.endereco.numero }}</div>
-                    <div *ngIf="informacoesCadastroConsulta.paciente.endereco.complemento">
-                        <b>Complemento: </b>{{ informacoesCadastroConsulta.paciente.endereco.complemento }}
+                    <div><b>Logradouro: </b>{{ paciente.endereco.logradouro }}</div>
+                    <div><b>Número: </b>{{ paciente.endereco.numero }}</div>
+                    <div *ngIf="paciente.endereco.complemento">
+                        <b>Complemento: </b>{{ paciente.endereco.complemento }}
                     </div>
-                    <div><b>Bairro: </b>{{ informacoesCadastroConsulta.paciente.endereco.bairro }}</div>
-                    <div><b>Cidade: </b>{{ informacoesCadastroConsulta.paciente.endereco.cidade }}</div>
+                    <div><b>Bairro: </b>{{ paciente.endereco.bairro }}</div>
+                    <div><b>Cidade: </b>{{ paciente.endereco.cidade }}</div>
 
                     <div>
-                        <span><b>CEP: </b>{{ informacoesCadastroConsulta.paciente.endereco.cep }}</span>
-                        <span class="pl-3"><b>UF: </b>{{ informacoesCadastroConsulta.paciente.endereco.uf }}</span>
+                        <span><b>CEP: </b>{{ paciente.endereco.cep }}</span>
+                        <span class="pl-3"><b>UF: </b>{{ paciente.endereco.uf }}</span>
                     </div>
                 </div>
             </div>
@@ -50,7 +50,59 @@
         </p-fieldset>
     </div>
 
-    <div class="mt-3">
+    <div *ngIf="historicosPaciente" class="mt-3">
+        <p-fieldset [toggleable]="true">
+            <p-header>
+                Históricos
+
+                <span *ngIf="existeHistoricoDesatualizado">
+                    <i class="fas fa-exclamation-circle text-warning"></i>
+                </span>
+
+                <span *ngIf="!existeHistoricoDesatualizado">
+                    <i class="fas fa-check-circle text-success"></i>
+                </span>
+            </p-header>
+
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <app-fieldset-historico-social [informacoesPreviasHistoricosSociais]="historicosPaciente.informacoesPreviasHistoricosSociais" 
+                        [paciente]="paciente" [exibirBotaoCadastrarHistorico]="true" 
+                        [informacoesParaCadastro]="informacoesCadastroConsulta.historicoSocial">
+                    </app-fieldset-historico-social>
+                </div>
+        
+                <div class="col-12 col-md-6">
+                    <app-fieldset-historico-patologia-familiares [paciente]="paciente"
+                        [informacoesPreviasHistoricosFamiliaresPorData]="historicosPaciente.informacoesPreviasHistoricosPatologiaFamiliaresPorData">
+                    </app-fieldset-historico-patologia-familiares>
+                </div>
+            </div>
+        
+            <div class="row mt-4">
+                <div class="col-12 col-md-6">
+                    <app-fieldset-historico-atividade-fisica [paciente]="paciente"
+                        [informacoesHistoricosAtividadeFisica]="historicosPaciente.informacoesHistoricosAtividadeFisica">
+                    </app-fieldset-historico-atividade-fisica>
+                </div>
+                <div class="col-12 col-md-6">
+                    <app-fieldset-historico-alimentar [paciente]="paciente"
+                        [informacoesPreviasHistoricosAlimentares]="historicosPaciente.informacoesPreviasHistoricosAlimentares">
+                    </app-fieldset-historico-alimentar>
+                </div>
+            </div>
+        
+            <div class="row">
+                <div class="col-12 col-md-6 mt-3">
+                    <app-historico-questionario-frequencia-alimentar [paciente]="paciente"
+                        [informacoesPreviasQuestionarios]="historicosPaciente.informacoesPreviasQuestionariosFrequenciaAlimentar">
+                    </app-historico-questionario-frequencia-alimentar>
+                </div>
+            </div>
+        </p-fieldset>
+    </div>
+
+    <div class="mt-4">
         <app-registro-dieta [cadastrarRegistroDieta]="true" [tipoRegistro]="'Registro de dieta habitual'"
             [tiposDeRefeicoesParaCadastro]="informacoesCadastroConsulta.tiposDeRefeicoesParaCadastroRegistroDieta"
             (formularioRegistroDieta)="salvarFormularioRegistroDietaHabitual($event)">

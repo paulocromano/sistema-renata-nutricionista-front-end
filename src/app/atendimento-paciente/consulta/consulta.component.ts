@@ -12,6 +12,9 @@ import { AvaliacaoConsumoHabitualFORM } from './../ficha-consulta-retorno/shared
 import { AvaliacaoMassaMuscularCorporeaFORM } from '../ficha-consulta-retorno/shared/model/avaliacao-massa-muscular-corporea.form';
 import { CondutaNutricionalFORM } from '../ficha-consulta-retorno/shared/model/conduta-nutricional.form';
 import { ConsultaFORM } from './shared/model/consulta.form';
+import { HistoricosPaciente } from './../../paciente-historicos/informacoes-historicos/shared/model/historicos-paciente.model';
+import { PacienteService } from './../../paciente/shared/service/paciente.service';
+import { Paciente } from './../../paciente/shared/model/paciente.model';
 
 @Component({
   selector: 'app-consulta',
@@ -28,22 +31,28 @@ export class ConsultaComponent implements OnInit, OnDestroy {
   private idPaciente: number;
   private idConsulta: number;
 
+  public historicosPaciente: HistoricosPaciente = null;
   public informacoesCadastroConsulta: InformacoesCadastroConsulta = new InformacoesCadastroConsulta();
   public formularioConsulta: ConsultaFORM = new ConsultaFORM();
+  public paciente: Paciente = new Paciente();
 
-  public carregandoPagina: boolean = true;
+  public carregandoInformacoesDosHistoricosDoPaciente: boolean = true;
+  public carregandoInformacoesParaCadastroConsulta: boolean = true;
   public processandoOperacao: boolean = false;
   public exibirDialogCancelarConsulta: boolean = false;
   public exibirDialogFinalizarConsulta: boolean = false;
+  public existeHistoricoDesatualizado: boolean = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
+    private pacienteService: PacienteService,
     private consultaService: ConsultaService
   ) { }
 
   ngOnInit(): void {
     this.capturarParametrosDaRota();
+    this.buscarHistoricosPaciente();
     this.informacoesParaCadastrarConsulta();
   }
 
@@ -58,14 +67,42 @@ export class ConsultaComponent implements OnInit, OnDestroy {
     });
   }
 
+  private buscarHistoricosPaciente(): void {
+    this.carregandoInformacoesDosHistoricosDoPaciente = true;
+
+    this.pacienteService.buscarInformacoesHistoricosPaciente(this.idPaciente)
+      .subscribe((informacoesHistoricos: HistoricosPaciente) => {
+        this.historicosPaciente = informacoesHistoricos;
+        this.verificarSeExisteHistoricoDesatualizado();
+        this.carregandoInformacoesDosHistoricosDoPaciente = false;
+      },
+      (errorResponse: HttpErrorResponse) => {
+        this.carregandoInformacoesDosHistoricosDoPaciente = false;
+        this.toasty.error('Erro ao buscar os históricos do paciente!');
+      });
+  }
+
+  private verificarSeExisteHistoricoDesatualizado(): void {
+    this.existeHistoricoDesatualizado = this.historicosPaciente 
+      && (this.historicosPaciente.informacoesPreviasHistoricosAlimentares.historicoEstaDesatualizado
+        || this.historicosPaciente.informacoesHistoricosAtividadeFisica.historicoEstaDesatualizado
+        || this.historicosPaciente.informacoesPreviasHistoricosPatologiaFamiliaresPorData.historicoEstaDesatualizado
+        || this.historicosPaciente.informacoesPreviasQuestionariosFrequenciaAlimentar.historicoEstaDesatualizado
+        || this.historicosPaciente.informacoesPreviasHistoricosSociais.historicoEstaDesatualizado);
+  }
+  
+
   private informacoesParaCadastrarConsulta(): void {
+    this.carregandoInformacoesParaCadastroConsulta = true;
+
     this.consultaService.informacoesParaCadastrarConsulta(this.idPaciente, this.idConsulta)
       .subscribe((informacoesCadastroConsulta: InformacoesCadastroConsulta) => {
         this.informacoesCadastroConsulta = informacoesCadastroConsulta;
-        this.carregandoPagina = false;
+        this.paciente = informacoesCadastroConsulta.paciente;
+        this.carregandoInformacoesParaCadastroConsulta = false;
       },
       (errorResponse: HttpErrorResponse) => {
-        this.carregandoPagina = false;
+        this.carregandoInformacoesParaCadastroConsulta = false;
         this.toasty.error('Erro ao buscar as informações para cadastro de consulta!')
       })
   }
@@ -129,5 +166,7 @@ export class ConsultaComponent implements OnInit, OnDestroy {
     this.idPaciente = null;
     this.idConsulta = null;
     this.formularioConsulta = null;
+    this.historicosPaciente = null;
+    this.paciente = null;
   }
 }

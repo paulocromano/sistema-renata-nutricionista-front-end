@@ -1,9 +1,21 @@
 <p-fieldset [toggleable]="true" [collapsed]="true">
     <p-header>
         Histórico Social
+
+        <span *ngIf="informacoesPreviasHistoricosSociais.historicoEstaDesatualizado">
+            <i class="fas fa-exclamation-circle text-warning"></i>
+        </span>
     </p-header>
 
-    <div class="borda-table">
+    <div *ngIf="exibirBotaoCadastrarHistorico">
+        <button class="btn btn-success" style="width: 100%;" (click)="abrirDialogCadastro = true"
+            [disabled]="!exibirBotaoCadastrarHistorico && !informacoesParaCadastro">
+            <i class="fas fa-plus"></i>
+            Cadastrar histórico social
+        </button>
+    </div>
+
+    <div class="borda-table mt-2">
         <p-table #dataView [value]="previaHistoricosSociais" [columns]="colunasTabelaPreviaHistoricos" [responsive]="true" 
             [rows]="5" [paginator]="true" class="text-center">
 
@@ -72,12 +84,61 @@
                 </div>
                 
                 <div *ngIf="previaHistoricosSociais && previaHistoricosSociais.length > 0" class="col-12">
-                    Data prevista para próxima atualização: {{ dataProximaAtualizacao }}
+                    <span *ngIf="!informacoesPreviasHistoricosSociais.historicoEstaDesatualizado">
+                        Data prevista para próxima atualização: {{ dataProximaAtualizacao }}
+                    </span>
+
+                    <span *ngIf="informacoesPreviasHistoricosSociais.historicoEstaDesatualizado"
+                        [ngClass]="informacoesPreviasHistoricosSociais.historicoEstaDesatualizado ? 'text-danger' : ''">
+                        {{ dataProximaAtualizacao }}
+                    </span>
                 </div>
             </ng-template>
         </p-table>
     </div>
 </p-fieldset>
+
+<!-- Dialog Histórico Social selecionado -->
+<p-dialog [visible]="abrirDialogCadastro" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '96%'}">
+
+    <p-header>
+        Cadastrar histórico social
+    </p-header>
+
+    <div class="container-fluid">
+        <div class="row mt-4">
+            <div class="col-12 col-md-6">
+                <span class="p-float-label">
+                    <input type="text" style="width: 100%;" [(ngModel)]="formularioHistoricoSocial.profissao" pInputText> 
+                    <label for="inputtext">Profissão</label>
+                </span>
+            </div>
+            <div class="col-12 col-md-6">
+                <p-dropdown [options]="estadoCivil" [(ngModel)]="formularioHistoricoSocial.estadoCivil" name="estadoCivil" 
+                    [style]="{width: '200px'}" [scrollHeight]="'120px'" placeholder="Estado Civil">
+                </p-dropdown>
+            </div>
+        </div>
+
+        <div class="row">
+            
+        </div>
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="resetarCampos()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+
+        <button class="btn btn-success" [disabled]="processandoExclusao" 
+            (click)="cadastrarHistoricoSocial()">
+            <i class="fas " [ngClass]="processandoExclusao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
+        </button>
+    </p-footer>
+</p-dialog>
 
 
 <!-- Dialog Histórico Social selecionado -->
