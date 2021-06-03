@@ -23,7 +23,9 @@ import { ToastyModule } from './shared/toasty/toasty.module';
 import { InterceptorModule } from './interceptor/interceptor.module';
 import { LogadoGuard } from './shared/guard/logado.guard';
 import { AdminGuard } from './shared/guard/admin.guard';
+import { IConfig, NgxMaskModule } from 'ngx-mask';
 
+const maskConfig: Partial<IConfig> = { validation: false };
 
 @NgModule({
   declarations: [
@@ -47,6 +49,7 @@ import { AdminGuard } from './shared/guard/admin.guard';
     HorarioAtendimentoModule,
     ToastyModule,
     InterceptorModule,
+    NgxMaskModule.forRoot({ dropSpecialCharacters: false }),
     JwtModule.forRoot({})
   ],
   providers: [

@@ -11,6 +11,7 @@ import { HistoricoSocialService } from './../shared/service/historico-social.ser
 import { InformacoesPreviasHistoricosSociais } from '../shared/model/informacoes-previas-historicos-sociais.model';
 import { HistoricoSocialFORM } from './../shared/model/historico-social.form';
 import { InformacoesCadastroHistoricoSocial } from './../../../atendimento-paciente/shared/model/informacoes-cadastro-historico-social.model';
+import { PatologiaPacienteFORM } from './../shared/model/patologia-paciente.form';
 
 @Component({
   selector: 'app-fieldset-historico-social',
@@ -27,6 +28,7 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
   @Input() public informacoesPreviasHistoricosSociais: InformacoesPreviasHistoricosSociais;
   @Input() public exibirBotaoCadastrarHistorico: boolean = false;
   @Input() public informacoesParaCadastro: InformacoesCadastroHistoricoSocial;
+  @Input() public respostaSimNao: SelectItem[];
 
   public previaHistoricoSelecionado: PreviaHistoricoSocial = new PreviaHistoricoSocial();
   public historicoSocial: HistoricoSocial = new HistoricoSocial();
@@ -35,6 +37,8 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
 
   public formularioHistoricoSocial: HistoricoSocialFORM = new HistoricoSocialFORM();
   public patologias: SelectItem[] = [];
+  public patologiasSelecionadasDropdown: SelectItem[] = [];
+  public formularioPatologiasSelecionadas: PatologiaPacienteFORM[] = [];
   public estadoCivil: SelectItem[] = [];
   public consumoBebidasAlcoolicas: SelectItem[] = [];
   public consumoCigarro: SelectItem[] = [];
@@ -45,11 +49,13 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
 
   public colunasTabelaPreviaHistoricos: any[];
   public colunasTabelaPatologiasPaciente: any[];
+  public colunasTabelaPatologiasPacienteParaCadastrar: any[];
   public inputPesquisaPreviaHistoricos: string;
   public inputPesquisaPatologiasPaciente: string;
   public abrirDialogCadastro: boolean = false;
   public abrirDialogInformacoes: boolean = false;
   public abrirDialogExclusao: boolean = false;
+  public abrirDialogCadastroPatologiasPaciente: boolean = false;
   public processandoOperacao: boolean = false;
   public processandoExclusao: boolean = false;
 
@@ -67,6 +73,12 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
     this.colunasTabelaPatologiasPaciente = [
       { header: 'Descrição', field: 'descricaoPatologia', style: 'col-descricaoPatologia' },
       { header: 'Tempo (anos)', field: 'quantosAnosPossuiPatologia', style: 'col-quantosAnosPossuiPatologia' }
+    ];
+
+    this.colunasTabelaPatologiasPacienteParaCadastrar = [
+      { header: 'Descrição', field: 'descricao', style: 'col-descricao' },
+      { header: 'Tempo (anos)', field: 'quantosAnosPossuiPatologia', style: 'col-descricao' },
+      { header: 'Ações', field: 'acoes', style: 'col-quantos-anosP-possui-patologia' }
     ];
 
     if (this.exibirBotaoCadastrarHistorico) {
@@ -115,7 +127,7 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
   }
 
   private prepararDadosParaCadastroDoHistorico(): void {
-    if (this.informacoesParaCadastro) {
+    if (this.informacoesParaCadastro && this.respostaSimNao) {
       this.informacoesParaCadastro.patologias.forEach(patologia => this.patologias.push({ label: patologia.descricao, value: patologia.id }));
       this.converterParaListagemDropdown(this.estadoCivil, this.informacoesParaCadastro.estadoCivil);
       this.converterParaListagemDropdown(this.consumoBebidasAlcoolicas, this.informacoesParaCadastro.consumoBebidasAlcoolicas);
@@ -157,6 +169,28 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
     lista.forEach(item => selectItem.push({ label: item.descricao, value: item.codigo }));
   }
 
+  public alteracaoPatologiasSelecionadasParaCadastro(): void {
+    this.formularioPatologiasSelecionadas = [];
+    this.patologiasSelecionadasDropdown.forEach(patologia => this.formularioPatologiasSelecionadas.push({ 
+      idPatologia: patologia.value, descricao: patologia.label, quantosAnosPossuiPatologia: null 
+    }));
+    console.log(this.formularioPatologiasSelecionadas)
+  }
+
+  public botaoCadastroHistoricoNaoEstaValido(): boolean {
+    return this.processandoOperacao || !(this.formularioHistoricoSocial);
+  }
+
+  public resetarMenstruacao(): void {
+    this.formularioHistoricoSocial.menstruacaoNormal = null;
+    this.formularioHistoricoSocial.motivoAnormalidadeMenstruacao = null;
+  }
+
+  public resetarMenopausa(): void {
+    this.formularioHistoricoSocial.menopausa = null;
+    this.formularioHistoricoSocial.quantosAnosEstaNaMenopausa = null;
+  }
+
   public resetarCampos(): void {
     this.abrirDialogCadastro = false;
     this.abrirDialogInformacoes = false;
@@ -165,5 +199,7 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
     this.historicoSocial = new HistoricoSocial();
     this.previaHistoricoSelecionado = new PreviaHistoricoSocial(); 
     this.formularioHistoricoSocial = new HistoricoSocialFORM();
+    this.patologiasSelecionadasDropdown = [];
+    this.formularioPatologiasSelecionadas = [];
   }
 }

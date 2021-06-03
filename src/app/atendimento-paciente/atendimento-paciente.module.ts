@@ -1,4 +1,4 @@
-import { PacienteHistoricosModule } from './../paciente-historicos/paciente-historicos.module';
+import { NgxMaskModule } from 'ngx-mask';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -25,6 +25,7 @@ import { AvaliacaoConsumoHabitualComponent } from './ficha-consulta-retorno/aval
 import { AvaliacaoComposicaoCorporalComponent } from './ficha-consulta-retorno/avaliacao-composicao-corporal/avaliacao-composicao-corporal.component';
 import { AvaliacaoMassaMuscularCorporeaComponent } from './ficha-consulta-retorno/avaliacao-massa-muscular-corporea/avaliacao-massa-muscular-corporea.component';
 import { CondutaNutricionalComponent } from './ficha-consulta-retorno/conduta-nutricional/conduta-nutricional.component';
+import { PacienteHistoricosModule } from './../paciente-historicos/paciente-historicos.module';
 
 @NgModule({
   declarations: [ 
@@ -53,6 +54,7 @@ import { CondutaNutricionalComponent } from './ficha-consulta-retorno/conduta-nu
     InputNumberModule,
     FieldsetModule,
     PacienteHistoricosModule,
+    NgxMaskModule.forChild(),
     ToastyModule
   ]
 })

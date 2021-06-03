@@ -10,6 +10,9 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { DialogModule } from 'primeng/dialog';
 import { TooltipModule } from 'primeng/tooltip';
 import { DropdownModule } from 'primeng/dropdown';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 import { ToastyModule } from './../shared/toasty/toasty.module';
 import { InformacoesHistoricosComponent } from './informacoes-historicos/informacoes-historicos.component';
@@ -39,6 +42,9 @@ import { FieldsetHistoricoPatologiaFamiliaresComponent } from './historico-patol
     DialogModule,
     TooltipModule,
     DropdownModule,
+    InputTextareaModule,
+    InputNumberModule,
+    MultiSelectModule,
     ToastyModule
   ],
   exports: [

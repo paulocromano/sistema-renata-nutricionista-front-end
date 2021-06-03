@@ -115,14 +115,180 @@
                 </span>
             </div>
             <div class="col-12 col-md-6">
-                <p-dropdown [options]="estadoCivil" [(ngModel)]="formularioHistoricoSocial.estadoCivil" name="estadoCivil" 
-                    [style]="{width: '200px'}" [scrollHeight]="'120px'" placeholder="Estado Civil">
+                <span class="p-float-label">
+                    <p-dropdown [options]="estadoCivil" [(ngModel)]="formularioHistoricoSocial.estadoCivil"
+                    [style]="{width: '170px'}" [scrollHeight]="'120px'" [autoDisplayFirst]="false">
                 </p-dropdown>
+                <label for="inputtext">Estado Civil</label>
+                </span>
             </div>
         </div>
 
-        <div class="row">
-            
+        <div class="row mt-4">
+            <div class="col-12 col-md-6">
+                <span class="p-float-label">
+                    <textarea pInputTextarea [rows]="3" [(ngModel)]="formularioHistoricoSocial.composicaoFamiliar" 
+                        [style]="{width: '70vh'}">
+                    </textarea>
+                    <label for="inputtext">Composição familiar</label>
+                </span>
+            </div>
+            <div class="col-12 col-md-6">
+                <span class="p-float-label">
+                    <textarea pInputTextarea [rows]="3" [(ngModel)]="formularioHistoricoSocial.localRefeicoes" 
+                        [style]="{width: '70vh'}">
+                    </textarea>
+                    <label for="inputtext">Local das refeições</label>
+                </span>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-12 col-md-6">
+                <span class="p-float-label">
+                    <p-dropdown [options]="consumoBebidasAlcoolicas" [(ngModel)]="formularioHistoricoSocial.frequenciaConsumoBebidasAlcoolicas"
+                        [style]="{width: '270px'}" [scrollHeight]="'120px'" [autoDisplayFirst]="false">
+                    </p-dropdown>
+                    <label for="inputtext">Consumo de bebidas alcoólicas</label>
+                </span>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-12 col-lg-6">
+                        <span class="p-float-label">
+                            <p-dropdown [options]="consumoCigarro" [(ngModel)]="formularioHistoricoSocial.consumoCigarro"
+                                [style]="{width: '160px'}" [scrollHeight]="'120px'" [autoDisplayFirst]="false">
+                            </p-dropdown>
+                            <label for="inputtext">Uso de cigarros</label>
+                        </span>
+                    </div>
+                    <div *ngIf="formularioHistoricoSocial.consumoCigarro && formularioHistoricoSocial.consumoCigarro !== '2'"
+                        class="col-sm-12 col-lg-6">
+                        <span class="p-float-label">
+                            <p-inputNumber [(ngModel)]="formularioHistoricoSocial.quantidadeCigarrosPorDia" 
+                                [minFractionDigits]="0" [min]="1" [showButtons]="true">
+                            </p-inputNumber>
+                            <label for="inputtext">Quantidade</label>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12 col-md-6 col-lg-3">
+                <span class="p-float-label">
+                    <p-dropdown [options]="habitoIntestinal" [(ngModel)]="formularioHistoricoSocial.habitoIntestinal"
+                        [style]="{width: '170px'}" [scrollHeight]="'120px'" [autoDisplayFirst]="false">
+                    </p-dropdown>
+                    <label for="inputtext">Habito intestinal</label>
+                </span>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <span class="p-float-label">
+                    <p-dropdown [options]="consistenciaFezes" [(ngModel)]="formularioHistoricoSocial.consistenciaFezes"
+                        [style]="{width: '200px'}" [scrollHeight]="'120px'" [autoDisplayFirst]="false">
+                    </p-dropdown>
+                    <label for="inputtext">Consistência das fezes</label>
+                </span>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <span class="p-float-label">
+                    <p-dropdown [options]="frequenciaDiurese" [(ngModel)]="formularioHistoricoSocial.frequenciaDiurese"
+                        [style]="{width: '180px'}" [scrollHeight]="'120px'" [autoDisplayFirst]="false">
+                    </p-dropdown>
+                    <label for="inputtext">Frequência diurese</label>
+                </span>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <span class="p-float-label">
+                    <p-dropdown [options]="coloracaoDiurese" [(ngModel)]="formularioHistoricoSocial.coloracaoDiurese" [filter]="true"
+                        [style]="{width: '200px'}" [scrollHeight]="'120px'" [autoDisplayFirst]="false">
+                    </p-dropdown>
+                    <label for="inputtext">Coloração diurese</label>
+                </span>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12 col-md-6">        
+                <div class="row">
+                    <div class="col-12">
+                        <button class="btn btn-info" style="width: 100%;" (click)="abrirDialogCadastroPatologiasPaciente = true">
+                            Patologias
+                        </button>
+                    </div>
+                    <div *ngIf="formularioPatologiasSelecionadas" class="col-12 mt-2">
+                        <b>Patologias cadastradas:</b> {{ formularioPatologiasSelecionadas?.length }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <span class="p-float-label">
+                    <p-inputNumber [(ngModel)]="formularioHistoricoSocial.horasSono" 
+                        [minFractionDigits]="0" [min]="1" [max]="24" [showButtons]="true">
+                    </p-inputNumber>
+                    <label for="inputtext">Horas de sono</label>
+                </span>
+            </div>
+        </div>
+
+        <div *ngIf="paciente.sexo === 'Feminino'" class="row mt-4">
+            <div class="col-12 col-sm-6">
+                <div class="row">
+                    <div class="col-12">
+                        <span class="p-float-label">
+                            <p-dropdown [options]="respostaSimNao" [(ngModel)]="formularioHistoricoSocial.menstruacaoNormal"
+                                [style]="{width: '200px'}" [scrollHeight]="'120px'" [autoDisplayFirst]="false"
+                                [disabled]="formularioHistoricoSocial.menopausa">
+                            </p-dropdown>
+                            <label for="inputtext">Menstruação normal</label>
+
+                            <button *ngIf="formularioHistoricoSocial.menstruacaoNormal" class="btn btn-warning ml-2" 
+                                tooltipPosition="bottom" pTooltip="Resetar menstruação"
+                                (click)="resetarMenstruacao()">
+                                <i class="fas fa-undo-alt"></i>
+                            </button>
+                        </span>
+                    </div>
+                    <div *ngIf="formularioHistoricoSocial.menstruacaoNormal === 'N'" class="col-12 mt-4">
+                        <span class="p-float-label">
+                            <textarea pInputTextarea [rows]="3" [(ngModel)]="formularioHistoricoSocial.motivoAnormalidadeMenstruacao" 
+                                [style]="{width: '70vh'}" autoResize="autoResize">
+                            </textarea>
+                            <label for="inputtext">Motivo da anormalidade</label>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-6">
+                <div class="row">
+                    <div class="col-12 col-sm-6">
+                        <span class="p-float-label">
+                            <p-dropdown [options]="respostaSimNao" [(ngModel)]="formularioHistoricoSocial.menopausa"
+                                [style]="{width: '200px'}" [scrollHeight]="'120px'" [autoDisplayFirst]="false"
+                                [disabled]="formularioHistoricoSocial.menstruacaoNormal" >
+                            </p-dropdown>
+                            <label for="inputtext">Menopausa</label>
+
+                            <button *ngIf="formularioHistoricoSocial.menopausa" class="btn btn-warning ml-2" 
+                                tooltipPosition="bottom" pTooltip="Resetar menopausa"
+                                (click)="resetarMenopausa()">
+                                <i class="fas fa-undo-alt"></i>
+                            </button>
+                        </span>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <span *ngIf="formularioHistoricoSocial.menopausa === 'S'" class="p-float-label">
+                            <p-inputNumber [(ngModel)]="formularioHistoricoSocial.quantosAnosEstaNaMenopausa" 
+                                [minFractionDigits]="0" [min]="1" [max]="100" [showButtons]="true">
+                            </p-inputNumber>
+                            <label for="inputtext">Anos na menopausa</label>
+                        </span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -132,7 +298,7 @@
             Voltar
         </button>
 
-        <button class="btn btn-success" [disabled]="processandoExclusao" 
+        <button class="btn btn-success" [disabled]="botaoCadastroHistoricoNaoEstaValido()" 
             (click)="cadastrarHistoricoSocial()">
             <i class="fas " [ngClass]="processandoExclusao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
             Confirmar
@@ -140,6 +306,88 @@
     </p-footer>
 </p-dialog>
 
+<!-- Dialog cadastro patologias paciente -->
+<p-dialog [visible]="abrirDialogCadastroPatologiasPaciente" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '70%'}">
+
+    <p-header>
+        Cadastrar patologias de <b>{{ paciente.nome }}</b>
+    </p-header>
+
+    <div class="container-fluid">
+        <div class="row mt-4">
+            <div class="col-12">
+                <span class="p-float-label">
+                    <p-multiSelect [options]="patologias" [(ngModel)]="patologiasSelecionadasDropdown" optionLabel="label" appendTo="body"
+                        [filter]="true" emptyFilterMessage="Patologia não encontrada!"
+                        (ngModelChange)="alteracaoPatologiasSelecionadasParaCadastro()"
+                        [style]="{width: '100%'}" [scrollHeight]="'120px'" [displaySelectedLabel]="false">
+                    </p-multiSelect >
+                    <label for="inputtext">Patologias</label>
+                </span>
+            </div>
+        </div>
+
+        <div class="row mt-3" [style]="!formularioPatologiasSelecionadas || formularioPatologiasSelecionadas.length < 2 ? 'margin-bottom: 150px' : ''">
+            <div class="borda-table">
+                <p-table #dataView [value]="formularioPatologiasSelecionadas" [columns]="colunasTabelaPatologiasPacienteParaCadastrar" 
+                    [responsive]="true" [rows]="5" [paginator]="true" class="text-center">
+
+                    <ng-template pTemplate="header" let-colunas>
+                        <tr>
+                            <th *ngFor="let coluna of colunas" [pSortableColumn]="coluna.field" [ngClass]="coluna.style" class="text-center">
+                                {{ coluna.header }}
+                                <p-sortIcon *ngIf="coluna.header === 'Descrição'" [field]="coluna.field" 
+                                    ariaLabel="active to sort"
+                                    ariaLabelDesc="Activate to sort in descending order"
+                                    ariaLabelAsc="Activate to sort in ascending order">
+                                </p-sortIcon>
+                            </th>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-patologia>
+                        <tr>
+                            <td *ngFor="let coluna of colunasTabelaPatologiasPacienteParaCadastrar" class="text-center">
+                                <span class="ui-column-title text-left"></span>
+
+                                <span *ngIf="coluna.header === 'Descrição'">
+                                    {{ patologia[coluna.field] }}
+                                </span>
+
+                                <span *ngIf="coluna.header === 'Tempo (anos)'">
+                                    <input type="text" [(ngModel)]="formularioPatologiasSelecionadas[formularioPatologiasSelecionadas.indexOf(patologia)].quantosAnosPossuiPatologia" 
+                                        pInputText> 
+                                </span>
+                
+                                <span *ngIf="coluna.header === 'Ações'">
+                                    <button class="btn btn-danger ml-2" pTooltip="Excluir" tooltipPosition="bottom">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </span>
+                            </td>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="emptymessage" class="text-center" let-patologias>
+                        <tr>
+                            <td [attr.colspan]="patologias.length" class="text-center">
+                                Nenhuma patologia selecionada
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="abrirDialogCadastroPatologiasPaciente = false">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+    </p-footer>
+</p-dialog>
 
 <!-- Dialog Histórico Social selecionado -->
 <p-dialog [visible]="abrirDialogInformacoes" [modal]="true" [resizable]="false" 

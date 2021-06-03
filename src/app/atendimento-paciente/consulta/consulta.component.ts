@@ -1,3 +1,4 @@
+import { SelectItem } from 'primeng/api';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -35,6 +36,7 @@ export class ConsultaComponent implements OnInit, OnDestroy {
   public informacoesCadastroConsulta: InformacoesCadastroConsulta = new InformacoesCadastroConsulta();
   public formularioConsulta: ConsultaFORM = new ConsultaFORM();
   public paciente: Paciente = new Paciente();
+  public respostaSimNao: SelectItem[] = [];
 
   public carregandoInformacoesDosHistoricosDoPaciente: boolean = true;
   public carregandoInformacoesParaCadastroConsulta: boolean = true;
@@ -97,6 +99,8 @@ export class ConsultaComponent implements OnInit, OnDestroy {
 
     this.consultaService.informacoesParaCadastrarConsulta(this.idPaciente, this.idConsulta)
       .subscribe((informacoesCadastroConsulta: InformacoesCadastroConsulta) => {
+        informacoesCadastroConsulta.respostaSimNao.forEach(resposta => 
+          this.respostaSimNao.push({ label: resposta.descricao, value: resposta.codigo }));
         this.informacoesCadastroConsulta = informacoesCadastroConsulta;
         this.paciente = informacoesCadastroConsulta.paciente;
         this.carregandoInformacoesParaCadastroConsulta = false;
