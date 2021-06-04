@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 
 import { HistoricoSocial } from './../model/historico-social.model';
 import { InformacoesPreviasHistoricosSociais } from '../model/informacoes-previas-historicos-sociais.model';
+import { HistoricoSocialFORM } from './../model/historico-social.form';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,10 @@ export class HistoricoSocialService {
 
   public buscarHistoricoSocialDoPaciente(idHistoricoSocial: number): Observable<HistoricoSocial> {
     return this.http.get<HistoricoSocial>(`/historico-social/${idHistoricoSocial}`);
+  }
+
+  public cadastrarHistoricoSocialDoPaciente(idPaciente: number, historicoSocial: HistoricoSocialFORM): Observable<any> {
+    return this.http.post(`/historico-social/${idPaciente}`, historicoSocial);
   }
 
   public excluirHistoricoSocialDoPaciente(idHistoricoSocial: number): Observable<any> {

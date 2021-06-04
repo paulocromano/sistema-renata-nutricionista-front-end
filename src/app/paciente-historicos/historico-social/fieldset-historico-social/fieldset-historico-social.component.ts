@@ -55,6 +55,7 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
   public abrirDialogCadastro: boolean = false;
   public abrirDialogInformacoes: boolean = false;
   public abrirDialogExclusao: boolean = false;
+  public abrirDialogExclusaoPatologiaPaciente: boolean = false;
   public abrirDialogCadastroPatologiasPaciente: boolean = false;
   public processandoOperacao: boolean = false;
   public processandoExclusao: boolean = false;
@@ -141,6 +142,19 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
 
   public cadastrarHistoricoSocial(): void {
     this.processandoOperacao = true;
+    this.formularioHistoricoSocial.patologiasPaciente = this.formularioPatologiasSelecionadas;
+
+    this.historicoSocialService.cadastrarHistoricoSocialDoPaciente(this.paciente.id, this.formularioHistoricoSocial)
+      .subscribe(() => {
+        this.resetarCampos();
+        this.toasty.success('Histórico social cadastrado com sucesso!');
+        this.processandoOperacao = false;
+        this.buscarInformacoesPreviasHistoricosSociaisDoPaciente();
+      },
+      (errorResponse: HttpErrorResponse) => {
+        this.processandoOperacao = false;
+        this.toasty.error('Erro ao cadastrar histórico social!');
+      });
   }
 
   public armazenarHistoricoSocialSelecionadoParaDialogExclusao(previaHistoricoSelecionado: PreviaHistoricoSocial): void {
@@ -172,13 +186,57 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
   public alteracaoPatologiasSelecionadasParaCadastro(): void {
     this.formularioPatologiasSelecionadas = [];
     this.patologiasSelecionadasDropdown.forEach(patologia => this.formularioPatologiasSelecionadas.push({ 
-      idPatologia: patologia.value, descricao: patologia.label, quantosAnosPossuiPatologia: null 
+      idPatologia: patologia.value, descricao: patologia.label, quantosAnosPossuiPatologia: 0 
     }));
-    console.log(this.formularioPatologiasSelecionadas)
   }
 
-  public botaoCadastroHistoricoNaoEstaValido(): boolean {
-    return this.processandoOperacao || !(this.formularioHistoricoSocial);
+  public excluirPatologiaDoPaciente(patologiaPaciente: PatologiaPacienteFORM): void {
+    const patologiaSelecionadaDropdown: SelectItem = this.patologiasSelecionadasDropdown.find(patologia => 
+      patologia.value === patologiaPaciente.idPatologia);
+    const indicePatologiaSelecionadaDropdown: number = this.patologiasSelecionadasDropdown.indexOf(patologiaSelecionadaDropdown);
+
+    const indicePatologiaPacienteSelecionadaParaExcluir: number = this.formularioPatologiasSelecionadas.indexOf(patologiaPaciente);
+
+    if (indicePatologiaSelecionadaDropdown > -1 && indicePatologiaPacienteSelecionadaParaExcluir > -1) {
+      this.patologiasSelecionadasDropdown.splice(indicePatologiaSelecionadaDropdown, 1);
+      this.formularioPatologiasSelecionadas.splice(indicePatologiaPacienteSelecionadaParaExcluir, 1);
+    }
+  }
+
+  public cancelarPatologiasPaciente(): void {
+    this.abrirDialogCadastroPatologiasPaciente = false;
+    this.patologiasSelecionadasDropdown = [];
+    this.formularioPatologiasSelecionadas = [];
+  }
+
+  public desabilitarBotaoConfirmarPatologiasPacienteSelecionadas(): boolean {
+    return new Boolean(this.formularioPatologiasSelecionadas.find(patologia => patologia.quantosAnosPossuiPatologia <= 0)
+      || this.formularioPatologiasSelecionadas?.length === 0).valueOf();
+  }
+
+  public desabilitarBotaoCadastroHistorico(): boolean {
+    let desabilitarBotao: boolean = this.processandoOperacao || !(this.formularioHistoricoSocial
+      && this.formularioHistoricoSocial.profissao && this.formularioHistoricoSocial.estadoCivil
+      && this.formularioHistoricoSocial.composicaoFamiliar && this.formularioHistoricoSocial.localRefeicoes
+      && this.formularioHistoricoSocial.frequenciaConsumoBebidasAlcoolicas && this.formularioHistoricoSocial.consumoCigarro
+      && this.formularioHistoricoSocial.habitoIntestinal && this.formularioHistoricoSocial.consistenciaFezes
+      && this.formularioHistoricoSocial.frequenciaDiurese && this.formularioHistoricoSocial.coloracaoDiurese
+      && this.formularioHistoricoSocial.horasSono && this.formularioHistoricoSocial.quantidadeCigarrosPorDia);
+
+      if (this.paciente.sexo === 'Feminino') {
+        if (this.formularioHistoricoSocial.menstruacaoNormal) {
+          if (this.formularioHistoricoSocial.menstruacaoNormal === 'N') {
+            return desabilitarBotao || !this.formularioHistoricoSocial.motivoAnormalidadeMenstruacao;
+          }
+          return desabilitarBotao;
+        }
+        else if (this.formularioHistoricoSocial.menopausa && this.formularioHistoricoSocial.quantosAnosEstaNaMenopausa) {
+          return desabilitarBotao;
+        }
+        return true;
+      }
+
+    return desabilitarBotao;
   }
 
   public resetarMenstruacao(): void {

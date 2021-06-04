@@ -219,7 +219,7 @@
                         </button>
                     </div>
                     <div *ngIf="formularioPatologiasSelecionadas" class="col-12 mt-2">
-                        <b>Patologias cadastradas:</b> {{ formularioPatologiasSelecionadas?.length }}
+                        <b>Patologias do(a) paciente:</b> {{ formularioPatologiasSelecionadas?.length }}
                     </div>
                 </div>
             </div>
@@ -298,9 +298,9 @@
             Voltar
         </button>
 
-        <button class="btn btn-success" [disabled]="botaoCadastroHistoricoNaoEstaValido()" 
+        <button class="btn btn-success" [disabled]="desabilitarBotaoCadastroHistorico()" 
             (click)="cadastrarHistoricoSocial()">
-            <i class="fas " [ngClass]="processandoExclusao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
             Confirmar
         </button>
     </p-footer>
@@ -330,8 +330,8 @@
 
         <div class="row mt-3" [style]="!formularioPatologiasSelecionadas || formularioPatologiasSelecionadas.length < 2 ? 'margin-bottom: 150px' : ''">
             <div class="borda-table">
-                <p-table #dataView [value]="formularioPatologiasSelecionadas" [columns]="colunasTabelaPatologiasPacienteParaCadastrar" 
-                    [responsive]="true" [rows]="5" [paginator]="true" class="text-center">
+                <p-table [value]="formularioPatologiasSelecionadas" [columns]="colunasTabelaPatologiasPacienteParaCadastrar" 
+                    [responsive]="true" class="text-center">
 
                     <ng-template pTemplate="header" let-colunas>
                         <tr>
@@ -356,12 +356,14 @@
                                 </span>
 
                                 <span *ngIf="coluna.header === 'Tempo (anos)'">
-                                    <input type="text" [(ngModel)]="formularioPatologiasSelecionadas[formularioPatologiasSelecionadas.indexOf(patologia)].quantosAnosPossuiPatologia" 
-                                        pInputText> 
+                                        <p-inputNumber [(ngModel)]="formularioPatologiasSelecionadas[formularioPatologiasSelecionadas.indexOf(patologia)].quantosAnosPossuiPatologia" 
+                                            [minFractionDigits]="0" [min]="1" [max]="100" [showButtons]="true">
+                                        </p-inputNumber>
                                 </span>
                 
                                 <span *ngIf="coluna.header === 'Ações'">
-                                    <button class="btn btn-danger ml-2" pTooltip="Excluir" tooltipPosition="bottom">
+                                    <button class="btn btn-danger ml-2" pTooltip="Excluir" tooltipPosition="bottom"
+                                        (click)="excluirPatologiaDoPaciente(patologia)">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </span>
@@ -382,9 +384,14 @@
     </div>
 
     <p-footer>
-        <button class="btn btn-danger" (click)="abrirDialogCadastroPatologiasPaciente = false">
-            <i class="fas fa-arrow-circle-left"></i>
-            Voltar
+        <button class="btn btn-danger" (click)="cancelarPatologiasPaciente()">
+            <i class="fas fa-times-circle"></i>
+            Cancelar
+        </button>
+        <button class="btn btn-success" [disabled]="desabilitarBotaoConfirmarPatologiasPacienteSelecionadas()"
+            (click)="abrirDialogCadastroPatologiasPaciente = false">
+            <i class="fas fa-check-circle"></i>
+            Confirmar
         </button>
     </p-footer>
 </p-dialog>
