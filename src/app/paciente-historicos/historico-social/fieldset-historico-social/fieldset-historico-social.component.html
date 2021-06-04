@@ -2,7 +2,7 @@
     <p-header>
         Histórico Social
 
-        <span *ngIf="informacoesPreviasHistoricosSociais.historicoEstaDesatualizado">
+        <span *ngIf="historicoEstaDesatualizado">
             <i class="fas fa-exclamation-circle text-warning"></i>
         </span>
     </p-header>
@@ -84,12 +84,12 @@
                 </div>
                 
                 <div *ngIf="previaHistoricosSociais && previaHistoricosSociais.length > 0" class="col-12">
-                    <span *ngIf="!informacoesPreviasHistoricosSociais.historicoEstaDesatualizado">
+                    <span *ngIf="!historicoEstaDesatualizado">
                         Data prevista para próxima atualização: {{ dataProximaAtualizacao }}
                     </span>
 
                     <span *ngIf="informacoesPreviasHistoricosSociais.historicoEstaDesatualizado"
-                        [ngClass]="informacoesPreviasHistoricosSociais.historicoEstaDesatualizado ? 'text-danger' : ''">
+                        [ngClass]="historicoEstaDesatualizado ? 'text-danger' : ''">
                         {{ dataProximaAtualizacao }}
                     </span>
                 </div>
@@ -157,7 +157,8 @@
                     <div class="col-sm-12 col-lg-6">
                         <span class="p-float-label">
                             <p-dropdown [options]="consumoCigarro" [(ngModel)]="formularioHistoricoSocial.consumoCigarro"
-                                [style]="{width: '160px'}" [scrollHeight]="'120px'" [autoDisplayFirst]="false">
+                                [style]="{width: '160px'}" [scrollHeight]="'120px'" [autoDisplayFirst]="false"
+                                (ngModelChange)="alteracaoConsumoCigarro($event)">
                             </p-dropdown>
                             <label for="inputtext">Uso de cigarros</label>
                         </span>
@@ -166,7 +167,7 @@
                         class="col-sm-12 col-lg-6">
                         <span class="p-float-label">
                             <p-inputNumber [(ngModel)]="formularioHistoricoSocial.quantidadeCigarrosPorDia" 
-                                [minFractionDigits]="0" [min]="1" [showButtons]="true">
+                                [minFractionDigits]="0" [min]="1" [max]="200">
                             </p-inputNumber>
                             <label for="inputtext">Quantidade</label>
                         </span>
@@ -226,7 +227,7 @@
             <div class="col-12 col-md-6">
                 <span class="p-float-label">
                     <p-inputNumber [(ngModel)]="formularioHistoricoSocial.horasSono" 
-                        [minFractionDigits]="0" [min]="1" [max]="24" [showButtons]="true">
+                        [minFractionDigits]="0" [min]="1" [max]="24">
                     </p-inputNumber>
                     <label for="inputtext">Horas de sono</label>
                 </span>
@@ -282,7 +283,7 @@
                     <div class="col-12 col-sm-6">
                         <span *ngIf="formularioHistoricoSocial.menopausa === 'S'" class="p-float-label">
                             <p-inputNumber [(ngModel)]="formularioHistoricoSocial.quantosAnosEstaNaMenopausa" 
-                                [minFractionDigits]="0" [min]="1" [max]="100" [showButtons]="true">
+                                [minFractionDigits]="0" [min]="1" [max]="100">
                             </p-inputNumber>
                             <label for="inputtext">Anos na menopausa</label>
                         </span>

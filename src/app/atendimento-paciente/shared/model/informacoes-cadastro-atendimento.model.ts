@@ -11,6 +11,6 @@ export abstract class InformacoesCadastroAtendimento {
     questionarioFrequenciaAlimentar: InformacoesCadastroQuestionario = new InformacoesCadastroQuestionario();
     tiposDeRefeicoesParaCadastroRegistroDieta: string[] = [];
     respostaSimNao: DadosEnum[] = [];
-    patologiaFamiliares: DadosEnum[] = [];
+    patologiasFamiliares: DadosEnum[] = [];
     frequenciaAtividadeFisica: DadosEnum[] = [];
 }

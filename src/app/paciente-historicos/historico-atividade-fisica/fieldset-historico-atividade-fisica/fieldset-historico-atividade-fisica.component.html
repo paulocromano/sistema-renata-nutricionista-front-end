@@ -2,12 +2,20 @@
     <p-header>
         Histórico Atividade Física
 
-        <span *ngIf="informacoesHistoricosAtividadeFisica.historicoEstaDesatualizado">
+        <span *ngIf="historicoEstaDesatualizado">
             <i class="fas fa-exclamation-circle text-warning"></i>
         </span>
     </p-header>
 
-    <div class="borda-table">
+    <div *ngIf="exibirBotaoCadastrarHistorico">
+        <button class="btn btn-success" style="width: 100%;" (click)="abrirDialogCadastro = true"
+            [disabled]="!exibirBotaoCadastrarHistorico && !frequenciaAtividadeFisica">
+            <i class="fas fa-plus"></i>
+            Cadastrar atividade física
+        </button>
+    </div>
+
+    <div class="borda-table mt-2">
         <p-table #dataView [value]="historicosAtividadeFisica" [columns]="colunasTabela" [responsive]="true" 
             [rows]="5" [paginator]="true" class="text-center">
 
@@ -76,12 +84,12 @@
                 </div>
                 
                 <div *ngIf="historicosAtividadeFisica && historicosAtividadeFisica.length > 0" class="col-12">
-                    <span *ngIf="!informacoesHistoricosAtividadeFisica.historicoEstaDesatualizado">
+                    <span *ngIf="!historicoEstaDesatualizado">
                         Data prevista para próxima atualização: {{ dataProximaAtualizacao }}
                     </span>
 
                     <span *ngIf="informacoesHistoricosAtividadeFisica.historicoEstaDesatualizado"
-                        [ngClass]="informacoesHistoricosAtividadeFisica.historicoEstaDesatualizado ? 'text-danger' : ''">
+                        [ngClass]="historicoEstaDesatualizado ? 'text-danger' : ''">
                         {{ dataProximaAtualizacao }}
                     </span>
                 </div>
@@ -100,9 +108,13 @@
     </p-header>
 
     <div class="container-fluid">
-        <div><b>Atividade praticada: </b>{{ historicoSelecionado.atividadePraticada }}</div>
+        <div *ngIf="historicoSelecionado.atividadePraticada">
+            <b>Atividade praticada: </b>{{ historicoSelecionado.atividadePraticada }}
+        </div>
         <div><b>Frequência: </b>{{ historicoSelecionado.frequencia }}</div>
-        <div><b>Duração: </b>{{ historicoSelecionado.duracao }}</div>
+        <div *ngIf="historicoSelecionado.atividadePraticada">
+            <b>Duração: </b>{{ historicoSelecionado.duracao }}
+        </div>
         <div><b>Cadastrado em: </b>{{ historicoSelecionado.dataHoraCadastroAtividadeFisica }}</div>
     </div>
 
@@ -138,6 +150,60 @@
         <i class="fas " [ngClass]="processandoExclusao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
         Confirmar
     </button>
+    </p-footer>
+</p-dialog>
+
+<!-- Dialog cadastro patologias paciente -->
+<p-dialog [visible]="abrirDialogCadastro" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '70vh'}">
+
+    <p-header>
+        Cadastrar atividade física
+    </p-header>
+
+    <div class="container-fluid mt-4">
+        <div *ngIf="formularioAtividadeFisica.frequenciaAtividadeFisica && formularioAtividadeFisica.frequenciaAtividadeFisica !== 'N'" 
+            class="row">
+            <div class="col-12">
+                <span class="p-float-label">
+                    <input type="text" style="width: 100%;" [(ngModel)]="formularioAtividadeFisica.atividadePraticada" pInputText> 
+                    <label for="inputtext">Atividade praticada</label>
+                </span>
+            </div>
+        </div>
+
+        <div class="row mt-4" style="margin-bottom: 100px;">
+            <div class="col-12 col-sm-6">
+                <span class="p-float-label">
+                    <p-dropdown [options]="frequenciaAtividadeFisicaDropdown" [(ngModel)]="formularioAtividadeFisica.frequenciaAtividadeFisica"
+                        [style]="{width: '180px'}" [scrollHeight]="'120px'" [autoDisplayFirst]="false" appendTo="body"
+                        (ngModelChange)="alteracaoFrequenciaAtividadeFisica($event)">
+                    </p-dropdown>
+                    <label for="inputtext">Frequência</label>
+                </span>
+            </div>
+            <div *ngIf="formularioAtividadeFisica.frequenciaAtividadeFisica && formularioAtividadeFisica.frequenciaAtividadeFisica !== 'N'" 
+                class="col-12 col-sm-6">
+                <span class="p-float-label">
+                    <p-inputMask mask="99:99" [style]="{width: '120px'}" [(ngModel)]="formularioAtividadeFisica.duracao"> 
+                    </p-inputMask>
+                    <label for="inputtext">Duração</label>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="resetarCampos()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+
+        <button class="btn btn-success" [disabled]="desabilitarBotaoCadastroAtividadeFisica()"
+            (click)="cadastrarAtividadeFisica()">
+            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
+        </button>
     </p-footer>
 </p-dialog>
 

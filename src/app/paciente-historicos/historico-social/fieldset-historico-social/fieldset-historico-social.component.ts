@@ -34,6 +34,7 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
   public historicoSocial: HistoricoSocial = new HistoricoSocial();
   public previaHistoricosSociais: PreviaHistoricoSocial[] = [];
   public dataProximaAtualizacao: string;
+  public historicoEstaDesatualizado: boolean = false;
 
   public formularioHistoricoSocial: HistoricoSocialFORM = new HistoricoSocialFORM();
   public patologias: SelectItem[] = [];
@@ -65,6 +66,7 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
   ngOnInit(): void {
     this.previaHistoricosSociais = this.informacoesPreviasHistoricosSociais.previaHistoricosSociais;
     this.dataProximaAtualizacao = this.informacoesPreviasHistoricosSociais.dataProximaAtualizacaoHistoricoSocial;
+    this.historicoEstaDesatualizado = this.informacoesPreviasHistoricosSociais.historicoEstaDesatualizado;
     
     this.colunasTabelaPreviaHistoricos = [
       { header: 'Cadastrado em', field: 'dataHoraCadastroHistoricoSocial', style: 'col-data-hora-cadastro' },
@@ -101,6 +103,7 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
       .subscribe((informacoesPreviasHistoricosSociais: InformacoesPreviasHistoricosSociais) => {
         this.previaHistoricosSociais = informacoesPreviasHistoricosSociais.previaHistoricosSociais
         this.dataProximaAtualizacao = informacoesPreviasHistoricosSociais.dataProximaAtualizacaoHistoricoSocial;
+        this.historicoEstaDesatualizado = informacoesPreviasHistoricosSociais.historicoEstaDesatualizado;
         this.processandoOperacao = false;
       },
       (errorResponse: HttpErrorResponse) => {
@@ -214,6 +217,12 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
       || this.formularioPatologiasSelecionadas?.length === 0).valueOf();
   }
 
+  public alteracaoConsumoCigarro(event: any): void {
+    if (this.formularioHistoricoSocial.consumoCigarro) {
+      this.formularioHistoricoSocial.quantidadeCigarrosPorDia = null;
+    }
+  }
+
   public desabilitarBotaoCadastroHistorico(): boolean {
     let desabilitarBotao: boolean = this.processandoOperacao || !(this.formularioHistoricoSocial
       && this.formularioHistoricoSocial.profissao && this.formularioHistoricoSocial.estadoCivil
@@ -221,20 +230,30 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
       && this.formularioHistoricoSocial.frequenciaConsumoBebidasAlcoolicas && this.formularioHistoricoSocial.consumoCigarro
       && this.formularioHistoricoSocial.habitoIntestinal && this.formularioHistoricoSocial.consistenciaFezes
       && this.formularioHistoricoSocial.frequenciaDiurese && this.formularioHistoricoSocial.coloracaoDiurese
-      && this.formularioHistoricoSocial.horasSono && this.formularioHistoricoSocial.quantidadeCigarrosPorDia);
+      && this.formularioHistoricoSocial.horasSono);
 
-      if (this.paciente.sexo === 'Feminino') {
-        if (this.formularioHistoricoSocial.menstruacaoNormal) {
-          if (this.formularioHistoricoSocial.menstruacaoNormal === 'N') {
-            return desabilitarBotao || !this.formularioHistoricoSocial.motivoAnormalidadeMenstruacao;
-          }
-          return desabilitarBotao;
-        }
-        else if (this.formularioHistoricoSocial.menopausa && this.formularioHistoricoSocial.quantosAnosEstaNaMenopausa) {
-          return desabilitarBotao;
-        }
+    if (this.formularioHistoricoSocial.consumoCigarro) {
+      if (this.formularioHistoricoSocial.consumoCigarro !== '2' && (!this.formularioHistoricoSocial.quantidadeCigarrosPorDia 
+        || this.formularioHistoricoSocial.quantidadeCigarrosPorDia === 0)) {
         return true;
       }
+    }
+    else {
+      return true;
+    }
+
+    if (this.paciente.sexo === 'Feminino') {
+      if (this.formularioHistoricoSocial.menstruacaoNormal) {
+        if (this.formularioHistoricoSocial.menstruacaoNormal === 'N') {
+          return desabilitarBotao || !this.formularioHistoricoSocial.motivoAnormalidadeMenstruacao;
+        }
+        return desabilitarBotao;
+      }
+      else if (this.formularioHistoricoSocial.menopausa && this.formularioHistoricoSocial.quantosAnosEstaNaMenopausa) {
+        return desabilitarBotao;
+      }
+      return true;
+    }
 
     return desabilitarBotao;
   }
