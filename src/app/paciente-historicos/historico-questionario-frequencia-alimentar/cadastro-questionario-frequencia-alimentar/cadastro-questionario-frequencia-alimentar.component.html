@@ -43,7 +43,8 @@
                             <span *ngIf="coluna.header === 'Frequência de Consumo'">
                                 <span *ngFor="let consumo of frequenciaConsumoAlimento">
                                     <p-radioButton [value]="consumo.codigo" class="pl-2"
-                                        [(ngModel)]="frequenciaAlimentar[frequenciaAlimentar.indexOf(alimento)].frequenciaConsumoAlimento">
+                                        [(ngModel)]="frequenciaAlimentar[frequenciaAlimentar.indexOf(alimento)].frequenciaConsumoAlimento"
+                                        (click)="alteracaoFrequenciaConsumoAlimento($event, alimento)">
                                     </p-radioButton> 
                                     {{ consumo.descricao }}
                                 </span>
@@ -61,7 +62,7 @@
                 </div>
                 <div class="col-sm-12 col-md-7">
                     <span *ngFor="let consumo of informacoesCadastro.consumoTipoBebida">
-                        <p-radioButton [value]="consumo.codigo" class="pl-2"[(ngModel)]="formularioQuestionario.consumoTipoBebida">
+                        <p-radioButton [value]="consumo.codigo" class="pl-2" [(ngModel)]="formularioQuestionario.consumoTipoBebida">
                         </p-radioButton> 
                         {{ consumo.descricao }}
                     </span>

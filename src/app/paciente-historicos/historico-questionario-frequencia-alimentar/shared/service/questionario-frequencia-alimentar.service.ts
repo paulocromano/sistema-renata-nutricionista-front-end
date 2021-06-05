@@ -1,8 +1,10 @@
-import { QuestionarioFrequenciaAlimentar } from './../model/questionario-frequencia-alimentar.model';
-import { InformacoesPreviasQuestionarios } from './../model/informacoes-previas-questionarios.model';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
+import { QuestionarioFrequenciaAlimentarFORM } from './../model/questionario-frequencia-alimentar.form';
+import { QuestionarioFrequenciaAlimentar } from './../model/questionario-frequencia-alimentar.model';
+import { InformacoesPreviasQuestionarios } from './../model/informacoes-previas-questionarios.model';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +21,10 @@ export class QuestionarioFrequenciaAlimentarService {
 
   public buscarQuestionarioFrequenciaAlimentarDoPaciente(idQuestionario: number): Observable<QuestionarioFrequenciaAlimentar> {
     return this.http.get<QuestionarioFrequenciaAlimentar>(`/questionario-frequencia-alimentar/${idQuestionario}`);
+  }
+
+  public cadastrarQuestionarioFrequenciaAlimentar(idPaciente: number, questionario: QuestionarioFrequenciaAlimentarFORM): Observable<any> {
+    return this.http.post(`/questionario-frequencia-alimentar/${idPaciente}`, questionario);
   }
 
   public excluirQuestionarioFrequenciaAlimentar(idQuestionario: number): Observable<any> {

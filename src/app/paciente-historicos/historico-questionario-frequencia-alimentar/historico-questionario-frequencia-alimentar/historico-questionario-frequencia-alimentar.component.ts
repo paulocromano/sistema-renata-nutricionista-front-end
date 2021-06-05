@@ -111,6 +111,12 @@ export class HistoricoQuestionarioFrequenciaAlimentarComponent implements OnInit
       });
   }
 
+  public eventoCadastroQuestionario(questionarioCadastrado: boolean): void {
+    if (questionarioCadastrado) {
+      this.buscarInformacoesPreviasQuestionariosDoPaciente();
+    }
+  }
+
   public armazenarHistoricoQuestionarioSelecionadoParaDialogInformacoes(previaQuestionario: PreviaQuestionarioFrequenciaAlimentar): void {
     this.previaQuestionarioSelecionado = previaQuestionario;
     this.buscarQuestionarioFrequenciaAlimentarDoPaciente(previaQuestionario);
