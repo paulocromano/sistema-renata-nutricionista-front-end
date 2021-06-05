@@ -3,7 +3,7 @@ import { AlimentoFrequenciaAlimentar } from './alimento-frequencia-alimentar.mod
 
 export class InformacoesCadastroQuestionario {
 
-    alimentosFrequenciaAlimentar: AlimentoFrequenciaAlimentar = new AlimentoFrequenciaAlimentar();
+    alimentosFrequenciaAlimentar: AlimentoFrequenciaAlimentar[] = [];
     consumoCarneVermelha: DadosEnum[] = [];
     consumoFrango: DadosEnum[] = [];
     consumoPeixe: DadosEnum[] = [];

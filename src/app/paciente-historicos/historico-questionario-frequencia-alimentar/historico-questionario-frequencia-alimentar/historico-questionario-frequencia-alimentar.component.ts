@@ -1,3 +1,4 @@
+import { InformacoesCadastroQuestionario } from './../../../atendimento-paciente/shared/model/informacoes-cadastro-questionario.model';
 import { FrequenciaAlimentar } from './../shared/model/frequencia-alimentar.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
@@ -22,12 +23,15 @@ export class HistoricoQuestionarioFrequenciaAlimentarComponent implements OnInit
 
   @Input() public paciente: Paciente;
   @Input() public informacoesPreviasQuestionarios: InformacoesPreviasQuestionarios;
+  @Input() public exibirBotaoCadastrarQuestionario: boolean = false;
+  @Input() public informacoesCadastro: InformacoesCadastroQuestionario;
 
   public previaQuestionarioSelecionado: PreviaQuestionarioFrequenciaAlimentar = new PreviaQuestionarioFrequenciaAlimentar();
   public questionario: QuestionarioFrequenciaAlimentar = new QuestionarioFrequenciaAlimentar();
   public frequenciaAlimentar: FrequenciaAlimentar[] = [];
   public previaQuestionarios: PreviaQuestionarioFrequenciaAlimentar[] = [];
   public dataProximaAtualizacao: string;
+  public historicoEstaDesatualizado: boolean = false;
 
   public colunasTabelaPreviaHistoricos: any[];
   public colunasTabelaFrequenciaAlimentar: any[];
@@ -43,6 +47,7 @@ export class HistoricoQuestionarioFrequenciaAlimentarComponent implements OnInit
   ngOnInit(): void {
     this.previaQuestionarios = this.informacoesPreviasQuestionarios.previaQuestionariosFrequenciaAlimentar;
     this.dataProximaAtualizacao = this.informacoesPreviasQuestionarios.dataProximaAtualizacaoQuestionario;
+    this.historicoEstaDesatualizado = this.informacoesPreviasQuestionarios.historicoEstaDesatualizado;
 
     this.colunasTabelaPreviaHistoricos = [
       { header: 'Cadastrado em', field: 'dataHoraCadastroQuestionario', style: 'col-data-hora-cadastro' },
@@ -62,6 +67,7 @@ export class HistoricoQuestionarioFrequenciaAlimentarComponent implements OnInit
       .subscribe((informacoesPreviaQuestionarios: InformacoesPreviasQuestionarios) => {
         this.previaQuestionarios = informacoesPreviaQuestionarios.previaQuestionariosFrequenciaAlimentar;
         this.dataProximaAtualizacao = informacoesPreviaQuestionarios.dataProximaAtualizacaoQuestionario;
+        this.historicoEstaDesatualizado = informacoesPreviaQuestionarios.historicoEstaDesatualizado;
         this.processandoOperacao = false;
       },
       (errorResponse: HttpErrorResponse) => {

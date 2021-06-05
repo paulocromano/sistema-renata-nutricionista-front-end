@@ -3,12 +3,16 @@
     <p-header>
         Questionário Frequência Alimentar
 
-        <span *ngIf="informacoesPreviasQuestionarios.historicoEstaDesatualizado">
+        <span *ngIf="historicoEstaDesatualizado">
             <i class="fas fa-exclamation-circle text-warning"></i>
         </span>
     </p-header>
 
-    <div class="borda-table">
+    <app-cadastro-questionario-frequencia-alimentar [exibirBotaoCadastrarQuestionario]="exibirBotaoCadastrarQuestionario"
+        [informacoesCadastro]="informacoesCadastro" [paciente]="paciente">
+    </app-cadastro-questionario-frequencia-alimentar>
+
+    <div class="borda-table mt-2">
         <p-table #dataView [value]="previaQuestionarios" [columns]="colunasTabelaPreviaHistoricos" [responsive]="true" 
             [rows]="5" [paginator]="true" class="text-center">
 
@@ -80,13 +84,12 @@
                 
                 
                 <div *ngIf="previaQuestionarios && previaQuestionarios.length > 0" class="col-12">
-                    <span *ngIf="!informacoesPreviasQuestionarios.historicoEstaDesatualizado">
+                    <span *ngIf="!historicoEstaDesatualizado">
                         Data prevista para próxima atualização: {{ dataProximaAtualizacao }}
                     </span>
                     
-                    <span *ngIf="informacoesPreviasQuestionarios.historicoEstaDesatualizado"
-                        [ngClass]="informacoesPreviasQuestionarios.historicoEstaDesatualizado ? 'text-danger' : ''">
-                        {{ dataProximaAtualizacao }}
+                    <span *ngIf="historicoEstaDesatualizado">
+                        <span class="text-danger">{{ dataProximaAtualizacao }}</span>
                     </span>
                 </div>
             </ng-template>
