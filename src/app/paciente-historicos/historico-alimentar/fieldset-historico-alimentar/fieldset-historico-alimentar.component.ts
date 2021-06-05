@@ -1,3 +1,5 @@
+import { HistoricoAlimentarFORM } from './../shared/model/historico-alimentar.form';
+import { SelectItem } from 'primeng/api';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 
@@ -8,6 +10,7 @@ import { HistoricoAlimentar } from './../shared/model/historico-alimentar.model'
 import { PreviaHistoricoAlimentar } from './../shared/model/previa-historico-alimentar.model';
 import { InformacoesPreviasHistoricosAlimentares } from './../shared/model/informacoes-historicos-alimentares.model';
 import { SuplementoPaciente } from './../shared/model/suplemento-paciente.model';
+import { InformacoesCadastroHistoricoAlimentar } from './../../../atendimento-paciente/shared/model/informacoes-cadastro-historico-alimentar.model';
 
 @Component({
   selector: 'app-fieldset-historico-alimentar',
@@ -22,19 +25,29 @@ export class FieldsetHistoricoAlimentarComponent implements OnInit {
 
   @Input() public paciente: Paciente;
   @Input() public informacoesPreviasHistoricosAlimentares: InformacoesPreviasHistoricosAlimentares;
+  @Input() public exibirBotaoCadastrarHistorico: boolean = false;
+  @Input() public informacoesParaCadastro: InformacoesCadastroHistoricoAlimentar;
 
   public previaHistoricoSelecionado: PreviaHistoricoAlimentar = new PreviaHistoricoAlimentar();
   public historicoAlimentar: HistoricoAlimentar = new HistoricoAlimentar();
   public previaHistoricosAlimentares: PreviaHistoricoAlimentar[] = [];
   public dataProximaAtualizacao: string;
+  public historicoEstaDesatualizado: boolean = false;
   public suplementosPaciente: SuplementoPaciente[] = [];
   public suplementoSelecionado: SuplementoPaciente = new SuplementoPaciente();
+
+  public formularioCadastro: HistoricoAlimentarFORM = new HistoricoAlimentarFORM();
+  public medicamentosDropdown: SelectItem[] = [];
+  public medicamentosSelecionadosDropdown: SelectItem[] = [];
+  public nomesMedicamentosSelecionados: string = '';
+  public suplementosDropdown: SelectItem[] = [];
 
   public colunasTabelaPreviaHistoricos: any[];
   public colunasTabelaSuplementosPaciente: any[];
   public inputPesquisaPreviaHistoricos: string;
   public inputPesquisaSuplementosPaciente: string;
   public abrirDialogInformacoes: boolean = false;
+  public abrirDialogCadastro: boolean = false;
   public abrirDialogSuplemento: boolean = false;
   public abrirDialogExclusao: boolean = false;
   public processandoOperacao: boolean = false;
@@ -45,6 +58,7 @@ export class FieldsetHistoricoAlimentarComponent implements OnInit {
   ngOnInit(): void {
     this.previaHistoricosAlimentares = this.informacoesPreviasHistoricosAlimentares.previaHistoricosAlimentares;
     this.dataProximaAtualizacao = this.informacoesPreviasHistoricosAlimentares.dataProximaAtualizacaoHistoricoAlimentar;
+    this.historicoEstaDesatualizado = this.informacoesPreviasHistoricosAlimentares.historicoEstaDesatualizado;
 
     this.colunasTabelaPreviaHistoricos = [
       { header: 'Cadastrado em', field: 'dataHoraCadastroHistoricoAlimentar', style: 'col-data-hora-cadastro' },
@@ -57,6 +71,10 @@ export class FieldsetHistoricoAlimentarComponent implements OnInit {
       { header: 'Forma de Preparo', field: 'formaPreparo', style: 'col-forma-preparo' },
       { header: 'Ações', field: 'acoes', style: 'col-acoes' }
     ];
+
+    if (this.exibirBotaoCadastrarHistorico) {
+      this.prepararDadosParaCadastroDoHistorico();
+    }
   }
 
   public buscarInformacoesPreviasHistoricosAlimentaresDoPaciente(): void {
@@ -66,6 +84,7 @@ export class FieldsetHistoricoAlimentarComponent implements OnInit {
       .subscribe((informacoesHistoricosPaciente: InformacoesPreviasHistoricosAlimentares) => {
         this.previaHistoricosAlimentares = informacoesHistoricosPaciente.previaHistoricosAlimentares;
         this.dataProximaAtualizacao = informacoesHistoricosPaciente.dataProximaAtualizacaoHistoricoAlimentar;
+        this.historicoEstaDesatualizado = informacoesHistoricosPaciente.historicoEstaDesatualizado;
         this.processandoOperacao = false;
       },
       (errorResponse: HttpErrorResponse) => {
@@ -109,6 +128,27 @@ export class FieldsetHistoricoAlimentarComponent implements OnInit {
       });
   }
 
+  private prepararDadosParaCadastroDoHistorico(): void {
+    this.informacoesParaCadastro.medicamentos.forEach(medicamento => this.medicamentosDropdown.push({
+      label: medicamento.nome, value: medicamento.id
+    }));
+
+    this.informacoesParaCadastro.suplementos.forEach(suplemento => this.suplementosDropdown.push({
+      label: suplemento.nome, value: suplemento.id
+    }));
+  }
+
+  public alteracaoMedicamentosSelecionadasParaCadastro(): void {
+    this.nomesMedicamentosSelecionados = '';
+
+    if (this.medicamentosSelecionadosDropdown.length > 0) {
+      this.medicamentosSelecionadosDropdown.forEach(medicamento => this.nomesMedicamentosSelecionados += medicamento.label + ', ');
+      this.nomesMedicamentosSelecionados = this.nomesMedicamentosSelecionados.substring(0, this.nomesMedicamentosSelecionados.length - 2);
+    }
+    console.log(this.medicamentosSelecionadosDropdown)
+    console.log(this.nomesMedicamentosSelecionados)
+  }
+
   public armazenarPreviaHistoricoSelecionadoParaDialogInformacoes(previaHistoricoAlimentar: PreviaHistoricoAlimentar): void {
     this.previaHistoricoSelecionado = previaHistoricoAlimentar;
     this.buscarHistoricoAlimentarDoPaciente(previaHistoricoAlimentar);
@@ -126,11 +166,13 @@ export class FieldsetHistoricoAlimentarComponent implements OnInit {
 
   public resetarCampos(): void {
     this.abrirDialogInformacoes = false;
+    this.abrirDialogCadastro = false;
     this.abrirDialogExclusao = false;
 
     this.previaHistoricoSelecionado = new PreviaHistoricoAlimentar();
     this.historicoAlimentar = new HistoricoAlimentar();
     this.suplementosPaciente = [];
     this.suplementoSelecionado = new SuplementoPaciente();
+    this.formularioCadastro = new HistoricoAlimentarFORM();
   }
 }

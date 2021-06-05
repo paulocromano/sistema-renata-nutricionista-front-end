@@ -2,12 +2,20 @@
     <p-header>
         Histórico Alimentar
 
-        <span *ngIf="informacoesPreviasHistoricosAlimentares.historicoEstaDesatualizado">
+        <span *ngIf="historicoEstaDesatualizado">
             <i class="fas fa-exclamation-circle text-warning"></i>
         </span>
     </p-header>
 
-    <div class="borda-table">
+    <div *ngIf="exibirBotaoCadastrarHistorico">
+        <button class="btn btn-success" style="width: 100%;" (click)="abrirDialogCadastro = true"
+            [disabled]="!exibirBotaoCadastrarHistorico || !informacoesParaCadastro">
+            <i class="fas fa-plus"></i>
+            Cadastrar histórico alimentar
+        </button>
+    </div>
+
+    <div class="borda-table mt-2">
         <p-table #dataView [value]="previaHistoricosAlimentares" [columns]="colunasTabelaPreviaHistoricos" [responsive]="true" 
             [rows]="5" [paginator]="true" class="text-center">
 
@@ -80,13 +88,12 @@
                 </div>
                 
                 <div *ngIf="previaHistoricosAlimentares && previaHistoricosAlimentares.length > 0" class="col-12">
-                    <span *ngIf="!informacoesPreviasHistoricosAlimentares.historicoEstaDesatualizado">
+                    <span *ngIf="!historicoEstaDesatualizado">
                         Data prevista para próxima atualização: {{ dataProximaAtualizacao }}
                     </span>
                    
-                    <span *ngIf="informacoesPreviasHistoricosAlimentares.historicoEstaDesatualizado"
-                        [ngClass]="informacoesPreviasHistoricosAlimentares.historicoEstaDesatualizado ? 'text-danger' : ''">
-                        {{ dataProximaAtualizacao }}
+                    <span *ngIf="historicoEstaDesatualizado">
+                        <span class="text-danger">{{ dataProximaAtualizacao }}</span>
                     </span>
                 </div>
             </ng-template>
@@ -270,6 +277,93 @@
         <button class="btn btn-success" [disabled]="processandoExclusao" 
             (click)="excluirHistoricoAlimentar()">
             <i class="fas " [ngClass]="processandoExclusao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
+        </button>
+    </p-footer>
+</p-dialog>
+
+<!-- Dialog cadastro de Histórico Alimentar -->
+<p-dialog [visible]="abrirDialogCadastro" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '96%'}">
+
+    <p-header>
+        Cadastrar histórico alimentar
+    </p-header>
+
+    <div class="container-fluid">
+        <div class="row mt-4">
+            <div class="col-12 col-md-6">
+                <span class="p-float-label">
+                    <textarea pInputTextarea [rows]="3" [(ngModel)]="formularioCadastro.intoleranciaAlergiaAlimentosPaciente" 
+                        [style]="{width: '90%'}">
+                    </textarea>
+                    <label for="inputtext">Intolerância/alergia a alimentos</label>
+                </span>
+            </div>
+            <div class="col-12 col-md-6">
+                <span class="p-float-label">
+                    <textarea pInputTextarea [rows]="3" [(ngModel)]="formularioCadastro.preferenciaAlimentarPaciente" 
+                        [style]="{width: '90%'}">
+                    </textarea>
+                    <label for="inputtext">Preferência alimentar</label>
+                </span>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12 col-md-6">
+                <span class="p-float-label">
+                    <textarea pInputTextarea [rows]="3" [(ngModel)]="formularioCadastro.alimentosPacienteNaoGosta" 
+                        [style]="{width: '90%'}">
+                    </textarea>
+                    <label for="inputtext">Alimentos que não gosta</label>
+                </span>
+            </div>
+            <div class="col-12 col-md-6">
+                <span class="p-float-label">
+                    <textarea pInputTextarea [rows]="3" [(ngModel)]="formularioCadastro.alteracoesGastrointestinal" 
+                        [style]="{width: '90%'}">
+                    </textarea>
+                    <label for="inputtext">Alterações gastroitestinal</label>
+                </span>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12 col-md-6">
+                <span class="p-float-label">
+                    <input type="text" style="width: 90%;" [(ngModel)]="formularioCadastro.consumoAgua" pInputText> 
+                    <label for="inputtext">Consumo de água</label>
+                </span>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-12 col-sm-6">
+                        <span class="p-float-label">
+                            <p-multiSelect [options]="medicamentosDropdown" [(ngModel)]="medicamentosSelecionadosDropdown" 
+                                optionLabel="label" appendTo="body" [filter]="true" emptyFilterMessage="Medicamento não encontrado!"
+                                (ngModelChange)="alteracaoMedicamentosSelecionadasParaCadastro()"
+                                [style]="{width: '100%'}" [scrollHeight]="'120px'" [displaySelectedLabel]="false">
+                            </p-multiSelect >
+                            <label for="inputtext">Medicamentos</label>
+                        </span>
+                    </div>
+                    <div class="col-12 col-sm-6 mt-1">
+                        <b>Medicamentos selecionados:</b> {{ nomesMedicamentosSelecionados }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="resetarCampos()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+
+        <button class="btn btn-success" [disabled]="processandoOperacao">
+            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
             Confirmar
         </button>
     </p-footer>
