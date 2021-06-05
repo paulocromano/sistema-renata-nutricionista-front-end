@@ -9,7 +9,7 @@
 
     <div *ngIf="exibirBotaoCadastrarHistorico">
         <button class="btn btn-success" style="width: 100%;" (click)="abrirDialogCadastro = true"
-            [disabled]="!exibirBotaoCadastrarHistorico && !frequenciaAtividadeFisica">
+            [disabled]="!exibirBotaoCadastrarHistorico || !frequenciaAtividadeFisica">
             <i class="fas fa-plus"></i>
             Cadastrar atividade física
         </button>
@@ -88,9 +88,8 @@
                         Data prevista para próxima atualização: {{ dataProximaAtualizacao }}
                     </span>
 
-                    <span *ngIf="informacoesHistoricosAtividadeFisica.historicoEstaDesatualizado"
-                        [ngClass]="historicoEstaDesatualizado ? 'text-danger' : ''">
-                        {{ dataProximaAtualizacao }}
+                    <span *ngIf="historicoEstaDesatualizado">
+                        <span class="text-danger">{{ dataProximaAtualizacao }}</span>
                     </span>
                 </div>
             </ng-template>
@@ -185,9 +184,9 @@
             <div *ngIf="formularioAtividadeFisica.frequenciaAtividadeFisica && formularioAtividadeFisica.frequenciaAtividadeFisica !== 'N'" 
                 class="col-12 col-sm-6">
                 <span class="p-float-label">
-                    <p-inputMask mask="99:99" [style]="{width: '120px'}" [(ngModel)]="formularioAtividadeFisica.duracao"> 
+                    <p-inputMask mask="99:99" [style]="{width: '150px'}" [(ngModel)]="formularioAtividadeFisica.duracao"> 
                     </p-inputMask>
-                    <label for="inputtext">Duração</label>
+                    <label for="inputtext">Duração (HH:mm)</label>
                 </span>
             </div>
         </div>

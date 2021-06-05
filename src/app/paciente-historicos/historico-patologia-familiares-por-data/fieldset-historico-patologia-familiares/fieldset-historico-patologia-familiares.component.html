@@ -2,12 +2,20 @@
     <p-header>
         Histórico Patologia Familiares
 
-        <span *ngIf="informacoesPreviasHistoricosFamiliaresPorData.historicoEstaDesatualizado">
+        <span *ngIf="historicoEstaDesatualizado">
             <i class="fas fa-exclamation-circle text-warning"></i>
         </span>
     </p-header>
 
-    <div class="borda-table">
+    <div *ngIf="exibirBotaoCadastrarHistorico">
+        <button class="btn btn-success" style="width: 100%;" (click)="abrirDialogCadastroPatologiasFamiliares()"
+            [disabled]="!exibirBotaoCadastrarHistorico || !patologias">
+            <i class="fas fa-plus"></i>
+            Cadastrar patologias dos familiares
+        </button>
+    </div>
+
+    <div class="borda-table mt-2">
         <p-table #dataView [value]="previaHistoricosPatologiaFamiliares" 
             [columns]="colunasTabelaPreviaHistoricosPatologiaFamiliaresPorData" [responsive]="true" 
             [rows]="5" [paginator]="true" class="text-center">
@@ -81,13 +89,12 @@
                 </div>
                 
                 <div *ngIf="previaHistoricosPatologiaFamiliares && previaHistoricosPatologiaFamiliares.length > 0" class="col-12">
-                    <span *ngIf="!informacoesPreviasHistoricosFamiliaresPorData.historicoEstaDesatualizado">
+                    <span *ngIf="!historicoEstaDesatualizado">
                         Data prevista para próxima atualização: {{ dataProximaAtualizacao }}
                     </span>
                     
-                    <span *ngIf="informacoesPreviasHistoricosFamiliaresPorData.historicoEstaDesatualizado"
-                        [ngClass]="informacoesPreviasHistoricosFamiliaresPorData.historicoEstaDesatualizado ? 'text-danger' : ''">
-                        {{ dataProximaAtualizacao }}
+                    <span *ngIf="historicoEstaDesatualizado">
+                        <span class="text-danger">{{ dataProximaAtualizacao }}</span>
                     </span>
                 </div>
             </ng-template>
@@ -175,6 +182,117 @@
         <button class="btn btn-success" [disabled]="processandoExclusao" 
             (click)="excluirHistoricoPatologiaFamiliaresPorData()">
             <i class="fas " [ngClass]="processandoExclusao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
+        </button>
+    </p-footer>
+</p-dialog>
+
+<!-- Dialog cadastro patologias paciente -->
+<p-dialog *ngIf="abrirDialogCadastro" [visible]="abrirDialogCadastro" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '96%'}">
+
+    <p-header>
+        Cadastrar patologias dos familiares
+    </p-header>
+
+    <div class="container-fluid">
+        <div class="borda-table mt-2">
+            <p-table [value]="patologias" [columns]="colunasTabelaCadastroPatologiasFamiliares" [responsive]="true" 
+                 class="text-center">
+
+                 <ng-template pTemplate="header" let-colunas>
+                    <tr>
+                        <th *ngFor="let coluna of colunas" [pSortableColumn]="coluna.field" [ngClass]="coluna.style" class="text-center">
+                            {{ coluna.header }}
+                            <p-sortIcon *ngIf="coluna.header === 'Patologia'" [field]="coluna.field" 
+                                ariaLabel="active to sort"
+                                ariaLabelDesc="Activate to sort in descending order"
+                                ariaLabelAsc="Activate to sort in ascending order">
+                            </p-sortIcon>
+                        </th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-patologia>
+                    <tr>
+                        <td *ngFor="let coluna of colunasTabelaCadastroPatologiasFamiliares" class="text-center">
+                            <span class="ui-column-title text-left"></span>
+                            
+                            <span *ngIf="coluna.header === 'Patologia'">
+                                {{ patologia[coluna.field] }}
+                            </span>
+
+                            <div [ngSwitch]="coluna.header">
+                                <div *ngSwitchCase="'Pai'">
+                                    <div class="mensagem-input-patologia">
+                                        {{ formularioPatologiasDosFamiliares[buscarDescricaoPatologiaPeloIndice(patologia)].pai ? 'Sim' : 'Não' }}
+                                    </div>
+                                    <p-inputSwitch [(ngModel)]="formularioPatologiasDosFamiliares[buscarDescricaoPatologiaPeloIndice(patologia)].pai">
+                                    </p-inputSwitch>
+                                </div>
+                                <div *ngSwitchCase="'Mãe'">
+                                    <div class="mensagem-input-patologia">
+                                        {{ formularioPatologiasDosFamiliares[buscarDescricaoPatologiaPeloIndice(patologia)].mae ? 'Sim' : 'Não' }}
+                                    </div>
+                                    <p-inputSwitch [(ngModel)]="formularioPatologiasDosFamiliares[buscarDescricaoPatologiaPeloIndice(patologia)].mae">
+                                    </p-inputSwitch>
+                                </div>
+                                <div *ngSwitchCase="'Avôs'">
+                                    <div class="mensagem-input-patologia">
+                                        {{ formularioPatologiasDosFamiliares[buscarDescricaoPatologiaPeloIndice(patologia)].avosMasculinos ? 'Sim' : 'Não' }}
+                                    </div>
+                                    <p-inputSwitch [(ngModel)]="formularioPatologiasDosFamiliares[buscarDescricaoPatologiaPeloIndice(patologia)].avosMasculinos">
+                                    </p-inputSwitch>
+                                </div>
+                                <div *ngSwitchCase="'Avós'">
+                                    <div class="mensagem-input-patologia">
+                                        {{ formularioPatologiasDosFamiliares[buscarDescricaoPatologiaPeloIndice(patologia)].avosFemininos ? 'Sim' : 'Não' }}
+                                    </div>
+                                    <p-inputSwitch [(ngModel)]="formularioPatologiasDosFamiliares[buscarDescricaoPatologiaPeloIndice(patologia)].avosFemininos">
+                                    </p-inputSwitch>
+                                </div>
+                                <div *ngSwitchCase="'Tios'">
+                                    <div class="mensagem-input-patologia">
+                                        {{ formularioPatologiasDosFamiliares[buscarDescricaoPatologiaPeloIndice(patologia)].tios ? 'Sim' : 'Não' }}
+                                    </div>
+                                    <p-inputSwitch [(ngModel)]="formularioPatologiasDosFamiliares[buscarDescricaoPatologiaPeloIndice(patologia)].tios">
+                                    </p-inputSwitch>
+                                </div>
+                                <div *ngSwitchCase="'Tias'">
+                                    <div class="mensagem-input-patologia">
+                                        {{ formularioPatologiasDosFamiliares[buscarDescricaoPatologiaPeloIndice(patologia)].tias ? 'Sim' : 'Não' }}
+                                    </div>
+                                    <p-inputSwitch [(ngModel)]="formularioPatologiasDosFamiliares[buscarDescricaoPatologiaPeloIndice(patologia)].tias">
+                                    </p-inputSwitch>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12 col-md-8 col-lg-5">
+                <span class="p-float-label">
+                    <textarea pInputTextarea [rows]="3" [(ngModel)]="formularioPatologiasDosFamiliaresPorData.observacao" 
+                        [style]="{width: '100%'}" autoResize="autoResize">
+                    </textarea>
+                    <label for="inputtext">Observação</label>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="resetarCampos()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+
+        <button class="btn btn-success" [disabled]="processandoOperacao"
+            (click)="cadastrarPatologiasFamiliares()">
+            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
             Confirmar
         </button>
     </p-footer>

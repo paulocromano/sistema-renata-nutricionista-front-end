@@ -73,8 +73,9 @@
                 </div>
         
                 <div class="col-12 col-md-6">
-                    <app-fieldset-historico-patologia-familiares [paciente]="paciente"
-                        [informacoesPreviasHistoricosFamiliaresPorData]="historicosPaciente.informacoesPreviasHistoricosPatologiaFamiliaresPorData">
+                    <app-fieldset-historico-patologia-familiares [paciente]="paciente" [exibirBotaoCadastrarHistorico]="true"
+                        [informacoesPreviasHistoricosFamiliaresPorData]="historicosPaciente.informacoesPreviasHistoricosPatologiaFamiliaresPorData"
+                        [patologias]="informacoesCadastroConsulta.patologiasFamiliares">
                     </app-fieldset-historico-patologia-familiares>
                 </div>
             </div>

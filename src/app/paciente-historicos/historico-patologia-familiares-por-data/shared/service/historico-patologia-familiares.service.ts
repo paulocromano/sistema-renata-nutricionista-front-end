@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 
 import { HistoricoPatologiaFamiliaresPorData } from './../model/historico-patologia-familiares-por-data.model';
 import { InformacoesPreviasHistoricosFamiliaresPorData } from './../model/informacoes-previas-historicos-familiares-data.model';
+import { PatologiaFamiliaresPorDataFORM } from './../model/patologia-familiares-por-data.form';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,10 @@ export class HistoricoPatologiaFamiliaresService {
 
     return this.http.get<HistoricoPatologiaFamiliaresPorData>(
       `/historico-patologia-familiares-por-data/paciente/${idPatologiaFamiliares}`);
+  }
+
+  public cadastrarHistoricoPatologiaFamiliaresPorData(idPaciente: number, patologiasFamiliares: PatologiaFamiliaresPorDataFORM): Observable<any> {
+    return this.http.post(`/historico-patologia-familiares-por-data/${idPaciente}`, patologiasFamiliares);
   }
 
   public excluirHistoricoPatologiaFamiliaresPorData(idHistoricoPatologiaFamiliaresPorData: number): Observable<any> {

@@ -14,6 +14,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { InputMaskModule } from 'primeng/inputmask';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 import { ToastyModule } from './../shared/toasty/toasty.module';
 import { InformacoesHistoricosComponent } from './informacoes-historicos/informacoes-historicos.component';
@@ -47,6 +48,7 @@ import { FieldsetHistoricoPatologiaFamiliaresComponent } from './historico-patol
     InputNumberModule,
     MultiSelectModule,
     InputMaskModule,
+    InputSwitchModule,
     ToastyModule
   ],
   exports: [

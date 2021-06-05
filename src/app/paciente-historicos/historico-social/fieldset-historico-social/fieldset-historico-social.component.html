@@ -9,7 +9,7 @@
 
     <div *ngIf="exibirBotaoCadastrarHistorico">
         <button class="btn btn-success" style="width: 100%;" (click)="abrirDialogCadastro = true"
-            [disabled]="!exibirBotaoCadastrarHistorico && !informacoesParaCadastro">
+            [disabled]="!exibirBotaoCadastrarHistorico || !informacoesParaCadastro">
             <i class="fas fa-plus"></i>
             Cadastrar histórico social
         </button>
@@ -88,9 +88,8 @@
                         Data prevista para próxima atualização: {{ dataProximaAtualizacao }}
                     </span>
 
-                    <span *ngIf="informacoesPreviasHistoricosSociais.historicoEstaDesatualizado"
-                        [ngClass]="historicoEstaDesatualizado ? 'text-danger' : ''">
-                        {{ dataProximaAtualizacao }}
+                    <span *ngIf="historicoEstaDesatualizado">
+                        <span class="text-danger">{{ dataProximaAtualizacao }}</span>
                     </span>
                 </div>
             </ng-template>
