@@ -1,4 +1,4 @@
-import { SuplementoPaciente } from './suplemento-paciente.model';
+import { SuplementoPacienteFORM } from './suplemento-paciente.form';
 
 export class HistoricoAlimentarFORM {
 
@@ -8,5 +8,5 @@ export class HistoricoAlimentarFORM {
     alteracoesGastrointestinal: string;
     consumoAgua: string;
     idMedicamentos: number[] = [];
-    suplementosPaciente: SuplementoPaciente[] = [];
+    suplementosPaciente: SuplementoPacienteFORM[] = [];
 }

@@ -1,3 +1,4 @@
+import { HistoricoAlimentarFORM } from './../model/historico-alimentar.form';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -20,6 +21,10 @@ export class HistoricoAlimentarService {
 
   public buscarHistoricoAlimentarDoPaciente(idHistoricoAlimentar: number): Observable<HistoricoAlimentar> {
     return this.http.get<HistoricoAlimentar>(`/historico-alimentar/paciente/${idHistoricoAlimentar}`);
+  }
+
+  public cadastrarHistoricoAlimentarDoPaciente(idPaciente: number, historicoAlimentar: HistoricoAlimentarFORM): Observable<any> {
+    return this.http.post(`/historico-alimentar/${idPaciente}`, historicoAlimentar);
   }
 
   public excluirHistoricoAlimentar(idHistoricoAlimentar: number): Observable<any> {
