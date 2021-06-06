@@ -26,6 +26,10 @@ import { FieldsetHistoricoAtividadeFisicaComponent } from './historico-atividade
 import { HistoricoQuestionarioFrequenciaAlimentarComponent } from './historico-questionario-frequencia-alimentar/historico-questionario-frequencia-alimentar/historico-questionario-frequencia-alimentar.component';
 import { FieldsetHistoricoPatologiaFamiliaresComponent } from './historico-patologia-familiares-por-data/fieldset-historico-patologia-familiares/fieldset-historico-patologia-familiares.component';
 import { CadastroQuestionarioFrequenciaAlimentarComponent } from './historico-questionario-frequencia-alimentar/cadastro-questionario-frequencia-alimentar/cadastro-questionario-frequencia-alimentar.component';
+import { CadastroHistoricoSocialComponent } from './historico-social/cadastro-historico-social/cadastro-historico-social.component';
+import { CadastroPatologiaFamiliaresComponent } from './historico-patologia-familiares-por-data/cadastro-patologia-familiares/cadastro-patologia-familiares.component';
+import { CadastroAtividadeFisicaComponent } from './historico-atividade-fisica/cadastro-atividade-fisica/cadastro-atividade-fisica.component';
+import { CadastradoHistoricoAlimentarComponent } from './historico-alimentar/cadastrado-historico-alimentar/cadastrado-historico-alimentar.component';
 
 @NgModule({
   declarations: [ 
@@ -35,7 +39,11 @@ import { CadastroQuestionarioFrequenciaAlimentarComponent } from './historico-qu
     FieldsetHistoricoAtividadeFisicaComponent,
     FieldsetHistoricoPatologiaFamiliaresComponent,
     HistoricoQuestionarioFrequenciaAlimentarComponent,
-    CadastroQuestionarioFrequenciaAlimentarComponent
+    CadastroQuestionarioFrequenciaAlimentarComponent,
+    CadastroHistoricoSocialComponent,
+    CadastroPatologiaFamiliaresComponent,
+    CadastroAtividadeFisicaComponent,
+    CadastradoHistoricoAlimentarComponent
   ],
   imports: [
     CommonModule,

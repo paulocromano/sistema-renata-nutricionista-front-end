@@ -1,0 +1,61 @@
+<button class="btn btn-success" style="width: 100%;" (click)="abrirDialogCadastro = true"
+    [disabled]="!exibirBotaoCadastrarHistorico || !frequenciaAtividadeFisica">
+    <i class="fas fa-plus"></i>
+    Cadastrar atividade física
+</button>
+
+<!-- Dialog cadastro patologias paciente -->
+<p-dialog [visible]="abrirDialogCadastro" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '70vh'}">
+
+    <p-header>
+        Cadastrar atividade física
+    </p-header>
+
+    <div class="container-fluid mt-4">
+        <div *ngIf="formularioAtividadeFisica.frequenciaAtividadeFisica && formularioAtividadeFisica.frequenciaAtividadeFisica !== 'N'" 
+            class="row">
+            <div class="col-12">
+                <span class="p-float-label">
+                    <input type="text" style="width: 100%;" [(ngModel)]="formularioAtividadeFisica.atividadePraticada" pInputText> 
+                    <label for="inputtext">Atividade praticada</label>
+                </span>
+            </div>
+        </div>
+
+        <div class="row mt-4" style="margin-bottom: 100px;">
+            <div class="col-12 col-sm-6">
+                <span class="p-float-label">
+                    <p-dropdown [options]="frequenciaAtividadeFisicaDropdown" [(ngModel)]="formularioAtividadeFisica.frequenciaAtividadeFisica"
+                        [style]="{width: '180px'}" [scrollHeight]="'120px'" [autoDisplayFirst]="false" appendTo="body"
+                        (ngModelChange)="alteracaoFrequenciaAtividadeFisica($event)">
+                    </p-dropdown>
+                    <label for="inputtext">Frequência</label>
+                </span>
+            </div>
+            <div *ngIf="formularioAtividadeFisica.frequenciaAtividadeFisica && formularioAtividadeFisica.frequenciaAtividadeFisica !== 'N'" 
+                class="col-12 col-sm-6">
+                <span class="p-float-label">
+                    <p-inputMask mask="99:99" [style]="{width: '150px'}" [(ngModel)]="formularioAtividadeFisica.duracao"> 
+                    </p-inputMask>
+                    <label for="inputtext">Duração (HH:mm)</label>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="resetarCampos()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+
+        <button class="btn btn-success" [disabled]="desabilitarBotaoCadastroAtividadeFisica()"
+            (click)="cadastrarAtividadeFisica()">
+            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
+        </button>
+    </p-footer>
+</p-dialog>
+
+<app-toasty #toastyComponent></app-toasty>
