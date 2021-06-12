@@ -1,81 +1,87 @@
-<p-table #dataView [value]="listagemCadastroPaciente.pacientes" [columns]="colunasTabela" [responsive]="true" 
-    [rows]="8" [paginator]="true" class="text-center">
+<div class="container-fluid">
+    <h3 class="text-center mt-5">Pacientes</h3>
 
-    <ng-template pTemplate="caption">
-        <div class="row">
-            <div class="col-12 col-sm-6 col-md-4">
-                <input type="text" pInputText placeholder="Pesquisa" class="pesquisa" [(ngModel)]="inputPesquisa"
-                    (input)="dataView.filterGlobal($event.target.value, 'contains')">
-                <i class="fas fa-search" style="font-size: 1.18em;"></i>
-            </div>
-    
-            <div class="col-12 col-sm-6 col-md-8 text-right">
-                <app-cadastro-paciente *ngIf="enviarEtniasComponenteCadastroPaciente" 
-                    [etnias]="listagemCadastroPaciente.etniasPaciente" (pacienteSalvo)="atualizarTabelaPacientes($event)">
-                </app-cadastro-paciente>
-            </div>
-        </div>
-    </ng-template>
+    <div class="borda-table mt-3">
+        <p-table #dataView [value]="listagemCadastroPaciente.pacientes" [columns]="colunasTabela" [responsive]="true" 
+            [rows]="8" [paginator]="true" class="text-center">
 
-    <ng-template pTemplate="header" let-colunas>
-        <tr>
-            <th *ngFor="let coluna of colunas" [pSortableColumn]="coluna.field" [ngClass]="coluna.style" class="text-center">
-                {{ coluna.header }}
-                <p-sortIcon *ngIf="coluna.header !== 'Ações' && coluna.header !== 'Telefone'" [field]="coluna.field" 
-                    ariaLabel="active to sort"
-                    ariaLabelDesc="Activate to sort in descending order"
-                    ariaLabelAsc="Activate to sort in ascending order">
-                </p-sortIcon>
-            </th>
-        </tr>
-    </ng-template>
+            <ng-template pTemplate="caption">
+                <div class="row">
+                    <div class="col-12 col-sm-6 col-md-4">
+                        <input type="text" pInputText placeholder="Pesquisa" class="pesquisa" [(ngModel)]="inputPesquisa"
+                            (input)="dataView.filterGlobal($event.target.value, 'contains')">
+                        <i class="fas fa-search" style="font-size: 1.18em;"></i>
+                    </div>
+            
+                    <div class="col-12 col-sm-6 col-md-8 text-right">
+                        <app-cadastro-paciente *ngIf="enviarEtniasComponenteCadastroPaciente" 
+                            [etnias]="listagemCadastroPaciente.etniasPaciente" (pacienteSalvo)="atualizarTabelaPacientes($event)">
+                        </app-cadastro-paciente>
+                    </div>
+                </div>
+            </ng-template>
 
-    <ng-template pTemplate="body" let-paciente>
-        <tr>
-            <td *ngFor="let coluna of colunasTabela" class="text-center">
-                <span class="ui-column-title text-left"></span>
-                {{ paciente[coluna.field] }}
+            <ng-template pTemplate="header" let-colunas>
+                <tr>
+                    <th *ngFor="let coluna of colunas" [pSortableColumn]="coluna.field" [ngClass]="coluna.style" class="text-center">
+                        {{ coluna.header }}
+                        <p-sortIcon *ngIf="coluna.header !== 'Ações' && coluna.header !== 'Telefone'" [field]="coluna.field" 
+                            ariaLabel="active to sort"
+                            ariaLabelDesc="Activate to sort in descending order"
+                            ariaLabelAsc="Activate to sort in ascending order">
+                        </p-sortIcon>
+                    </th>
+                </tr>
+            </ng-template>
 
-                <span *ngIf="coluna.header === 'Ações'">
-                    <button class="btn btn-primary px-3" pTooltip="Informações" tooltipPosition="bottom"
-                        (click)="armazenarPacienteSelecionadoParaDialogInformacoes(paciente)">
-                        <i class="fas fa-info"></i>
-                    </button>
+            <ng-template pTemplate="body" let-paciente>
+                <tr>
+                    <td *ngFor="let coluna of colunasTabela" class="text-center">
+                        <span class="ui-column-title text-left"></span>
+                        {{ paciente[coluna.field] }}
 
-                    <button class="btn btn-secondary mx-2" pTooltip="Históricos" tooltipPosition="bottom"
-                        (click)="redirecionarParaPaginaHistoricosDoPaciente(paciente)">
-                        <i class="far fa-address-card"></i>
-                    </button>
+                        <span *ngIf="coluna.header === 'Ações'">
+                            <button class="btn btn-primary px-3" pTooltip="Informações" tooltipPosition="bottom"
+                                (click)="armazenarPacienteSelecionadoParaDialogInformacoes(paciente)">
+                                <i class="fas fa-info"></i>
+                            </button>
 
-                    <app-edicao-paciente [paciente]="paciente" (pacienteEditado)="atualizarTabelaPacientes($event)"></app-edicao-paciente>
+                            <button class="btn btn-secondary mx-2" pTooltip="Históricos" tooltipPosition="bottom"
+                                (click)="redirecionarParaPaginaHistoricosDoPaciente(paciente)">
+                                <i class="far fa-address-card"></i>
+                            </button>
 
-                    <button class="btn btn-danger ml-2" pTooltip="Excluir" tooltipPosition="bottom"
-                        (click)="armazenarPacienteSelecionadoParaDialogExclusao(paciente)">
-                        <i class="fas fa-trash-alt"></i>
-                    </button>
-                </span>
-            </td>
-        </tr>
-    </ng-template>
+                            <app-edicao-paciente [paciente]="paciente" (pacienteEditado)="atualizarTabelaPacientes($event)"></app-edicao-paciente>
 
-    <ng-template pTemplate="emptymessage" class="text-center" let-pacientes>
-        <tr>
-            <td [attr.colspan]="pacientes.length" class="text-center">
-                <span *ngIf="!processandoOperacao">
-                    {{ inputPesquisa ? 'Nenhum paciente corresponde à pesquisa!' : 'Nenhum paciente encontrado!' }}
-                </span>
+                            <button class="btn btn-danger ml-2" pTooltip="Excluir" tooltipPosition="bottom"
+                                (click)="armazenarPacienteSelecionadoParaDialogExclusao(paciente)">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </span>
+                    </td>
+                </tr>
+            </ng-template>
 
-                <span *ngIf="processandoOperacao && !inputPesquisa">
-                    <p-progressSpinner strokeWidth="3"></p-progressSpinner>
-                </span>
-            </td>
-        </tr>
-    </ng-template>
+            <ng-template pTemplate="emptymessage" class="text-center" let-pacientes>
+                <tr>
+                    <td [attr.colspan]="pacientes.length" class="text-center">
+                        <span *ngIf="!processandoOperacao">
+                            {{ inputPesquisa ? 'Nenhum paciente corresponde à pesquisa!' : 'Nenhum paciente encontrado!' }}
+                        </span>
 
-    <ng-template pTemplate="summary">
-        Pacientes encontrados: {{ listagemCadastroPaciente.pacientes ? listagemCadastroPaciente.pacientes.length : 0 }}
-    </ng-template>
-</p-table>
+                        <span *ngIf="processandoOperacao && !inputPesquisa">
+                            <p-progressSpinner strokeWidth="3"></p-progressSpinner>
+                        </span>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="summary">
+                Pacientes encontrados: {{ listagemCadastroPaciente.pacientes ? listagemCadastroPaciente.pacientes.length : 0 }}
+            </ng-template>
+        </p-table>
+    </div>
+</div>
 
 <!-- Dialog informações do Paciente -->
 <p-dialog [visible]="abrirDialogInformacoesPaciente" [modal]="true" [resizable]="false" 

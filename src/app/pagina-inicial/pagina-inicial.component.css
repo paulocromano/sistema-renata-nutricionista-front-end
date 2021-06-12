@@ -9,3 +9,11 @@ button {
     white-space: normal;
     width: 24em;
 }
+
+.button-calendario:hover {
+    background-color: rgb(190, 77, 42) !important;
+}
+
+.button-horarios:hover {
+    background-color: rgb(115, 58, 180) !important;
+}

@@ -19,6 +19,7 @@ import { MedicamentoModule } from './medicamento/medicamento.module';
 import { AtendimentoPacienteModule } from './atendimento-paciente/atendimento-paciente.module';
 import { ParametrosAtendimentoPacienteModule } from './parametros-atendimento-paciente/parametros-atendimento-paciente.module';
 import { HorarioAtendimentoModule } from './horario-atendimento/horario-atendimento.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 import { ToastyModule } from './shared/toasty/toasty.module';
 import { InterceptorModule } from './interceptor/interceptor.module';
 import { LogadoGuard } from './shared/guard/logado.guard';
@@ -47,6 +48,7 @@ const maskConfig: Partial<IConfig> = { validation: false };
     AtendimentoPacienteModule,
     ParametrosAtendimentoPacienteModule,
     HorarioAtendimentoModule,
+    DashboardModule,
     ToastyModule,
     InterceptorModule,
     NgxMaskModule.forRoot({ dropSpecialCharacters: false }),

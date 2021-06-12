@@ -122,20 +122,18 @@
     </div>
 
     <div class="mt-5 text-center">
-        <button class="btn btn-warning px-5" [disabled]="editarParametros" pTooltip="Editar parâmetros" tooltipPosition="bottom"
-            (click)="editarParametros = true">
+        <button class="btn btn-warning px-5" [disabled]="editarParametros" (click)="editarParametros = true">
             <i class="fas fa-pen"></i>
             Editar
         </button>
 
-        <button *ngIf="editarParametros" class="btn btn-danger px-5 mx-4" (click)="cancelarAlteracao()"
-            pTooltip="Cancelar" tooltipPosition="bottom">
+        <button *ngIf="editarParametros" class="btn btn-danger px-5 mx-4" (click)="cancelarAlteracao()">
             <i class="fas fa-times"></i>
             Cancelar
         </button>
 
-        <button *ngIf="editarParametros" class="btn btn-success px-5" pTooltip="Confirmar" tooltipPosition="bottom"
-            (click)="atualizarParametrosAtendimentoDoPaciente()" [disabled]="desabilitarBotaoConfirmarAlteracao()">
+        <button *ngIf="editarParametros" class="btn btn-success px-5" (click)="atualizarParametrosAtendimentoDoPaciente()" 
+            [disabled]="desabilitarBotaoConfirmarAlteracao()">
             <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
             Confirmar
         </button>

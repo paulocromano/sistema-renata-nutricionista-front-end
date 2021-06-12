@@ -7,14 +7,21 @@
     </div>
 
     <div>
-        <button class="btn text-white my-3" style="background-color: #df6844;" [routerLink]="['/calendario-atendimento']">
+        <button class="btn text-white mt-3 button-calendario" style="background-color: #e6663f;" [routerLink]="['/calendario-atendimento']">
             <i class="far fa-calendar-check fa-lg"></i>
             Calendário Atendimento
         </button>
     </div>
 
     <div>
-        <button class="btn btn-info" [routerLink]="['/pacientes']">
+        <button class="btn text-white mt-3 button-horarios" style="background-color: #8d43e2;" [routerLink]="['/horario-atendimento']">
+            <i class="fas fa-user-clock"></i>
+            Horários Atendimento
+        </button>
+    </div>
+
+    <div>
+        <button class="btn btn-info mt-3" [routerLink]="['/pacientes']">
             <i class="fas fa-users fa-lg"></i>
             Pacientes
         </button>
