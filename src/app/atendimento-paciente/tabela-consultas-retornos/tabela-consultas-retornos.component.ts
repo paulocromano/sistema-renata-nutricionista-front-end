@@ -90,8 +90,6 @@ export class TabelaConsultasRetornosComponent implements OnInit, OnDestroy {
       { header: 'Ações', field: 'acoes', style: 'col-acoes' }
     ];
 
-
-
     this.formatoCalendario = {
       firstDayOfWeek: 0,
       dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
@@ -120,7 +118,7 @@ export class TabelaConsultasRetornosComponent implements OnInit, OnDestroy {
     this.dataMinimaParaAgendamento.setDate(this.dataMinimaParaAgendamento.getDate() + 1);
 
     this.buscarInformacoesParaConfirmacaoDeAtendimento();
-    this.listarAtendimentosPorPeriodoPadrao();
+    this.listarAtendimentosAPartirDaDataAtual();
   }
 
   public verificarProximoTipoAtendimentoDoPacienteSelecionado(event: any): void {
@@ -263,7 +261,7 @@ export class TabelaConsultasRetornosComponent implements OnInit, OnDestroy {
         this.resetarCampos();
         this.processandoOperacao = false;
         this.toasty.success('Consulta agendada com sucesso!');
-        this.listarAtendimentosPorPeriodoPadrao();
+        this.listarAtendimentosAPartirDaDataAtual();
       },
       (errorResponse: HttpErrorResponse) => {
         this.processandoOperacao = false;
@@ -285,7 +283,7 @@ export class TabelaConsultasRetornosComponent implements OnInit, OnDestroy {
         this.resetarCampos();
         this.processandoOperacao = false;
         this.toasty.success('Retorno da consulta agendada com sucesso!');
-        this.listarAtendimentosPorPeriodoPadrao();
+        this.listarAtendimentosAPartirDaDataAtual();
       },
       (errorResponse: HttpErrorResponse) => {
         this.processandoOperacao = false;
@@ -308,7 +306,7 @@ export class TabelaConsultasRetornosComponent implements OnInit, OnDestroy {
         this.resetarCampos();
         this.processandoOperacao = false;
         this.toasty.success('Consulta reagendada com sucesso!');
-        this.listarAtendimentosPorPeriodoPadrao();
+        this.listarAtendimentosAPartirDaDataAtual();
       },
       (errorResponse: HttpErrorResponse) => {
         this.processandoOperacao = false;
@@ -331,7 +329,7 @@ export class TabelaConsultasRetornosComponent implements OnInit, OnDestroy {
         this.resetarCampos();
         this.processandoOperacao = false;
         this.toasty.success('Retorno da consulta reagendada com sucesso!');
-        this.listarAtendimentosPorPeriodoPadrao();
+        this.listarAtendimentosAPartirDaDataAtual();
       },
       (errorResponse: HttpErrorResponse) => {
         this.processandoOperacao = false;
@@ -370,10 +368,10 @@ export class TabelaConsultasRetornosComponent implements OnInit, OnDestroy {
     }
   }
 
-  public listarAtendimentosPorPeriodoPadrao(): void {
+  public listarAtendimentosAPartirDaDataAtual(): void {
     this.processandoOperacao = true;
 
-    this.consultaService.listarAtendimentosPorPeriodoPadrao()
+    this.consultaService.listarAtendimentosAPartirDaDataAtual()
       .subscribe((atendimentos: InformacoesPreviasConsultaRetorno[]) => {
         this.atendimentos = atendimentos;
         this.listarPacientesParaAgendarConsultaOuRetorno();
@@ -427,7 +425,7 @@ export class TabelaConsultasRetornosComponent implements OnInit, OnDestroy {
         this.processandoOperacao = false;
         this.resetarCampos();
         this.toasty.success('Consulta confirmada com sucesso!');
-        this.listarAtendimentosPorPeriodoPadrao();
+        this.listarAtendimentosAPartirDaDataAtual();
       },
       (errorResponse: HttpErrorResponse) => {
         this.processandoOperacao = false;
@@ -443,7 +441,7 @@ export class TabelaConsultasRetornosComponent implements OnInit, OnDestroy {
         this.processandoOperacao = false;
         this.resetarCampos();
         this.toasty.success('Retorno da consulta confirmado com sucesso!');
-        this.listarAtendimentosPorPeriodoPadrao();
+        this.listarAtendimentosAPartirDaDataAtual();
       },
       (errorResponse: HttpErrorResponse) => {
         this.processandoOperacao = false;
@@ -507,7 +505,7 @@ export class TabelaConsultasRetornosComponent implements OnInit, OnDestroy {
         this.resetarCampos();
         this.processandoOperacao = false;
         this.toasty.success('Consulta cancelada com sucesso!');
-        this.listarAtendimentosPorPeriodoPadrao();
+        this.listarAtendimentosAPartirDaDataAtual();
       },
       (errorResponse: HttpErrorResponse) => {
         this.processandoOperacao = false;
@@ -523,7 +521,7 @@ export class TabelaConsultasRetornosComponent implements OnInit, OnDestroy {
         this.resetarCampos();
         this.processandoOperacao = false;
         this.toasty.success('Retorno da consulta cancelada com sucesso!');
-        this.listarAtendimentosPorPeriodoPadrao();
+        this.listarAtendimentosAPartirDaDataAtual();
       },
       (errorResponse: HttpErrorResponse) => {
         this.processandoOperacao = false;

@@ -1,5 +1,5 @@
-<button class="btn btn-success" style="width: 100%;" (click)="abrirDialogCadastro = true"
-    [disabled]="!exibirBotaoCadastrarHistorico || !informacoesParaCadastro">
+<button *ngIf="exibirBotaoCadastrarHistorico && informacoesParaCadastro" 
+    class="btn btn-success" style="width: 100%;" (click)="abrirDialogCadastro = true">
     <i class="fas fa-plus"></i>
     Cadastrar histórico social
 </button>
@@ -126,7 +126,7 @@
                         </button>
                     </div>
                     <div *ngIf="formularioPatologiasSelecionadas" class="col-12 mt-2">
-                        <b>Patologias do(a) paciente:</b> {{ formularioPatologiasSelecionadas?.length }}
+                        <b>Patologias selecionadas:</b> {{ formularioPatologiasSelecionadas?.length }}
                     </div>
                 </div>
             </div>
@@ -264,7 +264,7 @@
 
                                 <span *ngIf="coluna.header === 'Tempo (anos)'">
                                     <p-inputNumber [(ngModel)]="formularioPatologiasSelecionadas[formularioPatologiasSelecionadas.indexOf(patologia)].quantosAnosPossuiPatologia" 
-                                        [minFractionDigits]="0" [min]="1" [max]="100" [showButtons]="true">
+                                        [minFractionDigits]="0" [min]="1" [max]="100">
                                     </p-inputNumber>
                                 </span>
                 

@@ -9,7 +9,7 @@ export class DownloadRelatorioService {
   constructor() { }
 
 
-  public baixarRelatorio(response: any, nomeArquivo: string){
+  public baixarRelatorio(response: any, nomeArquivo: string) {
     const file = new Blob([response]);
     const blob = window.URL.createObjectURL(file);
     const link = document.createElement('a');
@@ -18,5 +18,5 @@ export class DownloadRelatorioService {
     link.click();
     window.URL.revokeObjectURL(blob);
     link.remove();
-}
+  }
 }

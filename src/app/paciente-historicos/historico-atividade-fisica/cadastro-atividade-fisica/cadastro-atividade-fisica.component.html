@@ -1,5 +1,5 @@
-<button class="btn btn-success" style="width: 100%;" (click)="abrirDialogCadastro = true"
-    [disabled]="!exibirBotaoCadastrarHistorico || !frequenciaAtividadeFisica">
+<button *ngIf="exibirBotaoCadastrarHistorico && frequenciaAtividadeFisica" 
+    class="btn btn-success" style="width: 100%;" (click)="abrirDialogCadastro = true">
     <i class="fas fa-plus"></i>
     Cadastrar atividade física
 </button>

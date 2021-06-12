@@ -47,7 +47,7 @@ export class CadastroHistoricoSocialComponent implements OnInit {
     this.colunasTabelaPatologiasPacienteParaCadastrar = [
       { header: 'Descrição', field: 'descricao', style: 'col-descricao' },
       { header: 'Tempo (anos)', field: 'quantosAnosPossuiPatologia', style: 'col-descricao' },
-      { header: 'Ações', field: 'acoes', style: 'col-quantos-anosP-possui-patologia' }
+      { header: 'Ações', field: 'acoes', style: 'col-quantos-anos-possui-patologia' }
     ];
 
     if (this.exibirBotaoCadastrarHistorico) {
@@ -76,7 +76,7 @@ export class CadastroHistoricoSocialComponent implements OnInit {
   public alteracaoPatologiasSelecionadasParaCadastro(): void {
     this.formularioPatologiasSelecionadas = [];
     this.patologiasSelecionadasDropdown.forEach(patologia => this.formularioPatologiasSelecionadas.push({ 
-      idPatologia: patologia.value, descricao: patologia.label, quantosAnosPossuiPatologia: 0 
+      idPatologia: patologia.value, descricao: patologia.label, quantosAnosPossuiPatologia: null 
     }));
   }
 
@@ -100,7 +100,7 @@ export class CadastroHistoricoSocialComponent implements OnInit {
   }
 
   public desabilitarBotaoConfirmarPatologiasPacienteSelecionadas(): boolean {
-    return new Boolean(this.formularioPatologiasSelecionadas.find(patologia => patologia.quantosAnosPossuiPatologia <= 0)
+    return new Boolean(this.formularioPatologiasSelecionadas.find(patologia => !patologia.quantosAnosPossuiPatologia)
       || this.formularioPatologiasSelecionadas?.length === 0).valueOf();
   }
 

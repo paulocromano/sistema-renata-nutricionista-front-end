@@ -21,8 +21,8 @@ export class ConsultaService {
   constructor(private http: HttpClient) { }
 
 
-  public listarAtendimentosPorPeriodoPadrao(): Observable<InformacoesPreviasConsultaRetorno[]> {
-    return this.http.get<InformacoesPreviasConsultaRetorno[]>(`/consulta-paciente/listar-atendimentos-periodo-padrao`);
+  public listarAtendimentosAPartirDaDataAtual(): Observable<InformacoesPreviasConsultaRetorno[]> {
+    return this.http.get<InformacoesPreviasConsultaRetorno[]>(`/consulta-paciente/listar-atendimentos`);
   }
 
   public listarAtendimentosPorPeriodo(dataInicial: string, dataFinal: string): Observable<InformacoesPreviasConsultaRetorno[]> {

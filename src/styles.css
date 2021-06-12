@@ -2,3 +2,16 @@ body {
     background-image: url('./assets/background.png');
     background-repeat: cover;
 } 
+
+::-webkit-scrollbar-track {
+    background-color: #F4F4F4;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    background: #5d2b8d
+}
+
+::-webkit-scrollbar-thumb {
+    background: #89228d;
+}

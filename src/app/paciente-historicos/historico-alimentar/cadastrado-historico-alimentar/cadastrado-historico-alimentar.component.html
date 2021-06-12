@@ -1,5 +1,5 @@
-<button class="btn btn-success" style="width: 100%;" (click)="abrirDialogCadastro = true"
-    [disabled]="!exibirBotaoCadastrarHistorico || !informacoesParaCadastro">
+<button *ngIf="exibirBotaoCadastrarHistorico && informacoesParaCadastro" class="btn btn-success" 
+    style="width: 100%;" (click)="abrirDialogCadastro = true">
     <i class="fas fa-plus"></i>
     Cadastrar histórico alimentar
 </button>

@@ -1,6 +1,5 @@
-<button class="btn btn-success" style="width: 100%;"
-    [disabled]="!(exibirBotaoCadastrarQuestionario && paciente && informacoesCadastro)"
-    (click)="abrirDialogQuestionario()">
+<button *ngIf="exibirBotaoCadastrarQuestionario && paciente && informacoesCadastro" 
+    class="btn btn-success" style="width: 100%;" (click)="abrirDialogQuestionario()">
     <i class="fas fa-plus"></i>
     Cadastrar questionário
 </button>

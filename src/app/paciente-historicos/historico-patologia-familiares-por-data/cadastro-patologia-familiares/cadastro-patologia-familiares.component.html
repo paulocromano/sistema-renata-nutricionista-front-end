@@ -1,5 +1,5 @@
-<button class="btn btn-success" style="width: 100%;" (click)="abrirDialogCadastroPatologiasFamiliares()"
-    [disabled]="!exibirBotaoCadastrarHistorico || !patologias">
+<button *ngIf="exibirBotaoCadastrarHistorico && patologias" class="btn btn-success" 
+    style="width: 100%;" (click)="abrirDialogCadastroPatologiasFamiliares()">
     <i class="fas fa-plus"></i>
     Cadastrar patologias dos familiares
 </button>
