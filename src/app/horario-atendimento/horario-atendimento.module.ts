@@ -12,6 +12,7 @@ import { InputMaskModule } from 'primeng/inputmask';
 
 import { ToastyModule } from './../shared/toasty/toasty.module';
 import { HorarioAtendimentoComponent } from './horario-atendimento.component';
+import { DashboardModule } from './../dashboard/dashboard.module';
 
 @NgModule({
   declarations: [ HorarioAtendimentoComponent ],
@@ -25,7 +26,8 @@ import { HorarioAtendimentoComponent } from './horario-atendimento.component';
     TooltipModule,
     DropdownModule,
     InputMaskModule,
-    ToastyModule
+    ToastyModule,
+    DashboardModule
   ]
 })
 

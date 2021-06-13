@@ -40,8 +40,10 @@ export class CadastroQuestionarioFrequenciaAlimentarComponent implements OnInit 
   constructor(private questionarioService: QuestionarioFrequenciaAlimentarService) { }
 
   ngOnInit(): void {
-    this.frequenciaConsumoAlimento = this.informacoesCadastro.frequenciaConsumoAlimento;
-
+    if (this.exibirBotaoCadastrarQuestionario && this.informacoesCadastro) {
+      this.frequenciaConsumoAlimento = this.informacoesCadastro.frequenciaConsumoAlimento;
+    }
+    
     this.colunasTabela = [
       { header: 'Descrição Alimento', field: 'descricaoAlimento', style: 'col-descricao-alimento' },
       { header: 'Frequência de Consumo', field: 'frequenciaConsumoAlimento', style: 'col-frequencia-consumo-alimento' }

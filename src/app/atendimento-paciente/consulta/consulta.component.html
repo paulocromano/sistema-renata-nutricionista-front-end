@@ -5,6 +5,8 @@
     </div>
 </div>
 
+<app-dashboard *ngIf="!carregandoInformacoesDosHistoricosDoPaciente && !carregandoInformacoesParaCadastroConsulta"></app-dashboard>
+
 <div *ngIf="!carregandoInformacoesDosHistoricosDoPaciente && !carregandoInformacoesParaCadastroConsulta" class="container-fluid">
     <h3 class="text-center mt-5">Consulta</h3>
 

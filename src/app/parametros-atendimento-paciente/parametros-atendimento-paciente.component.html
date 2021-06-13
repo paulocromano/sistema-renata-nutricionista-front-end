@@ -5,8 +5,12 @@
     </div>
 </div>
 
-<div class="container-fluid mt-3">
-    <div class="row">
+<app-dashboard *ngIf="!processandoOperacao"></app-dashboard>
+
+<div *ngIf="!processandoOperacao" class="container-fluid mt-3">
+    <h3 class="text-center mt-5">Parâmetros do Sistema</h3>
+
+    <div class="row mt-3">
         <div class="col-12 col-sm-6 col-md-4">
             <div>Preço da consulta</div>
             <p-inputNumber [(ngModel)]="precoConsulta" mode="currency" currency="BRL" locale="pt-BR" [disabled]="!editarParametros"

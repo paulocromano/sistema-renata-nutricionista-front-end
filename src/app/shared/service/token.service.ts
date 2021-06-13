@@ -43,4 +43,8 @@ export class TokenService {
     
     return permissoesToken ? permissoesToken.map(permissao => permissao.authority) : null;
   }
+
+  public apagarToken(): void {
+    localStorage.clear();
+  }
 }

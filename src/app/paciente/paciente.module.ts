@@ -15,6 +15,7 @@ import { ToastyModule } from './../shared/toasty/toasty.module';
 import { TabelaPacientesComponent } from './tabela-pacientes/tabela-pacientes.component';
 import { CadastroPacienteComponent } from './cadastro-paciente/cadastro-paciente.component';
 import { EdicaoPacienteComponent } from './edicao-paciente/edicao-paciente.component';
+import { DashboardModule } from './../dashboard/dashboard.module';
 
 @NgModule({
   declarations: [ CadastroPacienteComponent, TabelaPacientesComponent, EdicaoPacienteComponent ],
@@ -29,7 +30,8 @@ import { EdicaoPacienteComponent } from './edicao-paciente/edicao-paciente.compo
     RadioButtonModule,
     DropdownModule,
     InputMaskModule,
-    ToastyModule
+    ToastyModule,
+    DashboardModule
   ],
   exports: [ CadastroPacienteComponent, EdicaoPacienteComponent ]
 })

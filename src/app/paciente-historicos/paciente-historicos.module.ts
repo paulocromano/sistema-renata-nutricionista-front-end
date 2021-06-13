@@ -30,6 +30,7 @@ import { CadastroHistoricoSocialComponent } from './historico-social/cadastro-hi
 import { CadastroPatologiaFamiliaresComponent } from './historico-patologia-familiares-por-data/cadastro-patologia-familiares/cadastro-patologia-familiares.component';
 import { CadastroAtividadeFisicaComponent } from './historico-atividade-fisica/cadastro-atividade-fisica/cadastro-atividade-fisica.component';
 import { CadastradoHistoricoAlimentarComponent } from './historico-alimentar/cadastrado-historico-alimentar/cadastrado-historico-alimentar.component';
+import { DashboardModule } from './../dashboard/dashboard.module';
 
 @NgModule({
   declarations: [ 
@@ -63,7 +64,8 @@ import { CadastradoHistoricoAlimentarComponent } from './historico-alimentar/cad
     InputSwitchModule,
     RadioButtonModule,
     CheckboxModule,
-    ToastyModule
+    ToastyModule,
+    DashboardModule
   ],
   exports: [
     FieldsetHistoricoSocialComponent, 

@@ -26,6 +26,7 @@ import { AvaliacaoComposicaoCorporalComponent } from './ficha-consulta-retorno/a
 import { AvaliacaoMassaMuscularCorporeaComponent } from './ficha-consulta-retorno/avaliacao-massa-muscular-corporea/avaliacao-massa-muscular-corporea.component';
 import { CondutaNutricionalComponent } from './ficha-consulta-retorno/conduta-nutricional/conduta-nutricional.component';
 import { PacienteHistoricosModule } from './../paciente-historicos/paciente-historicos.module';
+import { DashboardModule } from './../dashboard/dashboard.module';
 
 @NgModule({
   declarations: [ 
@@ -54,6 +55,7 @@ import { PacienteHistoricosModule } from './../paciente-historicos/paciente-hist
     InputNumberModule,
     FieldsetModule,
     PacienteHistoricosModule,
+    DashboardModule,
     NgxMaskModule.forChild(),
     ToastyModule
   ]

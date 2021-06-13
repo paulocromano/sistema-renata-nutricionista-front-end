@@ -7,6 +7,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 
 import { ToastyModule } from './../shared/toasty/toasty.module';
 import { ParametrosAtendimentoPacienteComponent } from './parametros-atendimento-paciente.component';
+import { DashboardModule } from './../dashboard/dashboard.module';
 
 @NgModule({
   declarations: [ ParametrosAtendimentoPacienteComponent ],
@@ -15,7 +16,8 @@ import { ParametrosAtendimentoPacienteComponent } from './parametros-atendimento
     FormsModule,
     ProgressSpinnerModule,
     InputNumberModule,
-    ToastyModule
+    ToastyModule,
+    DashboardModule
   ]
 })
 

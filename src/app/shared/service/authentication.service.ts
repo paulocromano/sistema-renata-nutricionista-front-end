@@ -20,4 +20,8 @@ export class AuthenticationService {
       responseType: 'text'
     });
   }
+
+  public logout(): Observable<any> {
+    return this.http.post(`/logout`, {});
+  }
 }

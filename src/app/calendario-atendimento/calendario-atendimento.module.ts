@@ -13,8 +13,7 @@ import { TabViewModule } from 'primeng/tabview';
 
 import { CalendarioAtendimentoComponent } from './calendario-atendimento.component';
 import { ToastyModule } from './../shared/toasty/toasty.module';
-
-
+import { DashboardModule } from './../dashboard/dashboard.module';
 
 @NgModule({
   declarations: [ CalendarioAtendimentoComponent ],
@@ -28,7 +27,8 @@ import { ToastyModule } from './../shared/toasty/toasty.module';
     TooltipModule,
     InputMaskModule,
     TabViewModule,
-    ToastyModule
+    ToastyModule,
+    DashboardModule
   ]
 })
 

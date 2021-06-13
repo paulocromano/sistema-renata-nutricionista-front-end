@@ -11,6 +11,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 
 import { SuplementoComponent } from './suplemento.component';
 import { ToastyModule } from './../shared/toasty/toasty.module';
+import { DashboardModule } from './../dashboard/dashboard.module';
 
 @NgModule({
   declarations: [ SuplementoComponent ],
@@ -23,7 +24,8 @@ import { ToastyModule } from './../shared/toasty/toasty.module';
     DialogModule,
     TooltipModule,
     InputTextareaModule,
-    ToastyModule
+    ToastyModule,
+    DashboardModule
   ]
 })
 

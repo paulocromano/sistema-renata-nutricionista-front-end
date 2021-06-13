@@ -5,6 +5,8 @@
     </div>
 </div>
 
+<app-dashboard *ngIf="!carregandoPagina"></app-dashboard>
+
 <div *ngIf="!carregandoPagina" class="container-fluid">
     <h3 class="text-center mt-5">Retorno da Consulta</h3>
 

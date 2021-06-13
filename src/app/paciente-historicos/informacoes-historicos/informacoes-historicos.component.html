@@ -5,79 +5,84 @@
     </div>
 </div>
 
-<div *ngIf="!processandoOperacao" class="col-12 col-sm-8 mt-4">
-    <p-fieldset [toggleable]="true">
-        <p-header>
-            Paciente
-        </p-header>
+<app-dashboard *ngIf="!processandoOperacao"></app-dashboard>
 
+<div *ngIf="!processandoOperacao" class="container-fluid">
+    <h3 class="text-center mt-5">Informações do(a) paciente</h3>
+    
+    <div class="col-12 col-sm-8 mt-3">
+        <p-fieldset [toggleable]="true">
+            <p-header>
+                Paciente
+            </p-header>
+    
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <div><b>Nome: </b>{{ paciente.nome }}</div>
+    
+                    <div>
+                        <span><b>Sexo: </b>{{ paciente.sexo }}</span>
+                        <span class="px-3"><b>Etnia: </b>{{ paciente.etnia }}</span>      
+                    </div>
+                    
+                    <div><b>Data de Nascimento: </b>{{ paciente.dataNascimento }}</div>
+                    <div><b>Telefone: </b>{{ paciente.telefone }}</div>
+                    <div *ngIf="paciente.telefoneRecado"><b>Telefone para Recado: </b>{{ paciente.telefoneRecado }}</div>
+                </div>
+    
+                <div class="col-12 col-md-6">
+                    <div><b>Logradouro: </b>{{ paciente.endereco.logradouro }}</div>
+                    <div><b>Número: </b>{{ paciente.endereco.numero }}</div>
+                    <div *ngIf="paciente.endereco.complemento"><b>Complemento: </b>{{ paciente.endereco.complemento }}</div>
+                    <div><b>Bairro: </b>{{ paciente.endereco.bairro }}</div>
+                    <div><b>Cidade: </b>{{ paciente.endereco.cidade }}</div>
+    
+                    <div>
+                        <span><b>CEP: </b>{{ paciente.endereco.cep }}</span>
+                        <span class="pl-3"><b>UF: </b>{{ paciente.endereco.uf }}</span>
+                    </div>
+    
+                </div>
+            </div>
+        </p-fieldset>
+    </div>
+    
+    <div class="mt-5">
         <div class="row">
             <div class="col-12 col-md-6">
-                <div><b>Nome: </b>{{ paciente.nome }}</div>
-
-                <div>
-                    <span><b>Sexo: </b>{{ paciente.sexo }}</span>
-                    <span class="px-3"><b>Etnia: </b>{{ paciente.etnia }}</span>      
-                </div>
-                
-                <div><b>Data de Nascimento: </b>{{ paciente.dataNascimento }}</div>
-                <div><b>Telefone: </b>{{ paciente.telefone }}</div>
-                <div *ngIf="paciente.telefoneRecado"><b>Telefone para Recado: </b>{{ paciente.telefoneRecado }}</div>
+                <app-fieldset-historico-social [informacoesPreviasHistoricosSociais]="historicosPaciente.informacoesPreviasHistoricosSociais" 
+                    [paciente]="paciente">
+                </app-fieldset-historico-social>
             </div>
-
+    
             <div class="col-12 col-md-6">
-                <div><b>Logradouro: </b>{{ paciente.endereco.logradouro }}</div>
-                <div><b>Número: </b>{{ paciente.endereco.numero }}</div>
-                <div *ngIf="paciente.endereco.complemento"><b>Complemento: </b>{{ paciente.endereco.complemento }}</div>
-                <div><b>Bairro: </b>{{ paciente.endereco.bairro }}</div>
-                <div><b>Cidade: </b>{{ paciente.endereco.cidade }}</div>
-
-                <div>
-                    <span><b>CEP: </b>{{ paciente.endereco.cep }}</span>
-                    <span class="pl-3"><b>UF: </b>{{ paciente.endereco.uf }}</span>
-                </div>
-
+                <app-fieldset-historico-patologia-familiares [paciente]="paciente"
+                    [informacoesPreviasHistoricosFamiliaresPorData]="historicosPaciente.informacoesPreviasHistoricosPatologiaFamiliaresPorData">
+                </app-fieldset-historico-patologia-familiares>
             </div>
         </div>
-    </p-fieldset>
-</div>
-
-<div *ngIf="!processandoOperacao" class="container-fluid mt-5">
-    <div class="row">
-        <div class="col-12 col-md-6">
-            <app-fieldset-historico-social [informacoesPreviasHistoricosSociais]="historicosPaciente.informacoesPreviasHistoricosSociais" 
-                [paciente]="paciente">
-            </app-fieldset-historico-social>
+    
+        <div class="row mt-4">
+            <div class="col-12 col-md-6">
+                <app-fieldset-historico-atividade-fisica [paciente]="paciente"
+                    [informacoesHistoricosAtividadeFisica]="historicosPaciente.informacoesHistoricosAtividadeFisica">
+                </app-fieldset-historico-atividade-fisica>
+            </div>
+            <div class="col-12 col-md-6">
+                <app-fieldset-historico-alimentar [paciente]="paciente"
+                    [informacoesPreviasHistoricosAlimentares]="historicosPaciente.informacoesPreviasHistoricosAlimentares">
+                </app-fieldset-historico-alimentar>
+            </div>
         </div>
-
-        <div class="col-12 col-md-6">
-            <app-fieldset-historico-patologia-familiares [paciente]="paciente"
-                [informacoesPreviasHistoricosFamiliaresPorData]="historicosPaciente.informacoesPreviasHistoricosPatologiaFamiliaresPorData">
-            </app-fieldset-historico-patologia-familiares>
-        </div>
-    </div>
-
-    <div class="row mt-4">
-        <div class="col-12 col-md-6">
-            <app-fieldset-historico-atividade-fisica [paciente]="paciente"
-                [informacoesHistoricosAtividadeFisica]="historicosPaciente.informacoesHistoricosAtividadeFisica">
-            </app-fieldset-historico-atividade-fisica>
-        </div>
-        <div class="col-12 col-md-6">
-            <app-fieldset-historico-alimentar [paciente]="paciente"
-                [informacoesPreviasHistoricosAlimentares]="historicosPaciente.informacoesPreviasHistoricosAlimentares">
-            </app-fieldset-historico-alimentar>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-12 col-md-6 mt-3">
-            <app-historico-questionario-frequencia-alimentar [paciente]="paciente"
-                [informacoesPreviasQuestionarios]="historicosPaciente.informacoesPreviasQuestionariosFrequenciaAlimentar">
-            </app-historico-questionario-frequencia-alimentar>
+    
+        <div class="row">
+            <div class="col-12 col-md-6 mt-3">
+                <app-historico-questionario-frequencia-alimentar [paciente]="paciente"
+                    [informacoesPreviasQuestionarios]="historicosPaciente.informacoesPreviasQuestionariosFrequenciaAlimentar">
+                </app-historico-questionario-frequencia-alimentar>
+            </div>
         </div>
     </div>
 </div>
-
 
 <app-toasty #toastyComponent></app-toasty>

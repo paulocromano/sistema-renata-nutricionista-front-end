@@ -1,3 +1,4 @@
+
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
@@ -21,6 +22,7 @@ import { ParametrosAtendimentoPacienteModule } from './parametros-atendimento-pa
 import { HorarioAtendimentoModule } from './horario-atendimento/horario-atendimento.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { ToastyModule } from './shared/toasty/toasty.module';
+import { RelatoriosGraficosModule } from './relatorios-graficos/relatorios-graficos.module';
 import { InterceptorModule } from './interceptor/interceptor.module';
 import { LogadoGuard } from './shared/guard/logado.guard';
 import { AdminGuard } from './shared/guard/admin.guard';
@@ -48,6 +50,7 @@ const maskConfig: Partial<IConfig> = { validation: false };
     AtendimentoPacienteModule,
     ParametrosAtendimentoPacienteModule,
     HorarioAtendimentoModule,
+    RelatoriosGraficosModule,
     DashboardModule,
     ToastyModule,
     InterceptorModule,

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+<nav *ngIf="usuarioEstaLogado" class="navbar navbar-expand-lg navbar-dark bg-secondary">
     <a class="navbar-brand" [routerLink]="['/inicio']">Início</a>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" 
@@ -31,10 +31,18 @@
                 </a>
             </li>
             <li class="nav-item mr-2">
-                <a class="nav-link">
-                    <i class="fas fa-user"></i>
-                </a>
+                <div class="dropdown">
+                    <button class="btn btn-secondary">
+                        <i class="far fa-user"></i>
+                        Olá, {{ nomeUsuario }}!
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="#">Funcionários</a>
+                        <a href="#">Alterar senha</a>
+                        <a (click)="efetuarLogout()">Logout</a>
+                    </div>
+                </div>
             </li>
         </ul>
     </div>
-  </nav>
+</nav>

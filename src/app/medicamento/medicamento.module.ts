@@ -10,6 +10,7 @@ import { TooltipModule } from 'primeng/tooltip';
 
 import { MedicamentoComponent } from './medicamento.component';
 import { ToastyModule } from './../shared/toasty/toasty.module';
+import { DashboardModule } from './../dashboard/dashboard.module';
 
 @NgModule({
   declarations: [ MedicamentoComponent ],
@@ -21,7 +22,8 @@ import { ToastyModule } from './../shared/toasty/toasty.module';
     ProgressSpinnerModule,
     DialogModule,
     TooltipModule,
-    ToastyModule
+    ToastyModule,
+    DashboardModule
   ]
 })
 
