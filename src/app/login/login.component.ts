@@ -57,6 +57,6 @@ export class LoginComponent implements OnInit {
 
   public desabilitarBotaoEntrar(): boolean {
     return !(this.credenciaisUsuario.email && this.credenciaisUsuario.senha) 
-      || this.credenciaisUsuario.senha.length < 6; 
+      || this.credenciaisUsuario.senha.length < 6 || this.credenciaisUsuario.senha.length > 20; 
   }
 }

@@ -34,11 +34,11 @@
                 <div class="dropdown">
                     <button class="btn btn-secondary">
                         <i class="far fa-user"></i>
-                        Olá, {{ nomeUsuario }}!
+                        Olá, <b>{{ primeiroNomeUsuario }}</b>!
                     </button>
                     <div class="dropdown-content">
-                        <a href="#">Funcionários</a>
-                        <a href="#">Alterar senha</a>
+                        <a *ngIf="usuarioAdmin" [routerLink]="['/colaboradores']">Colaboradores</a>
+                        <a href="#">Dados pessoais</a>
                         <a (click)="efetuarLogout()">Logout</a>
                     </div>
                 </div>

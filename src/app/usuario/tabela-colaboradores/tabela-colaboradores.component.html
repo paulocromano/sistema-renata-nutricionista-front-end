@@ -1,0 +1,149 @@
+<app-dashboard></app-dashboard>
+
+<div class="container">
+    <h3 class="text-center mt-5">Colaboradores</h3>
+
+    <div class="borda-table mt-3">
+        <p-table [value]="colaboradores" [columns]="colunasTabela" [responsive]="true" 
+            [rows]="8" [paginator]="true" class="text-center">
+
+            <ng-template pTemplate="caption">
+                <div style="text-align: right;">
+                    <button class="btn btn-success px-5" (click)="abrirDialogCadastro()">
+                        <i class="fas fa-plus"></i>
+                        Cadastrar colaborador
+                    </button>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="header" let-colunas>
+                <tr>
+                    <th *ngFor="let coluna of colunas" [pSortableColumn]="coluna.field" [ngClass]="coluna.style" class="text-center">
+                        {{ coluna.header }}
+                        <p-sortIcon *ngIf="coluna.header !== 'Ações'" [field]="coluna.field" 
+                            ariaLabel="active to sort"
+                            ariaLabelDesc="Activate to sort in descending order"
+                            ariaLabelAsc="Activate to sort in ascending order">
+                        </p-sortIcon>
+                    </th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-colaborador>
+                <tr>
+                    <td *ngFor="let coluna of colunasTabela" class="text-center">
+                        <span class="ui-column-title text-left"></span>
+                        {{ colaborador[coluna.field] }}
+        
+                        <span *ngIf="coluna.header === 'Ações'">
+                            <button class="btn btn-danger ml-2" pTooltip="Excluir" tooltipPosition="bottom"
+                                (click)="armazenarUsuarioParaExclusao(colaborador)">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </span>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage" class="text-center" let-colaboradores>
+                <tr>
+                    <td [attr.colspan]="colaboradores.length" class="text-center">
+                        <span *ngIf="!processandoOperacao">
+                            Nenhum colaborador encontrado!
+                        </span>
+
+                        <span *ngIf="processandoOperacao">
+                            <p-progressSpinner strokeWidth="3"></p-progressSpinner>
+                        </span>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="summary">
+                Colaboradores registrados: {{ colaboradores ? colaboradores.length : 0 }}
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<!-- Dialog cadastro de Colaborador -->
+<p-dialog [visible]="exibirDialogCadastro" [modal]="true" [resizable]="false" [blockScroll]="true" 
+    [draggable]="false" [closable]="false" [style]="{width: '70vh'}">
+
+    <p-header>
+        Cadastrar colaborador
+    </p-header>
+
+    <div class="container-fluid">
+        <div class="mt-4">
+            <span class="p-float-label">
+                <input type="text" style="width: 100%;" maxlength="100" [(ngModel)]="formularioColaborador.nome" pInputText> 
+                <label for="inputtext">Nome</label>
+            </span>
+        </div>
+
+        <div class="mt-4">
+            <span class="p-float-label">
+                <input type="text" style="width: 100%;" maxlength="50" [(ngModel)]="formularioColaborador.email" pInputText> 
+                <label for="inputtext">Email</label>
+            </span>
+        </div>
+
+        <div class="mt-4">
+            <div>
+                <span class="p-float-label">
+                    <input type="password" pPassword maxlength="20" [(ngModel)]="formularioColaborador.senha"
+                        promptLabel="Informe a senha" weakLabel="Fraca" mediumLabel="Mediana" strongLabel="Forte"/>
+                    <label for="inputtext">Senha</label>
+                </span>
+                <div class="text-danger mt-1" style="font-size: 13px;">
+                    *A senha deve ter de 6 a 20 caracteres!
+                </div>
+                <div class="text-danger" style="font-size: 13px;">
+                    *A senha deve conter caracteres alfanuméricos, um caracter maiúsculo e um caracter especial!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="resetarCampos()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+        
+        <button class="btn btn-success" [disabled]="processandoOperacao || desabilitarBotaoCadastro()"
+            (click)="cadastrarUsuario()">
+            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
+        </button>
+    </p-footer>
+</p-dialog>
+
+<!-- Dialog exclusão de Colaborador -->
+<p-dialog [visible]="exibirDialogExclusao" [modal]="true" [resizable]="false" [blockScroll]="true" 
+    [draggable]="false" [closable]="false" [style]="{width: '70vh'}">
+
+    <p-header>
+        Excluir colaborador
+    </p-header>
+
+    <div class="container-fluid">
+        Tem certeza que deseja excluir o(a) colaborador(a) <b>{{ colaboradorSelecionado.nome }}</b>?
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="resetarCampos()">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
+        </button>
+        
+        <button class="btn btn-success" [disabled]="processandoOperacao"
+            (click)="excluirUsuario()">
+            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
+        </button>
+    </p-footer>
+</p-dialog>
+
+<app-toasty #toastyComponent></app-toasty>

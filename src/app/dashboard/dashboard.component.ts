@@ -13,7 +13,8 @@ import { TokenService } from './../shared/service/token.service';
 export class DashboardComponent implements OnInit {
 
   public usuarioEstaLogado: boolean = false;
-  public nomeUsuario: string;
+  public primeiroNomeUsuario: string;
+  public usuarioAdmin: boolean = false;
   public show: boolean = false;
 
   constructor(
@@ -24,14 +25,19 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void { 
     this.usuarioEstaLogado = new Boolean(this.tokenService.getPermissoes()).valueOf();
-    this.nomeUsuario = this.tokenService.jwtPayload?.nome.split('/')[0];
+    
+    if (this.usuarioEstaLogado) {
+      this.primeiroNomeUsuario = this.tokenService.jwtPayload?.nome.split('/')[0];
+      this.usuarioAdmin = this.tokenService.contemPermissaoAdmin();
+    }
   }
 
   public efetuarLogout(): void {
     this.authenticationService.logout()
       .subscribe(() => {
         this.usuarioEstaLogado = false;
-        this.nomeUsuario = null;
+        this.primeiroNomeUsuario = null;
+        this.usuarioAdmin = false;
         this.tokenService.apagarToken();
         this.router.navigate(['/login']);
       });

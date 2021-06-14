@@ -44,6 +44,13 @@ export class TokenService {
     return permissoesToken ? permissoesToken.map(permissao => permissao.authority) : null;
   }
 
+  public contemPermissaoAdmin(): boolean {
+    this.carregarInformacoesToken();
+    const permissoesToken: any[] = this.jwtPayload.permissoes;
+
+    return permissoesToken ? new Boolean(permissoesToken.filter(permissao => permissao.authority === 'ROLE_ADMIN')).valueOf() : false;
+  }
+
   public apagarToken(): void {
     localStorage.clear();
   }

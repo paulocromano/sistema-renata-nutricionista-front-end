@@ -17,6 +17,7 @@ import { ConsultaComponent } from './atendimento-paciente/consulta/consulta.comp
 import { ParametrosAtendimentoPacienteComponent } from './parametros-atendimento-paciente/parametros-atendimento-paciente.component';
 import { HorarioAtendimentoComponent } from './horario-atendimento/horario-atendimento.component';
 import { PaginaRelatoriosGraficosComponent } from './relatorios-graficos/pagina-relatorios-graficos/pagina-relatorios-graficos.component';
+import { TabelaColaboradoresComponent } from './usuario/tabela-colaboradores/tabela-colaboradores.component';
 
 const routes: Routes = [
   { path: 'inicio', component: PaginaInicialComponent, canActivate: [ LogadoGuard ] },
@@ -32,6 +33,7 @@ const routes: Routes = [
   { path: 'parametros-atendimento', component: ParametrosAtendimentoPacienteComponent, canActivate: [ AdminGuard ] },
   { path: 'horario-atendimento', component: HorarioAtendimentoComponent, canActivate: [ LogadoGuard ] },
   { path: 'relatorios-graficos', component: PaginaRelatoriosGraficosComponent, canActivate: [ LogadoGuard ] },
+  { path: 'colaboradores', component: TabelaColaboradoresComponent, canActivate: [ AdminGuard ] },
   { path: 'login', component: LoginComponent }
 ];
 

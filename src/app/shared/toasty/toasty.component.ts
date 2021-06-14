@@ -14,8 +14,7 @@ export class ToastyComponent implements OnInit {
 
   constructor(private messageService: MessageService) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
   public error(mensagem: string | HttpErrorResponse): void {
     this.mensagemErro('error', 'Erro', this.verificarSeMensagemVemDoBackEnd(mensagem));
@@ -43,12 +42,15 @@ export class ToastyComponent implements OnInit {
     });
   }
 
-  public mostrarErrosDeValidacoes(erro: HttpErrorResponse): void {
-    let errosValidacoes = erro.error.errors;
-    errosValidacoes.forEach(erroValidacao => this.error(erroValidacao.message));
+  public mostrarErroDeValidacao(erro: HttpErrorResponse): void {
+    let errosValidacoes: any[] = erro.error.errors;
+
+    if (errosValidacoes) {
+      this.error(errosValidacoes[0].message);
+    }
   }
 
-  private verificarSeMensagemVemDoBackEnd(mensagem: string | HttpErrorResponse): string {
-    return (typeof mensagem === 'string') ? mensagem : mensagem.error.message;
+  private verificarSeMensagemVemDoBackEnd(erro: string | HttpErrorResponse): string {
+    return (typeof erro === 'string') ? erro : erro.error.message;
   }
 }
