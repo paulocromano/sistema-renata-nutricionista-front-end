@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { AuthenticationService } from './../shared/service/authentication.service';
 import { TokenService } from './../shared/service/token.service';
+import { Colaborador } from './../usuario/shared/model/colaborador.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,6 +17,7 @@ export class DashboardComponent implements OnInit {
   public primeiroNomeUsuario: string;
   public usuarioAdmin: boolean = false;
   public show: boolean = false;
+  public exibirDialogInformacoesUsuario: boolean = false;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -27,8 +29,24 @@ export class DashboardComponent implements OnInit {
     this.usuarioEstaLogado = new Boolean(this.tokenService.getPermissoes()).valueOf();
     
     if (this.usuarioEstaLogado) {
-      this.primeiroNomeUsuario = this.tokenService.jwtPayload?.nome.split('/')[0];
+      this.primeiroNomeUsuario = this.tokenService.jwtPayload?.nome.split(' ')[0];
       this.usuarioAdmin = this.tokenService.contemPermissaoAdmin();
+    }
+  }
+
+  public abrirDialogUsuario(): void {
+    this.exibirDialogInformacoesUsuario = true;
+  }
+
+  public eventoFecharDialogInformacoesUsuario(dialogUsuarioFechado: boolean): void {
+    if (dialogUsuarioFechado) {
+      this.exibirDialogInformacoesUsuario = false;
+    }
+  }
+
+  public eventoUsuarioAtualizado(usuario: Colaborador): void {
+    if (usuario) {
+      this.primeiroNomeUsuario = usuario.nome.split(' ')[0];
     }
   }
 

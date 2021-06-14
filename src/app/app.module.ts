@@ -22,7 +22,8 @@ import { HorarioAtendimentoModule } from './horario-atendimento/horario-atendime
 import { DashboardModule } from './dashboard/dashboard.module';
 import { ToastyModule } from './shared/toasty/toasty.module';
 import { RelatoriosGraficosModule } from './relatorios-graficos/relatorios-graficos.module';
-import { UsuarioModule } from './usuario/usuario.module';
+import { DadosPessoaisUsuarioModule } from './usuario/dados-pessoais-usuario/dados-pessoais-usuario.module';
+import { TabelaColaboradoresModule } from './usuario/tabela-colaboradores/tabela-colaboradores.module';
 import { InterceptorModule } from './interceptor/interceptor.module';
 import { LogadoGuard } from './shared/guard/logado.guard';
 import { AdminGuard } from './shared/guard/admin.guard';
@@ -51,7 +52,8 @@ const maskConfig: Partial<IConfig> = { validation: false };
     ParametrosAtendimentoPacienteModule,
     HorarioAtendimentoModule,
     RelatoriosGraficosModule,
-    UsuarioModule,
+    DadosPessoaisUsuarioModule,
+    TabelaColaboradoresModule,
     DashboardModule,
     ToastyModule,
     InterceptorModule,

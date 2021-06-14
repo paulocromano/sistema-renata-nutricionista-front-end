@@ -9,15 +9,13 @@ import { DialogModule } from 'primeng/dialog';
 import { TooltipModule } from 'primeng/tooltip';
 import { PasswordModule } from 'primeng/password';
 
-import { TabelaColaboradoresComponent } from './tabela-colaboradores/tabela-colaboradores.component';
-import { ToastyModule } from '../shared/toasty/toasty.module';
-import { DashboardModule } from './../dashboard/dashboard.module';
-import { DadosPessoaisUsuarioComponent } from './dados-pessoais-usuario/dados-pessoais-usuario.component';
+import { TabelaColaboradoresComponent } from './tabela-colaboradores.component';
+import { ToastyModule } from '../../shared/toasty/toasty.module';
+import { DashboardModule } from '../../dashboard/dashboard.module';
 
 @NgModule({
   declarations: [
-    TabelaColaboradoresComponent,
-    DadosPessoaisUsuarioComponent
+    TabelaColaboradoresComponent
   ],
   imports: [
     CommonModule,
@@ -32,4 +30,4 @@ import { DadosPessoaisUsuarioComponent } from './dados-pessoais-usuario/dados-pe
     DashboardModule
   ]
 })
-export class UsuarioModule { }
+export class TabelaColaboradoresModule { }

@@ -1,1 +1,39 @@
-<p>dados-pessoais-usuario works!</p>
+<!-- Dialog exclusão de Colaborador -->
+<p-dialog [visible]="exibirDialog" [modal]="true" [resizable]="false" [blockScroll]="true" 
+    [draggable]="false" [closable]="false" [style]="{width: '70vh'}">
+
+    <p-header>
+        Dados pessoais
+    </p-header>
+
+    <div class="text-center" *ngIf="processandoOperacao">
+        <div class="info-carregando-dados">
+          <p-progressSpinner [style]="{width: '100px', height: '100px'}"></p-progressSpinner>
+          <p class="h5">Carregando suas informações...</p>
+        </div>
+    </div>
+
+    <div *ngIf="!processandoOperacao" class="container-fluid">
+
+    </div>
+
+    <p-footer *ngIf="!processandoOperacao">
+        <button class="btn btn-danger" (click)="resetarCampos()">
+            <i class="fas " [ngClass]="editarInformacoes ? 'fa-times-circle' : 'fa-arrow-circle-left'"></i>
+            {{ editarInformacoes ? 'Cancelar' : 'Voltar' }}
+        </button>
+
+        <button *ngIf="!editarInformacoes" class="btn btn-warning" (click)="editarInformacoes = true">
+            <i class="fas fa-pen"></i>
+            Editar
+        </button>
+        
+        <button *ngIf="editarInformacoes" class="btn btn-success" [disabled]="processandoOperacao"
+            (click)="atualizarUsuario()">
+            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+            Confirmar
+        </button>
+    </p-footer>
+</p-dialog>
+
+<app-toasty #toastyComponent></app-toasty>

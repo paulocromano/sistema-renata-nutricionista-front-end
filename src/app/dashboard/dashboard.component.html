@@ -38,7 +38,7 @@
                     </button>
                     <div class="dropdown-content">
                         <a *ngIf="usuarioAdmin" [routerLink]="['/colaboradores']">Colaboradores</a>
-                        <a href="#">Dados pessoais</a>
+                        <a (click)="abrirDialogUsuario()">Dados pessoais</a>
                         <a (click)="efetuarLogout()">Logout</a>
                     </div>
                 </div>
@@ -46,3 +46,7 @@
         </ul>
     </div>
 </nav>
+
+<app-dados-pessoais-usuario *ngIf="usuarioEstaLogado" [exibirDialog]="exibirDialogInformacoesUsuario" 
+    (fecharDialog)="eventoFecharDialogInformacoesUsuario($event)" (usuarioAtualizado)="eventoUsuarioAtualizado($event)">
+</app-dados-pessoais-usuario>
