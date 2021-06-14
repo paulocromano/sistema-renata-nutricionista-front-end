@@ -1,38 +1,77 @@
-<!-- Dialog exclusão de Colaborador -->
-<p-dialog [visible]="exibirDialog" [modal]="true" [resizable]="false" [blockScroll]="true" 
+<!-- Dialog dados pessoais do usuário -->
+<p-dialog [visible]="exibirDialog" [modal]="true" [resizable]="false" [blockScroll]="true" (onShow)="eventoDialogVisivel($event)"
     [draggable]="false" [closable]="false" [style]="{width: '70vh'}">
 
     <p-header>
         Dados pessoais
     </p-header>
 
-    <div class="text-center" *ngIf="processandoOperacao">
+    <div class="text-center" *ngIf="carregandoDadosUsuario">
         <div class="info-carregando-dados">
           <p-progressSpinner [style]="{width: '100px', height: '100px'}"></p-progressSpinner>
           <p class="h5">Carregando suas informações...</p>
         </div>
     </div>
 
-    <div *ngIf="!processandoOperacao" class="container-fluid">
+    <div *ngIf="!carregandoDadosUsuario" class="container-fluid mt-2">
+        <p-tabView (onChange)="eventoIndiceAbaSelecionada($event)">
+            <p-tabPanel header="Informações">
+                <div class="mt-4">
+                    <span class="p-float-label">
+                        <input type="text" style="width: 100%;" maxlength="100" [(ngModel)]="formularioUsuario.nome"
+                            [disabled]="!editarInformacoes" pInputText> 
+                        <label for="inputtext">Nome</label>
+                    </span>
+                </div>
+        
+                <div class="mt-4">
+                    <span class="p-float-label">
+                        <input type="text" style="width: 100%;" maxlength="50" [(ngModel)]="formularioUsuario.email" 
+                            [disabled]="!editarInformacoes" pInputText> 
+                        <label for="inputtext">Email</label>
+                    </span>
+                </div>
+            </p-tabPanel>
 
+            <p-tabPanel header="Alterar senha" [hidden]="editarInformacoes">
+                <div class="mt-4">
+                    <div>
+                        <span class="p-float-label">
+                            <input type="password" pPassword maxlength="20" [(ngModel)]="formularioAlteracaoSenha.senha"
+                                promptLabel="Informe a senha" weakLabel="Fraca" mediumLabel="Mediana" strongLabel="Forte"/>
+                            <label for="inputtext">Senha</label>
+                        </span>
+                        <div class="text-danger mt-1" style="font-size: 13px;">
+                            *A senha deve ter de 6 a 20 caracteres!
+                        </div>
+                        <div class="text-danger" style="font-size: 13px;">
+                            *A senha deve conter caracteres alfanuméricos, um caracter maiúsculo e um caracter especial!
+                        </div>
+                    </div>
+                </div>
+            </p-tabPanel>
+        </p-tabView>
     </div>
 
-    <p-footer *ngIf="!processandoOperacao">
-        <button class="btn btn-danger" (click)="resetarCampos()">
-            <i class="fas " [ngClass]="editarInformacoes ? 'fa-times-circle' : 'fa-arrow-circle-left'"></i>
-            {{ editarInformacoes ? 'Cancelar' : 'Voltar' }}
-        </button>
-
-        <button *ngIf="!editarInformacoes" class="btn btn-warning" (click)="editarInformacoes = true">
-            <i class="fas fa-pen"></i>
-            Editar
-        </button>
-        
-        <button *ngIf="editarInformacoes" class="btn btn-success" [disabled]="processandoOperacao"
-            (click)="atualizarUsuario()">
-            <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
-            Confirmar
-        </button>
+    <p-footer>
+        <div *ngIf="!carregandoDadosUsuario">
+            <button class="btn btn-danger" (click)="resetarCampos()" [disabled]="processandoOperacao">
+                <i class="fas " [ngClass]="editarInformacoes ? 'fa-times-circle' : 'fa-arrow-circle-left'"></i>
+                {{ editarInformacoes ? 'Cancelar' : 'Voltar' }}
+            </button>
+    
+            <button *ngIf="!editarInformacoes && indiceAbaSelecionada === 0" class="btn btn-warning" (click)="editarInformacoes = true">
+                <i class="fas fa-pen"></i>
+                Editar
+            </button>
+            
+            <button *ngIf="editarInformacoes || indiceAbaSelecionada === 1" class="btn btn-success" 
+                [disabled]="processandoOperacao || desabilitarBotaoConfirmacaoConformeAbaSelecionada()"
+                (click)="atualizarUsuarioConformeAbaSelecionada()">
+                <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
+                Confirmar
+            </button>
+        </div>
     </p-footer>
 </p-dialog>
 

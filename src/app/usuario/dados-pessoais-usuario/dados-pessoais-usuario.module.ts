@@ -6,6 +6,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DialogModule } from 'primeng/dialog';
 import { PasswordModule } from 'primeng/password';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { TabViewModule } from 'primeng/tabview';
 
 import { DadosPessoaisUsuarioComponent } from './dados-pessoais-usuario.component';
 import { ToastyModule } from './../../shared/toasty/toasty.module';
@@ -19,6 +20,7 @@ import { ToastyModule } from './../../shared/toasty/toasty.module';
     DialogModule,
     PasswordModule,
     ProgressSpinnerModule,
+    TabViewModule,
     ToastyModule
   ],
   exports: [ DadosPessoaisUsuarioComponent ]
