@@ -24,7 +24,7 @@ const routes: Routes = [
   { path: 'consultas-retornos', component: TabelaConsultasRetornosComponent, canActivate: [ LogadoGuard ] },
   { path: 'consulta/:idPaciente/:idConsulta', component: ConsultaComponent, canActivate: [ AdminGuard ] },
   { path: 'retorno-consulta/:idPaciente/:idRetornoConsulta', component: RetornoConsultaComponent, canActivate: [ AdminGuard ] },
-  { path: 'calendario-atendimento', component: CalendarioAtendimentoComponent, canActivate: [ AdminGuard ] },
+  { path: 'calendario-atendimento', component: CalendarioAtendimentoComponent, canActivate: [ LogadoGuard ] },
   { path: 'pacientes', component: TabelaPacientesComponent, canActivate: [ LogadoGuard ] },
   { path: 'paciente/historicos/:id', component: InformacoesHistoricosComponent, canActivate: [ AdminGuard ] },
   { path: 'medicamentos', component: MedicamentoComponent, canActivate: [ AdminGuard ] },

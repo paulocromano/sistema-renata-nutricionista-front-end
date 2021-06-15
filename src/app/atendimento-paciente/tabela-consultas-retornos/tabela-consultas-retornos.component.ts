@@ -23,6 +23,7 @@ import { ConfirmacaoConsultaFORM } from './../consulta/shared/model/confirmacao-
 import { ConfirmacaoAtendimento } from './shared/model/confirmacao-atendimento.model';
 import { ReagendamentoConsultaFORM } from '../consulta/shared/model/reagendamento-consulta.form';
 import { ReagendamentoRetornoFORM } from './../retorno-consulta/shared/model/reagendamento-retorno-consulta.form';
+import { TokenService } from './../../shared/service/token.service';
 
 @Component({
   selector: 'app-tabela-consultas-retornos',
@@ -34,6 +35,8 @@ export class TabelaConsultasRetornosComponent implements OnInit, OnDestroy {
 
   @ViewChild('toastyComponent', { static: false })
   public toasty: ToastyComponent;
+
+  public usuarioAdmin: boolean = false;
 
   public atendimentos: InformacoesPreviasConsultaRetorno[] = [];
   public atendimentoSelecionado: InformacoesPreviasConsultaRetorno = new InformacoesPreviasConsultaRetorno();
@@ -78,6 +81,7 @@ export class TabelaConsultasRetornosComponent implements OnInit, OnDestroy {
     private retornoConsultaService: RetornoConsultaService,
     private pacienteService: PacienteService,
     private calendarioAtendimentoService: CalendarioAtendimentoService,
+    private tokenService: TokenService,
     private router: Router) { }
 
   ngOnInit(): void {
@@ -90,6 +94,15 @@ export class TabelaConsultasRetornosComponent implements OnInit, OnDestroy {
       { header: 'Ações', field: 'acoes', style: 'col-acoes' }
     ];
 
+    this.usuarioAdmin = this.tokenService.contemPermissaoAdmin();
+    this.dataMinimaParaAgendamento.setDate(this.dataMinimaParaAgendamento.getDate() + 1);
+
+    this.gerarFormatoCalendario();
+    this.buscarInformacoesParaConfirmacaoDeAtendimento();
+    this.listarAtendimentosAPartirDaDataAtual();
+  }
+
+  private gerarFormatoCalendario(): void {
     this.formatoCalendario = {
       firstDayOfWeek: 0,
       dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
@@ -114,11 +127,6 @@ export class TabelaConsultasRetornosComponent implements OnInit, OnDestroy {
       clear: 'Limpar',
       dateFormat: 'mm/dd/yy'
     };
-
-    this.dataMinimaParaAgendamento.setDate(this.dataMinimaParaAgendamento.getDate() + 1);
-
-    this.buscarInformacoesParaConfirmacaoDeAtendimento();
-    this.listarAtendimentosAPartirDaDataAtual();
   }
 
   public verificarProximoTipoAtendimentoDoPacienteSelecionado(event: any): void {
@@ -627,7 +635,7 @@ export class TabelaConsultasRetornosComponent implements OnInit, OnDestroy {
 
   public exibirBotaoVisualizarFichaDoAtendimento(atendimento: InformacoesPreviasConsultaRetorno): boolean {
       return this.verificarSituacaoAtendimentoParaExibirBotao(atendimento, SituacaoConsulta.CONSULTA_FINALIZADA,
-        SituacaoRetornoConsulta.RETORNO_FINALIZADO);
+        SituacaoRetornoConsulta.RETORNO_FINALIZADO) && this.usuarioAdmin;
   }
 
   public exibirBotaoReagendamentoDoAtendimento(atendimento: InformacoesPreviasConsultaRetorno): boolean {
@@ -642,14 +650,19 @@ export class TabelaConsultasRetornosComponent implements OnInit, OnDestroy {
 
   public exibirBotaoParaIniciarAtendimento(atendimento: InformacoesPreviasConsultaRetorno): boolean {
     return this.verificarSituacaoAtendimentoParaExibirBotao(atendimento, SituacaoConsulta.AGUARDANDO_ATENDIMENTO,
-      SituacaoRetornoConsulta.AGUARDANDO_ATENDIMENTO);
+      SituacaoRetornoConsulta.AGUARDANDO_ATENDIMENTO) && this.usuarioAdmin;
   }
 
   public exibirBotaoParaCancelarAtendimento(atendimento: InformacoesPreviasConsultaRetorno): boolean {
-    let descricaoSituacaoAtendimento: string = this.tipoAtendimentoIgualConsulta(atendimento) 
+    const descricaoFinalizacaoAtendimento: string = this.tipoAtendimentoIgualConsulta(atendimento) 
       ? SituacaoConsulta.CONSULTA_FINALIZADA : SituacaoRetornoConsulta.RETORNO_FINALIZADO;
 
-    return atendimento.situacaoAtendimento !== descricaoSituacaoAtendimento;
+    if (!this.usuarioAdmin && (atendimento.situacaoAtendimento === SituacaoConsulta.CONSULTA_INICIADA 
+      || atendimento.situacaoAtendimento === SituacaoRetornoConsulta.RETORNO_INICIADO)) {
+        return false;
+    }
+
+    return atendimento.situacaoAtendimento !== descricaoFinalizacaoAtendimento;
   }
 
   private verificarSituacaoAtendimentoParaExibirBotao(atendimento: InformacoesPreviasConsultaRetorno, 

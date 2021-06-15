@@ -5,7 +5,7 @@
 
     <div class="borda-table mt-3">
         <p-table [value]="diasDeAtendimento" [columns]="colunasTabela" [responsive]="true" class="text-center">
-            <ng-template pTemplate="caption">
+            <ng-template *ngIf="usuarioAdmin" pTemplate="caption">
                 <div style="text-align: right;">
                     <button class="btn btn-success px-5" (click)="abrirDialogCadastro()" 
                         [disabled]="!this.diasDisponiveisDaSemanaParaCadastro || this.diasDisponiveisDaSemanaParaCadastro.length === 0">
@@ -29,7 +29,7 @@
                         <span class="ui-column-title text-left"></span>
                         {{ diaAtendimento[coluna.field] }}
         
-                        <span *ngIf="coluna.header === 'Ações'">
+                        <span *ngIf="coluna.header === 'Ações' && usuarioAdmin">
                             <button class="btn btn-warning" pTooltip="Editar" tooltipPosition="bottom"
                                 (click)="armazenarDiaAtendimentoParaEdicao(diaAtendimento)">
                                 <i class="fas fa-pen text-light"></i>

@@ -6,7 +6,7 @@ import { PacienteService } from './../shared/service/paciente.service';
 import { ToastyComponent } from './../../shared/toasty/toasty.component';
 import { ListagemCadastroPaciente } from './../shared/model/listagem-cadastro-paciente.model';
 import { Paciente } from './../shared/model/paciente.model';
-
+import { TokenService } from './../../shared/service/token.service';
 
 @Component({
   selector: 'app-tabela-pacientes',
@@ -18,6 +18,8 @@ export class TabelaPacientesComponent implements OnInit {
   
   @ViewChild('toastyComponent', { static: false })
   public toasty: ToastyComponent;
+
+  public usuarioAdmin: boolean = false;
 
   public inputPesquisa: string = '';
   public colunasTabela: any[];
@@ -31,10 +33,12 @@ export class TabelaPacientesComponent implements OnInit {
 
   constructor(
     private pacienteService: PacienteService,
-    private route: Router
+    private route: Router,
+    private tokenService: TokenService
     ) { }
 
   ngOnInit(): void {
+    this.usuarioAdmin = this.tokenService.contemPermissaoAdmin();
     this.buscarInformacoesListagemCadastroPaciente();
 
     this.colunasTabela = [

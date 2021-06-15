@@ -48,14 +48,16 @@
                                 <i class="fas fa-info"></i>
                             </button>
 
-                            <button class="btn btn-secondary mx-2" pTooltip="Históricos" tooltipPosition="bottom"
+                            <button *ngIf="usuarioAdmin" class="btn btn-secondary ml-2" pTooltip="Históricos" tooltipPosition="bottom"
                                 (click)="redirecionarParaPaginaHistoricosDoPaciente(paciente)">
                                 <i class="far fa-address-card"></i>
                             </button>
 
-                            <app-edicao-paciente [paciente]="paciente" (pacienteEditado)="atualizarTabelaPacientes($event)"></app-edicao-paciente>
+                            <app-edicao-paciente [paciente]="paciente" class="ml-2"
+                                (pacienteEditado)="atualizarTabelaPacientes($event)">
+                            </app-edicao-paciente>
 
-                            <button class="btn btn-danger ml-2" pTooltip="Excluir" tooltipPosition="bottom"
+                            <button *ngIf="usuarioAdmin" class="btn btn-danger ml-2" pTooltip="Excluir" tooltipPosition="bottom"
                                 (click)="armazenarPacienteSelecionadoParaDialogExclusao(paciente)">
                                 <i class="fas fa-trash-alt"></i>
                             </button>

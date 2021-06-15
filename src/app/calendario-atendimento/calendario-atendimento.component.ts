@@ -6,6 +6,7 @@ import { CalendarioAtendimentoService } from './shared/service/calendario-atendi
 import { PeriodoAtendimentoFORM } from './shared/model/periodo-atendimento.form';
 import { CalendarioAtendimentoPacienteFORM } from './shared/model/calendario-atendimento-paciente.form';
 import { PeriodoAtendimento } from './shared/model/periodo-atendimento.model';
+import { TokenService } from './../shared/service/token.service';
 
 @Component({
   selector: 'app-calendario-atendimento',
@@ -17,6 +18,8 @@ export class CalendarioAtendimentoComponent implements OnInit {
 
   @ViewChild('toastyComponent', { static: false })
   public toasty: ToastyComponent;
+
+  public usuarioAdmin: boolean = false;
 
   public periodos: PeriodoAtendimento[] = [];
   public formularioCalendario: CalendarioAtendimentoPacienteFORM = new CalendarioAtendimentoPacienteFORM();
@@ -36,15 +39,23 @@ export class CalendarioAtendimentoComponent implements OnInit {
   public indiceAbaTabViewSelecionada: number = 0;
   public quantidadePeriodosDisponiveisIntervaloParaExclusao: number = 0;
 
-  constructor(private calendarioAtendimentoService: CalendarioAtendimentoService) { }
+  constructor(
+    private calendarioAtendimentoService: CalendarioAtendimentoService,
+    private tokenService: TokenService
+    ) { }
 
   ngOnInit(): void {
+    this.usuarioAdmin = this.tokenService.contemPermissaoAdmin();
+    
     this.colunasTabela = [
       { header: 'Data', field: 'data', style: 'col-data' },
       { header: 'Horário', field: 'horario', style: 'col-horario' },
-      { header: 'Disponível', field: 'periodoDisponivel', style: 'col-periodo-disponivel' },
-      { header: 'Ações', field: 'acoes', style: 'col-acoes' }
+      { header: 'Disponível', field: 'periodoDisponivel', style: 'col-periodo-disponivel' }
     ];
+
+    if (this.usuarioAdmin) {
+      this.colunasTabela.push({ header: 'Ações', field: 'acoes', style: 'col-acoes' });
+    }
 
     this.listarPeriodosAPartirDoDiaAtual();
   }

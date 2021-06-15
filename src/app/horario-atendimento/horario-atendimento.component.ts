@@ -1,13 +1,15 @@
-import { SelectItem } from 'primeng/api';
 import { HttpErrorResponse } from '@angular/common/http';
 import { HorarioAtendimentoService } from './shared/service/horario-atendimento.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
+
+import { SelectItem } from 'primeng/api';
 
 import { ToastyComponent } from './../shared/toasty/toasty.component';
 import { EdicaoHorarioAtendimentoFORM } from './shared/model/edicao-horario-atendimento.form';
 import { HorarioAtendimentoFORM } from './shared/model/horario-atendimento.form';
 import { HorarioAtendimento } from './shared/model/horario-atendimento.model';
 import { DadosEnum } from './../shared/model/dados-enum.model';
+import { TokenService } from './../shared/service/token.service';
 
 @Component({
   selector: 'app-horario-atendimento',
@@ -19,6 +21,8 @@ export class HorarioAtendimentoComponent implements OnInit {
 
   @ViewChild('toastyComponent', { static: false })
   public toasty: ToastyComponent;
+
+  public usuarioAdmin: boolean = false;
 
   public diasDeAtendimento: HorarioAtendimento[] = [];
   public diaDeAtendimentoSelecionado: HorarioAtendimento = new HorarioAtendimento();
@@ -33,17 +37,26 @@ export class HorarioAtendimentoComponent implements OnInit {
   public exibirDialogEdicao: boolean = false;
   public exibirDialogExclusao: boolean = false;
 
-  constructor(private horarioAtendimentoService: HorarioAtendimentoService) { }
+  constructor(
+    private horarioAtendimentoService: HorarioAtendimentoService,
+    private tokenService: TokenService
+    ) { }
 
   ngOnInit(): void {
+    this.usuarioAdmin = this.tokenService.contemPermissaoAdmin();
+
     this.colunasTabela = [
       { header: 'Dia', field: 'diaDaSemana', style: 'col-dia-semana' },
       { header: 'Entrada/Saída (antes do almoço)', field: 'entradaSaidaAntesDoAlmoco', style: 'col-entrada-saida-antes-almoco' },
-      { header: 'Entrada/Saída (depois do almoço)', field: 'entradaSaidaDepoisDoAlmoco', style: 'col-entrada-saida-depois-almoco' },
-      { header: 'Ações', field: 'acoes', style: 'col-acoes' }
+      { header: 'Entrada/Saída (depois do almoço)', field: 'entradaSaidaDepoisDoAlmoco', style: 'col-entrada-saida-depois-almoco' }
     ];
 
-    this.listarDiasDaSemanaDisponiveisParaCadastro();
+    if (this.usuarioAdmin) {
+      this.colunasTabela.push({ header: 'Ações', field: 'acoes', style: 'col-acoes' });
+      this.listarDiasDaSemanaDisponiveisParaCadastro();
+    }
+
+    
     this.listarHorariosAtendimento();
   }
 

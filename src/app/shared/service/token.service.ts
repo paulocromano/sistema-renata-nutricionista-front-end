@@ -48,7 +48,7 @@ export class TokenService {
     this.carregarInformacoesToken();
     const permissoesToken: any[] = this.jwtPayload.permissoes;
 
-    return permissoesToken ? new Boolean(permissoesToken.filter(permissao => permissao.authority === 'ROLE_ADMIN')).valueOf() : false;
+    return permissoesToken ? new Boolean(permissoesToken.find(permissao => permissao.authority === 'ROLE_ADMIN')).valueOf() : false;
   }
 
   public apagarToken(): void {
