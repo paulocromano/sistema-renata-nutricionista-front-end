@@ -1,12 +1,14 @@
 import { HttpErrorResponse } from '@angular/common/http';
+import { Component, Input, OnInit, Output, ViewChild, EventEmitter } from '@angular/core';
+
+import { SelectItem } from 'primeng/api';
+
 import { HistoricoSocialService } from './../shared/service/historico-social.service';
 import { PatologiaPacienteFORM } from './../shared/model/patologia-paciente.form';
 import { HistoricoSocialFORM } from './../shared/model/historico-social.form';
 import { InformacoesCadastroHistoricoSocial } from './../../../atendimento-paciente/shared/model/informacoes-cadastro-historico-social.model';
-import { SelectItem } from 'primeng/api';
 import { Paciente } from './../../../paciente/shared/model/paciente.model';
 import { ToastyComponent } from './../../../shared/toasty/toasty.component';
-import { Component, Input, OnInit, Output, ViewChild, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-cadastro-historico-social',
@@ -34,10 +36,12 @@ export class CadastroHistoricoSocialComponent implements OnInit {
   public habitoIntestinal: SelectItem[] = [];
   public consistenciaFezes: SelectItem[] = [];
   public frequenciaDiurese: SelectItem[] = [];
-  public coloracaoDiurese: SelectItem[] = [];
+  public imagensColoracaoDiurese: SelectItem[] = [];
+  public imagemColoracaoDiureseSelecionada: SelectItem;
 
   public colunasTabelaPatologiasPacienteParaCadastrar: any[];
   public abrirDialogCadastro: boolean = false;
+  public abrirDialogCadastroColoracaoDiurese: boolean = false;
   public abrirDialogCadastroPatologiasPaciente: boolean = false;
   public processandoOperacao: boolean = false;
 
@@ -71,6 +75,10 @@ export class CadastroHistoricoSocialComponent implements OnInit {
         this.toasty.error('Erro ao cadastrar histórico social!');
         this.cadastroHistorico.emit(false);
       });
+  }
+
+  public coloracaoDiureseSelecionada(valueImagemSelecionada: any): void {
+    this.imagemColoracaoDiureseSelecionada = this.imagensColoracaoDiurese.find(imagem => imagem.value === valueImagemSelecionada.value);
   }
 
   public alteracaoPatologiasSelecionadasParaCadastro(): void {
@@ -148,13 +156,18 @@ export class CadastroHistoricoSocialComponent implements OnInit {
   private prepararDadosParaCadastroDoHistorico(): void {
     if (this.informacoesParaCadastro && this.respostaSimNao) {
       this.informacoesParaCadastro.patologias.forEach(patologia => this.patologias.push({ label: patologia.descricao, value: patologia.id }));
+
       this.converterParaListagemDropdown(this.estadoCivil, this.informacoesParaCadastro.estadoCivil);
       this.converterParaListagemDropdown(this.consumoBebidasAlcoolicas, this.informacoesParaCadastro.consumoBebidasAlcoolicas);
       this.converterParaListagemDropdown(this.consumoCigarro, this.informacoesParaCadastro.consumoCigarro);
       this.converterParaListagemDropdown(this.habitoIntestinal, this.informacoesParaCadastro.habitoIntestinal);
       this.converterParaListagemDropdown(this.consistenciaFezes, this.informacoesParaCadastro.consistenciaFezes);
       this.converterParaListagemDropdown(this.frequenciaDiurese, this.informacoesParaCadastro.frequenciaDiurese);
-      this.converterParaListagemDropdown(this.coloracaoDiurese, this.informacoesParaCadastro.coloracaoDiurese);
+
+      this.informacoesParaCadastro.imagensColoracaoDiurese.forEach(imagem => 
+        this.imagensColoracaoDiurese.push({
+          label: imagem.coloracaoDiurese.descricao, value: imagem.coloracaoDiurese.codigo, icon: imagem.uuidImagemCorBase64
+        }));
     }
   }
 

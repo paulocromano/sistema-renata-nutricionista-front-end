@@ -28,7 +28,9 @@ export class LoginComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-
+    if (!this.tokenService.isTokenInvalido()) {
+      this.router.navigate(['inicio']);
+    }
   }
 
   public efetuarLogin(): void {

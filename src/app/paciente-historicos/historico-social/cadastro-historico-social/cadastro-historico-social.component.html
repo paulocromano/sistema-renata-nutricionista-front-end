@@ -99,7 +99,7 @@
                     <label for="inputtext">Consistência das fezes</label>
                 </span>
             </div>
-            <div class="col-12 col-md-6 col-lg-3">
+            <div class="col-12 col-md-6 col-lg-2">
                 <span class="p-float-label">
                     <p-dropdown [options]="frequenciaDiurese" [(ngModel)]="formularioHistoricoSocial.frequenciaDiurese"
                         [style]="{width: '180px'}" [scrollHeight]="'120px'" [autoDisplayFirst]="false">
@@ -107,13 +107,18 @@
                     <label for="inputtext">Frequência diurese</label>
                 </span>
             </div>
-            <div class="col-12 col-md-6 col-lg-3">
-                <span class="p-float-label">
-                    <p-dropdown [options]="coloracaoDiurese" [(ngModel)]="formularioHistoricoSocial.coloracaoDiurese" [filter]="true"
-                        [style]="{width: '200px'}" [scrollHeight]="'120px'" [autoDisplayFirst]="false">
-                    </p-dropdown>
-                    <label for="inputtext">Coloração diurese</label>
-                </span>
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="row">
+                    <div class="col-12">
+                        <button class="btn btn-warning" style="width: 100%;" (click)="abrirDialogCadastroColoracaoDiurese = true">
+                            Coloração da diurese
+                        </button>
+                    </div>
+                    <div class="col-12 text-center mt-2">
+                        <b>Coloração selecionada: </b> 
+                            {{ imagemColoracaoDiureseSelecionada ? imagemColoracaoDiureseSelecionada.label : 'Não informada!' }}
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -125,7 +130,7 @@
                             Patologias
                         </button>
                     </div>
-                    <div *ngIf="formularioPatologiasSelecionadas" class="col-12 mt-2">
+                    <div *ngIf="formularioPatologiasSelecionadas" class="col-12 text-center mt-2">
                         <b>Patologias selecionadas:</b> {{ formularioPatologiasSelecionadas?.length }}
                     </div>
                 </div>
@@ -209,6 +214,52 @@
             (click)="cadastrarHistoricoSocial()">
             <i class="fas " [ngClass]="processandoOperacao ? 'fa-spin fa-circle-notch' : 'fa-check-circle'"></i>
             Confirmar
+        </button>
+    </p-footer>
+</p-dialog>
+
+<!-- Dialog cadastro da coloração da diurese do paciente -->
+<p-dialog [visible]="abrirDialogCadastroColoracaoDiurese" [modal]="true" [resizable]="false" 
+    [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '70%'}">
+
+    <p-header>
+        Cadastrar coloração da diurese de <b>{{ paciente.nome }}</b>
+    </p-header>
+
+    <div class="container-fluid">
+        <div class="mt-4" [style]="!imagemColoracaoDiureseSelecionada ? 'margin-bottom: 200px' : ''">
+            <span class="p-float-label">
+                <p-dropdown [options]="imagensColoracaoDiurese" [(ngModel)]="formularioHistoricoSocial.coloracaoDiurese" filter="true"
+                    [style]="{width: '100%'}" [autoDisplayFirst]="false" appendTo="body" emptyFilterMessage="Coloração não encontrada!"
+                    (onChange)="coloracaoDiureseSelecionada($event)">
+    
+                    <ng-template let-imagemSelecionada pTemplate="selectedItem">
+                        <img [src]="imagemSelecionada.icon" class="imagem-coloracao-diurese-selecionada"/>
+                        <span class="descricao-coloracao-diurese-selecionada">{{ imagemSelecionada.label }}</span>
+                    </ng-template>
+    
+                    <ng-template let-imagem pTemplate="item">
+                        <div class="ui-helper-clearfix" style="position: relative; height: 25px;">
+                            <img [src]="imagem.icon" class="imagem-dropdown-coloracao-diurese"/>
+                            <div class="descricao-dropdown-coloracao-diurese">
+                                {{imagem.label}}
+                            </div>
+                        </div>
+                    </ng-template>
+                </p-dropdown>
+                <label for="inputtext">Coloração da diurese</label>
+            </span>
+        </div>
+
+        <div *ngIf="imagemColoracaoDiureseSelecionada" class="mt-4 text-center">
+            <img [src]="imagemColoracaoDiureseSelecionada.icon" [style]="{width: '200px', height: '200px'}">
+        </div>
+    </div>
+
+    <p-footer>
+        <button class="btn btn-danger" (click)="abrirDialogCadastroColoracaoDiurese = false">
+            <i class="fas fa-arrow-circle-left"></i>
+            Voltar
         </button>
     </p-footer>
 </p-dialog>
