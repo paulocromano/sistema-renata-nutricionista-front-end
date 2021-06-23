@@ -15,6 +15,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FieldsetModule } from 'primeng/fieldset';
+import { TabViewModule } from 'primeng/tabview';
 
 import { ToastyModule } from '../shared/toasty/toasty.module';
 import { TabelaConsultasRetornosComponent } from './tabela-consultas-retornos/tabela-consultas-retornos.component';
@@ -54,6 +55,7 @@ import { DashboardModule } from './../dashboard/dashboard.module';
     InputTextareaModule,
     InputNumberModule,
     FieldsetModule,
+    TabViewModule,
     PacienteHistoricosModule,
     DashboardModule,
     NgxMaskModule.forChild(),

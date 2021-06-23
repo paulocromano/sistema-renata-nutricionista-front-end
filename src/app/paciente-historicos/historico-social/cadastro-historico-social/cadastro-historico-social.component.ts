@@ -191,5 +191,6 @@ export class CadastroHistoricoSocialComponent implements OnInit {
     this.formularioHistoricoSocial = new HistoricoSocialFORM();
     this.patologiasSelecionadasDropdown = [];
     this.formularioPatologiasSelecionadas = [];
+    this.imagemColoracaoDiureseSelecionada = null;
   }
 }

@@ -58,8 +58,6 @@ export class TabelaConsultasRetornosComponent implements OnInit, OnDestroy {
 
   public colunasTabela: any[];
   public inputPesquisa: string;
-  public dataInicialPesquisaPeriodoAtendimento: string;
-  public dataFinalPesquisaPeriodoAtendimento: string;
   public processandoOperacao: boolean = false;
   public buscandoPacientesParaAgendamentoDeAtendimento: boolean = false;
   public exibirDialogInformacoesAtendimento: boolean = false;
@@ -393,23 +391,6 @@ export class TabelaConsultasRetornosComponent implements OnInit, OnDestroy {
       });
   }
 
-  public listarAtendimentosPorPeriodo(): void {
-    this.processandoOperacao = true;
-
-    this.consultaService.listarAtendimentosPorPeriodo(this.dataInicialPesquisaPeriodoAtendimento, this.dataFinalPesquisaPeriodoAtendimento)
-      .subscribe((atendimentos: InformacoesPreviasConsultaRetorno[]) => {
-        this.atendimentos = atendimentos;
-        this.gerarMensagemDoPeriodoDosAtendimentosConsultados();
-        this.processandoOperacao = false;
-        this.resetarCampos();
-      },
-      (errorResponse: HttpErrorResponse) => {
-        this.processandoOperacao = false;
-        this.mensagemPeriodoDosAtendimentosConsultados = '';
-        this.toasty.error('Erro ao listar os atendimentos!');
-      });
-  }
-
   public confirmarAtendimento(): void {
     if (this.tipoAtendimentoIgualConsulta(this.atendimentoSelecionado)) {
       this.confirmarConsulta();
@@ -611,12 +592,6 @@ export class TabelaConsultasRetornosComponent implements OnInit, OnDestroy {
     this.exibirDialogCancelamentoAtendimento = true;
   }
 
-  public desabilitarBotaoPesquisa(): boolean {
-    return !(this.dataInicialPesquisaPeriodoAtendimento && !this.dataInicialPesquisaPeriodoAtendimento.includes('_')
-      && this.dataFinalPesquisaPeriodoAtendimento && !this.dataFinalPesquisaPeriodoAtendimento.includes('_'))
-      || this.processandoOperacao;
-  }
-
   public desabilitarBotaoConfirmacaoAtendimento(): boolean {
     if (this.tipoAtendimentoIgualConsulta(this.atendimentoSelecionado)) {
       let botaoDesabilitado: boolean = this.processandoOperacao || !(this.formularioConfirmacaoConsulta.formaPagamento && this.valorConsulta);
@@ -732,8 +707,6 @@ export class TabelaConsultasRetornosComponent implements OnInit, OnDestroy {
     this.formularioAgendamentoConsulta = new AgendamentoConsultaFORM();
     this.formularioAgendamentoRetornoConsulta = new AgendamentoRetornoFORM();
     this.formularioConfirmacaoConsulta = new ConfirmacaoConsultaFORM();
-    this.dataInicialPesquisaPeriodoAtendimento = null;
-    this.dataFinalPesquisaPeriodoAtendimento = null;
     this.formularioReagendamentoConsulta = new ReagendamentoConsultaFORM();
     this.formularioReagendamentoRetornoConsulta = new ReagendamentoRetornoFORM();
   }

@@ -22,12 +22,11 @@ export class ConsultaService {
 
 
   public listarAtendimentosAPartirDaDataAtual(): Observable<InformacoesPreviasConsultaRetorno[]> {
-    return this.http.get<InformacoesPreviasConsultaRetorno[]>(`/consulta-paciente/listar-atendimentos`);
+    return this.http.get<InformacoesPreviasConsultaRetorno[]>(`/consulta-paciente/listar-atendimentos-data-atual-posteriores`);
   }
 
-  public listarAtendimentosPorPeriodo(dataInicial: string, dataFinal: string): Observable<InformacoesPreviasConsultaRetorno[]> {
-    return this.http.get<InformacoesPreviasConsultaRetorno[]>(
-      `/consulta-paciente/listar-atendimentos-por-periodo?dataInicial=${dataInicial}&dataFinal=${dataFinal}`);
+  public listarAtendimentosAnterioresAoDiaAtual(): Observable<InformacoesPreviasConsultaRetorno[]> {
+    return this.http.get<InformacoesPreviasConsultaRetorno[]>(`/consulta-paciente/listar-atendimentos-anteriores-data-atual`);
   }
 
   public verificarProximoTipoDeAtendimentoDoPaciente(idPaciente: number): Observable<TipoAtendimento> {

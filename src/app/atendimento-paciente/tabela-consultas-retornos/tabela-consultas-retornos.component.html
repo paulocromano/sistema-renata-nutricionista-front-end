@@ -3,131 +3,123 @@
 <div class="container-fluid">
     <h3 class="text-center mt-5">Consultas & Retornos</h3>
 
-    <div class="borda-table mt-3">
-        <p-table #dataView [value]="atendimentos" [columns]="colunasTabela" [responsive]="true" 
-            [rows]="8" [paginator]="true" class="text-center">
-
-            <ng-template pTemplate="caption">
-                <div class="row">
-                    <div class="col-12 col-sm-6 col-md-6 col-lg-3">
-                        <input type="text" pInputText placeholder="Pesquisa" class="pesquisa" [(ngModel)]="inputPesquisa"
-                            (input)="dataView.filterGlobal($event.target.value, 'contains')">
-                        <i class="fas fa-search" style="font-size: 1.18em;"></i>
-                    </div>
-
-                    <div class="col-12 col-sm-6 col-md-6 col-lg-6">
-                        <div class="row">
-                            <span class="p-float-label">
-                                <p-inputMask mask="99/99/9999" [style]="{width: '120px'}" [(ngModel)]="dataInicialPesquisaPeriodoAtendimento"> 
-                                </p-inputMask>
-                                <label for="inputtext">Data inicial</label>
-                            </span>
-            
-                            <span class="p-float-label ml-3">
-                                <p-inputMask mask="99/99/9999" [style]="{width: '120px'}" [(ngModel)]="dataFinalPesquisaPeriodoAtendimento"> 
-                                </p-inputMask>
-                                <label for="inputtext">Data final</label>
-                            </span>
+    <div class="borda-table">
+        <p-tabView>
+            <p-tabPanel header="Anteriores ao dia atual">
     
-                            <button class="btn btn-success ml-4 px-5" [disabled]="desabilitarBotaoPesquisa()"
-                                (click)="listarAtendimentosPorPeriodo()">
-                                <i class="fas fa-search"></i>
-                                Pesquisar
-                            </button>
-                        </div>
-
-                        <div class="text-danger mt-2" style="font-size: 13px;">{{ mensagemPeriodoDosAtendimentosConsultados }}</div>
-                    </div>
-
-                    <div class="col-12 col-sm-12 col-lg-3">
-                        <button class="btn btn-success px-5" pTooltip="Agendar atendimento" tooltipPosition="bottom"
-                            (click)="exibirDialogAgendarReagendarAtendimento = true" [disabled]="buscandoPacientesParaAgendamentoDeAtendimento">
-                            <i class="fas fa-plus"></i>
-                            Agendar atendimento
-                        </button>
-                    </div>
+            </p-tabPanel>
+    
+            <p-tabPanel header="Dia atual e posteriores" [selected]="true">
+                <div class="borda-table">
+                    <p-table #dataView [value]="atendimentos" [columns]="colunasTabela" [responsive]="true" 
+                        [rows]="8" [paginator]="true" class="text-center">
+            
+                        <ng-template pTemplate="caption">
+                            <div class="row">
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+                                    <input type="text" pInputText placeholder="Pesquisa" class="pesquisa" [(ngModel)]="inputPesquisa"
+                                        (input)="dataView.filterGlobal($event.target.value, 'contains')">
+                                    <i class="fas fa-search" style="font-size: 1.18em;"></i>
+                                </div>
+            
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-6">            
+                                    <div class="text-danger mt-2" style="font-size: 13px;">
+                                        {{ mensagemPeriodoDosAtendimentosConsultados }}
+                                    </div>
+                                </div>
+            
+                                <div class="col-12 col-sm-12 col-lg-3">
+                                    <button class="btn btn-success px-5" pTooltip="Agendar atendimento" tooltipPosition="bottom"
+                                        (click)="exibirDialogAgendarReagendarAtendimento = true" [disabled]="buscandoPacientesParaAgendamentoDeAtendimento">
+                                        <i class="fas fa-plus"></i>
+                                        Agendar atendimento
+                                    </button>
+                                </div>
+                            </div>
+                        </ng-template>
+            
+                        <ng-template pTemplate="header" let-colunas>
+                            <tr>
+                                <th *ngFor="let coluna of colunas" [pSortableColumn]="coluna.field" [ngClass]="coluna.style" class="text-center">
+                                    {{ coluna.header }}
+                                    <p-sortIcon *ngIf="coluna.header !== 'Ações'" [field]="coluna.field" 
+                                        ariaLabel="active to sort"
+                                        ariaLabelDesc="Activate to sort in descending order"
+                                        ariaLabelAsc="Activate to sort in ascending order">
+                                    </p-sortIcon>
+                                </th>
+                            </tr>
+                        </ng-template>
+            
+                        <ng-template pTemplate="body" let-atendimento>
+                            <tr>
+                                <td *ngFor="let coluna of colunasTabela" class="text-center">
+                                    <span class="ui-column-title text-left"></span>
+                                    {{ atendimento[coluna.field] }}
+                    
+                                    <span *ngIf="coluna.header === 'Ações'">
+                                        <button class="btn btn-primary px-3" pTooltip="Informações" tooltipPosition="bottom"
+                                            (click)="armazenarAtendimentoSelecionadoParaDialogInformacoes(atendimento)">
+                                            <i class="fas fa-info"></i>
+                                        </button>
+            
+                                        <button *ngIf="exibirBotaoVisualizarFichaDoAtendimento(atendimento)" class="btn btn-secondary ml-2" 
+                                            pTooltip="Visualizar ficha" tooltipPosition="bottom" [disabled]="processandoOperacao"
+                                            (click)="armazenarAtendimentoParaExibirFicha(atendimento)">
+                                            
+                                            <i [ngClass]="atendimento.processandoOperacao ? 'fas fa-spin fa-circle-notch' : 'far fa-address-card'">
+                                            </i>
+                                        </button>
+            
+                                        <button *ngIf="exibirBotaoReagendamentoDoAtendimento(atendimento)" class="btn btn-warning ml-2" 
+                                            [pTooltip]="definirMensagemTooltip('Reagendar', atendimento)" tooltipPosition="bottom"
+                                            (click)="armazenarAtendimentoParaReagendamento(atendimento)">
+                                            <i class="fas fa-pen text-white"></i>
+                                        </button>
+            
+                                        <button *ngIf="exibirBotaoConfirmacaoDoAtendimento(atendimento)" class="btn btn-success ml-2" 
+                                            [pTooltip]="definirMensagemTooltip('Confirmar', atendimento)" tooltipPosition="bottom"
+                                            (click)="armazenarAtendimentoParaConfirmacao(atendimento)">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+            
+                                        <button *ngIf="exibirBotaoParaIniciarAtendimento(atendimento)" class="btn btn-info ml-2 px-3" 
+                                            [pTooltip]="definirMensagemTooltip('Iniciar', atendimento)" tooltipPosition="bottom"
+                                            (click)="armazenarAtendimentoParaIniciarConsultaOuRetorno(atendimento)">
+                                            <i class="fas fa-notes-medical"></i>
+                                        </button>
+            
+                                        <button *ngIf="exibirBotaoParaCancelarAtendimento(atendimento)" class="btn btn-danger ml-2" 
+                                            [pTooltip]="definirMensagemTooltip('Cancelar', atendimento)" tooltipPosition="bottom" 
+                                            (click)="armazenarAtendimentoParaCancelamento(atendimento)">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </span>
+                                </td>
+                            </tr>
+                        </ng-template>
+            
+                        <ng-template pTemplate="emptymessage" class="text-center" let-atendimentos>
+                            <tr>
+                                <td [attr.colspan]="atendimentos.length" class="text-center">
+                                    <span *ngIf="!processandoOperacao">
+                                        {{ inputPesquisa ? 'Nenhum atendimento corresponde à pesquisa!' : 'Nenhum atendimento encontrado!' }}
+                                    </span>
+            
+                                    <span *ngIf="processandoOperacao && !inputPesquisa">
+                                        <p-progressSpinner strokeWidth="3"></p-progressSpinner>
+                                    </span>
+                                </td>
+                            </tr>
+                        </ng-template>
+            
+                        <ng-template pTemplate="summary">
+                            Atendimentos encontrados: {{ atendimentos ? atendimentos.length : 0 }}
+                        </ng-template>
+                    </p-table>
                 </div>
-            </ng-template>
-
-            <ng-template pTemplate="header" let-colunas>
-                <tr>
-                    <th *ngFor="let coluna of colunas" [pSortableColumn]="coluna.field" [ngClass]="coluna.style" class="text-center">
-                        {{ coluna.header }}
-                        <p-sortIcon *ngIf="coluna.header !== 'Ações'" [field]="coluna.field" 
-                            ariaLabel="active to sort"
-                            ariaLabelDesc="Activate to sort in descending order"
-                            ariaLabelAsc="Activate to sort in ascending order">
-                        </p-sortIcon>
-                    </th>
-                </tr>
-            </ng-template>
-
-            <ng-template pTemplate="body" let-atendimento>
-                <tr>
-                    <td *ngFor="let coluna of colunasTabela" class="text-center">
-                        <span class="ui-column-title text-left"></span>
-                        {{ atendimento[coluna.field] }}
-        
-                        <span *ngIf="coluna.header === 'Ações'">
-                            <button class="btn btn-primary px-3" pTooltip="Informações" tooltipPosition="bottom"
-                                (click)="armazenarAtendimentoSelecionadoParaDialogInformacoes(atendimento)">
-                                <i class="fas fa-info"></i>
-                            </button>
-
-                            <button *ngIf="exibirBotaoVisualizarFichaDoAtendimento(atendimento)" class="btn btn-secondary ml-2" 
-                                pTooltip="Visualizar ficha" tooltipPosition="bottom" [disabled]="processandoOperacao"
-                                (click)="armazenarAtendimentoParaExibirFicha(atendimento)">
-                                
-                                <i [ngClass]="atendimento.processandoOperacao ? 'fas fa-spin fa-circle-notch' : 'far fa-address-card'">
-                                </i>
-                            </button>
-
-                            <button *ngIf="exibirBotaoReagendamentoDoAtendimento(atendimento)" class="btn btn-warning ml-2" 
-                                [pTooltip]="definirMensagemTooltip('Reagendar', atendimento)" tooltipPosition="bottom"
-                                (click)="armazenarAtendimentoParaReagendamento(atendimento)">
-                                <i class="fas fa-pen text-white"></i>
-                            </button>
-
-                            <button *ngIf="exibirBotaoConfirmacaoDoAtendimento(atendimento)" class="btn btn-success ml-2" 
-                                [pTooltip]="definirMensagemTooltip('Confirmar', atendimento)" tooltipPosition="bottom"
-                                (click)="armazenarAtendimentoParaConfirmacao(atendimento)">
-                                <i class="fas fa-check"></i>
-                            </button>
-
-                            <button *ngIf="exibirBotaoParaIniciarAtendimento(atendimento)" class="btn btn-info ml-2 px-3" 
-                                [pTooltip]="definirMensagemTooltip('Iniciar', atendimento)" tooltipPosition="bottom"
-                                (click)="armazenarAtendimentoParaIniciarConsultaOuRetorno(atendimento)">
-                                <i class="fas fa-notes-medical"></i>
-                            </button>
-
-                            <button *ngIf="exibirBotaoParaCancelarAtendimento(atendimento)" class="btn btn-danger ml-2" 
-                                [pTooltip]="definirMensagemTooltip('Cancelar', atendimento)" tooltipPosition="bottom" 
-                                (click)="armazenarAtendimentoParaCancelamento(atendimento)">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </span>
-                    </td>
-                </tr>
-            </ng-template>
-
-            <ng-template pTemplate="emptymessage" class="text-center" let-atendimentos>
-                <tr>
-                    <td [attr.colspan]="atendimentos.length" class="text-center">
-                        <span *ngIf="!processandoOperacao">
-                            {{ inputPesquisa ? 'Nenhum atendimento corresponde à pesquisa!' : 'Nenhum atendimento encontrado!' }}
-                        </span>
-
-                        <span *ngIf="processandoOperacao && !inputPesquisa">
-                            <p-progressSpinner strokeWidth="3"></p-progressSpinner>
-                        </span>
-                    </td>
-                </tr>
-            </ng-template>
-
-            <ng-template pTemplate="summary">
-                Atendimentos encontrados: {{ atendimentos ? atendimentos.length : 0 }}
-            </ng-template>
-        </p-table>
+            </p-tabPanel>
+        </p-tabView>
     </div>
 </div>
 
