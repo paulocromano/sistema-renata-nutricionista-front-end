@@ -44,6 +44,7 @@ export class ConsultaComponent implements OnInit, OnDestroy {
   public exibirDialogCancelarConsulta: boolean = false;
   public exibirDialogFinalizarConsulta: boolean = false;
   public existeHistoricoDesatualizado: boolean = false;
+  public possuiTodosOsHistoricos: boolean = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -75,13 +76,26 @@ export class ConsultaComponent implements OnInit, OnDestroy {
     this.pacienteService.buscarInformacoesHistoricosPaciente(this.idPaciente)
       .subscribe((informacoesHistoricos: HistoricosPaciente) => {
         this.historicosPaciente = informacoesHistoricos;
-        this.verificarSeExisteHistoricoDesatualizado();
+        this.verificarSePossuiTodosOsHistoricos();
+        
+        if (!this.possuiTodosOsHistoricos) {
+          this.verificarSeExisteHistoricoDesatualizado();
+        }
         this.carregandoInformacoesDosHistoricosDoPaciente = false;
       },
       (errorResponse: HttpErrorResponse) => {
         this.carregandoInformacoesDosHistoricosDoPaciente = false;
         this.toasty.error('Erro ao buscar os históricos do paciente!');
       });
+  }
+
+  private verificarSePossuiTodosOsHistoricos(): void {
+    this.possuiTodosOsHistoricos = this.historicosPaciente 
+      && (this.historicosPaciente.informacoesPreviasHistoricosAlimentares.possuiHistorico
+        && this.historicosPaciente.informacoesHistoricosAtividadeFisica.possuiHistorico
+        && this.historicosPaciente.informacoesPreviasHistoricosPatologiaFamiliaresPorData.possuiHistorico
+        && this.historicosPaciente.informacoesPreviasQuestionariosFrequenciaAlimentar.possuiHistorico
+        && this.historicosPaciente.informacoesPreviasHistoricosSociais.possuiHistorico);
   }
 
   private verificarSeExisteHistoricoDesatualizado(): void {

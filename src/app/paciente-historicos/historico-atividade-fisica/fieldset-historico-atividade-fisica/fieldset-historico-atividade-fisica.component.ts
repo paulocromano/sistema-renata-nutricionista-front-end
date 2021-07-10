@@ -29,6 +29,7 @@ export class FieldsetHistoricoAtividadeFisicaComponent implements OnInit {
   public historicoSelecionado: HistoricoAtividadeFisica = new HistoricoAtividadeFisica();
   public dataProximaAtualizacao: string;
   public historicoEstaDesatualizado: boolean = false;
+  public possuiHistorico: boolean = false;
 
   public colunasTabela: any[];
   public inputPesquisa: string;
@@ -58,6 +59,7 @@ export class FieldsetHistoricoAtividadeFisicaComponent implements OnInit {
         this.historicosAtividadeFisica = informacoesHistorico.historicosAtividadesFisicas;
         this.dataProximaAtualizacao = informacoesHistorico.dataProximaAtualizacaoHistoricoAtividadeFisica;
         this.historicoEstaDesatualizado = informacoesHistorico.historicoEstaDesatualizado;
+        this.possuiHistorico = informacoesHistorico.possuiHistorico;
         this.processandoOperacao = false;
       },
       (errorResponse: HttpErrorResponse) => {

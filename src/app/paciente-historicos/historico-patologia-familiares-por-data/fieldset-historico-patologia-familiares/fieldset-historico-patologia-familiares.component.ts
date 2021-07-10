@@ -30,6 +30,7 @@ export class FieldsetHistoricoPatologiaFamiliaresComponent implements OnInit {
   public previaHistoricosPatologiaFamiliares: PreviaHistoricoPatologiaFamiliaresPorData[] = [];
   public dataProximaAtualizacao: string;
   public historicoEstaDesatualizado: boolean = false;
+  public possuiHistorico: boolean = false;
 
   public previaHistoricoPorDataSelecionado: PreviaHistoricoPatologiaFamiliaresPorData = new PreviaHistoricoPatologiaFamiliaresPorData();
   public historicoPatologiaFamiliaresPorData: HistoricoPatologiaFamiliaresPorData = new HistoricoPatologiaFamiliaresPorData();
@@ -74,6 +75,7 @@ export class FieldsetHistoricoPatologiaFamiliaresComponent implements OnInit {
         this.previaHistoricosPatologiaFamiliares = informacoesPreviasHistoricos.previaHistoricosPatologiaFamiliaresPorData;
         this.dataProximaAtualizacao = informacoesPreviasHistoricos.dataProximaAtualizacaoHistoricoPatologiasFamiliares;
         this.historicoEstaDesatualizado = informacoesPreviasHistoricos.historicoEstaDesatualizado;
+        this.possuiHistorico = informacoesPreviasHistoricos.possuiHistorico;
         this.processandoOperacao = false;
       },
       (errorResponse: HttpErrorResponse) => {

@@ -32,6 +32,7 @@ export class HistoricoQuestionarioFrequenciaAlimentarComponent implements OnInit
   public previaQuestionarios: PreviaQuestionarioFrequenciaAlimentar[] = [];
   public dataProximaAtualizacao: string;
   public historicoEstaDesatualizado: boolean = false;
+  public possuiHistorico: boolean = false;
 
   public colunasTabelaPreviaHistoricos: any[];
   public colunasTabelaFrequenciaAlimentar: any[];
@@ -68,6 +69,7 @@ export class HistoricoQuestionarioFrequenciaAlimentarComponent implements OnInit
         this.previaQuestionarios = informacoesPreviaQuestionarios.previaQuestionariosFrequenciaAlimentar;
         this.dataProximaAtualizacao = informacoesPreviaQuestionarios.dataProximaAtualizacaoQuestionario;
         this.historicoEstaDesatualizado = informacoesPreviaQuestionarios.historicoEstaDesatualizado;
+        this.possuiHistorico = informacoesPreviaQuestionarios.possuiHistorico;
         this.processandoOperacao = false;
       },
       (errorResponse: HttpErrorResponse) => {

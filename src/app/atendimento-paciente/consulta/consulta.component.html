@@ -59,11 +59,11 @@
             <p-header>
                 Históricos
 
-                <span *ngIf="existeHistoricoDesatualizado">
+                <span *ngIf="existeHistoricoDesatualizado || !possuiTodosOsHistoricos">
                     <i class="fas fa-exclamation-circle text-warning"></i>
                 </span>
 
-                <span *ngIf="!existeHistoricoDesatualizado">
+                <span *ngIf="!existeHistoricoDesatualizado && possuiTodosOsHistoricos">
                     <i class="fas fa-check-circle text-success"></i>
                 </span>
             </p-header>

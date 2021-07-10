@@ -1,9 +1,13 @@
 <p-fieldset [toggleable]="true" [collapsed]="true">
     <p-header>
         Histórico Patologia Familiares
-
-        <span *ngIf="historicoEstaDesatualizado">
+        
+        <span *ngIf="historicoEstaDesatualizado || !possuiHistorico">
             <i class="fas fa-exclamation-circle text-warning"></i>
+        </span>
+
+        <span *ngIf="!historicoEstaDesatualizado && possuiHistorico">
+            <i class="fas fa-check-circle text-success"></i>
         </span>
     </p-header>
 
@@ -80,8 +84,11 @@
 
             <ng-template pTemplate="summary">
                 <div class="col-12">
-                    Histórico de Patologias dos Familiares encontrados: 
-                        {{ previaHistoricosPatologiaFamiliares ? previaHistoricosPatologiaFamiliares.length : 0 }}
+                    <span *ngIf="previaHistoricosPatologiaFamiliares && previaHistoricosPatologiaFamiliares.length > 0">
+                        Histórico de Patologias dos Familiares encontrados: {{ previaHistoricosPatologiaFamiliares.length }}
+                    </span>
+
+                    <span *ngIf="!possuiHistorico" class="text-danger">{{ dataProximaAtualizacao }}</span>
                 </div>
                 
                 <div *ngIf="previaHistoricosPatologiaFamiliares && previaHistoricosPatologiaFamiliares.length > 0" class="col-12">

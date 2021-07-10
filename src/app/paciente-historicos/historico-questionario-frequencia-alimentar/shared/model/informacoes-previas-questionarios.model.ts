@@ -5,4 +5,5 @@ export class InformacoesPreviasQuestionarios {
     previaQuestionariosFrequenciaAlimentar: PreviaQuestionarioFrequenciaAlimentar[] = [];
     dataProximaAtualizacaoQuestionario: string;
     historicoEstaDesatualizado: boolean;
+    possuiHistorico: boolean;
 }

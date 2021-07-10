@@ -1,4 +1,3 @@
-import { SelectItem } from 'primeng/api';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 
@@ -10,8 +9,6 @@ import { PreviaHistoricoAlimentar } from './../shared/model/previa-historico-ali
 import { InformacoesPreviasHistoricosAlimentares } from './../shared/model/informacoes-historicos-alimentares.model';
 import { SuplementoPaciente } from './../shared/model/suplemento-paciente.model';
 import { InformacoesCadastroHistoricoAlimentar } from './../../../atendimento-paciente/shared/model/informacoes-cadastro-historico-alimentar.model';
-import { SuplementoPacienteFORM } from './../shared/model/suplemento-paciente.form';
-import { HistoricoAlimentarFORM } from './../shared/model/historico-alimentar.form';
 
 @Component({
   selector: 'app-fieldset-historico-alimentar',
@@ -34,6 +31,7 @@ export class FieldsetHistoricoAlimentarComponent implements OnInit {
   public previaHistoricosAlimentares: PreviaHistoricoAlimentar[] = [];
   public dataProximaAtualizacao: string;
   public historicoEstaDesatualizado: boolean = false;
+  public possuiHistorico: boolean = false;
   public suplementosPaciente: SuplementoPaciente[] = [];
   public suplementoSelecionado: SuplementoPaciente = new SuplementoPaciente();
 
@@ -75,6 +73,7 @@ export class FieldsetHistoricoAlimentarComponent implements OnInit {
         this.previaHistoricosAlimentares = informacoesHistoricosPaciente.previaHistoricosAlimentares;
         this.dataProximaAtualizacao = informacoesHistoricosPaciente.dataProximaAtualizacaoHistoricoAlimentar;
         this.historicoEstaDesatualizado = informacoesHistoricosPaciente.historicoEstaDesatualizado;
+        this.possuiHistorico = informacoesHistoricosPaciente.possuiHistorico;
         this.processandoOperacao = false;
       },
       (errorResponse: HttpErrorResponse) => {

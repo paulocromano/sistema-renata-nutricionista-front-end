@@ -2,8 +2,12 @@
     <p-header>
         Histórico Atividade Física
 
-        <span *ngIf="historicoEstaDesatualizado">
+        <span *ngIf="historicoEstaDesatualizado || !possuiHistorico">
             <i class="fas fa-exclamation-circle text-warning"></i>
+        </span>
+
+        <span *ngIf="!historicoEstaDesatualizado && possuiHistorico">
+            <i class="fas fa-check-circle text-success"></i>
         </span>
     </p-header>
 
@@ -76,7 +80,11 @@
 
             <ng-template pTemplate="summary">
                 <div class="col-12">
-                    Históricos Atividade Física encontrados: {{ historicosAtividadeFisica ? historicosAtividadeFisica.length : 0 }}
+                    <span *ngIf="historicosAtividadeFisica && historicosAtividadeFisica.length > 0">
+                        Históricos de Atividade Física encontrados: {{ historicosAtividadeFisica.length }}
+                    </span>
+
+                    <span *ngIf="!possuiHistorico" class="text-danger">{{ dataProximaAtualizacao }}</span>
                 </div>
                 
                 <div *ngIf="historicosAtividadeFisica && historicosAtividadeFisica.length > 0" class="col-12">

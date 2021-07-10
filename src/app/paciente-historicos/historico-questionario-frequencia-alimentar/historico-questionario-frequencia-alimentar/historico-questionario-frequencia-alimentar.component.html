@@ -3,8 +3,12 @@
     <p-header>
         Questionário Frequência Alimentar
 
-        <span *ngIf="historicoEstaDesatualizado">
+        <span *ngIf="historicoEstaDesatualizado || !possuiHistorico">
             <i class="fas fa-exclamation-circle text-warning"></i>
+        </span>
+
+        <span *ngIf="!historicoEstaDesatualizado && possuiHistorico">
+            <i class="fas fa-check-circle text-success"></i>
         </span>
     </p-header>
 
@@ -79,10 +83,12 @@
 
             <ng-template pTemplate="summary">
                 <div class="col-12">
-                    Questionários de Frequência Alimentar encontrados: 
-                    {{ previaQuestionarios ? previaQuestionarios.length : 0 }}
+                    <span *ngIf="previaQuestionarios && previaQuestionarios.length > 0">
+                        Questionários de Frequência Alimentar encontrados: {{ previaQuestionarios.length }}
+                    </span>
+
+                    <span *ngIf="!possuiHistorico" class="text-danger">{{ dataProximaAtualizacao }}</span>
                 </div>
-                
                 
                 <div *ngIf="previaQuestionarios && previaQuestionarios.length > 0" class="col-12">
                     <span *ngIf="!historicoEstaDesatualizado">

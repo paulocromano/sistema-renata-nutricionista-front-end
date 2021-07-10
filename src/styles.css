@@ -15,3 +15,7 @@ body {
 ::-webkit-scrollbar-thumb {
     background: #89228d;
 }
+
+.p-fieldset.p-fieldset-toggleable .p-fieldset-legend a {
+    text-decoration: none !important;
+}

@@ -33,6 +33,7 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
   public previaHistoricosSociais: PreviaHistoricoSocial[] = [];
   public dataProximaAtualizacao: string;
   public historicoEstaDesatualizado: boolean = false;
+  public possuiHistorico: boolean = false;
 
   public colunasTabelaPreviaHistoricos: any[];
   public colunasTabelaPatologiasPaciente: any[];
@@ -77,6 +78,7 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
         this.previaHistoricosSociais = informacoesPreviasHistoricosSociais.previaHistoricosSociais
         this.dataProximaAtualizacao = informacoesPreviasHistoricosSociais.dataProximaAtualizacaoHistoricoSocial;
         this.historicoEstaDesatualizado = informacoesPreviasHistoricosSociais.historicoEstaDesatualizado;
+        this.possuiHistorico = informacoesPreviasHistoricosSociais.possuiHistorico;
         this.processandoOperacao = false;
       },
       (errorResponse: HttpErrorResponse) => {

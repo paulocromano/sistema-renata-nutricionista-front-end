@@ -1,9 +1,13 @@
 <p-fieldset [toggleable]="true" [collapsed]="true">
     <p-header>
         Histórico Alimentar
-
-        <span *ngIf="historicoEstaDesatualizado">
+        
+        <span *ngIf="historicoEstaDesatualizado || !possuiHistorico">
             <i class="fas fa-exclamation-circle text-warning"></i>
+        </span>
+
+        <span *ngIf="!historicoEstaDesatualizado && possuiHistorico">
+            <i class="fas fa-check-circle text-success"></i>
         </span>
     </p-header>
 
@@ -80,7 +84,11 @@
 
             <ng-template pTemplate="summary">
                 <div class="col-12">
-                    Históricos Alimentares encontrados: {{ previaHistoricosAlimentares ? previaHistoricosAlimentares.length : 0 }}
+                    <span *ngIf="previaHistoricosAlimentares && previaHistoricosAlimentares.length > 0">
+                        Históricos Alimentares encontrados: {{ previaHistoricosAlimentares.length }}
+                    </span>
+
+                    <span *ngIf="!possuiHistorico" class="text-danger">{{ dataProximaAtualizacao }}</span>
                 </div>
                 
                 <div *ngIf="previaHistoricosAlimentares && previaHistoricosAlimentares.length > 0" class="col-12">

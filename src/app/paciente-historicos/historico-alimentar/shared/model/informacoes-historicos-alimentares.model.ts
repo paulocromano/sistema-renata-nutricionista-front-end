@@ -5,4 +5,5 @@ export class InformacoesPreviasHistoricosAlimentares {
     previaHistoricosAlimentares: PreviaHistoricoAlimentar[] = [];
     dataProximaAtualizacaoHistoricoAlimentar: string;
     historicoEstaDesatualizado: boolean;
+    possuiHistorico: boolean;
 }
