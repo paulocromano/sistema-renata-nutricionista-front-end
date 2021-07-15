@@ -150,15 +150,6 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-12 col-md-6 col-lg-4">
-                <b>Frequência diurese: </b> {{ historicoSocial.frequenciaDiurese }}
-            </div>
-            <div class="col-12 col-md-6 col-lg-4">
-                <b>Coloração diurese: </b> {{ historicoSocial.coloracaoDiurese }}
-            </div>
-        </div>
-
         <div><b>Horas de sono: </b> {{ historicoSocial.horasSono }}</div>
 
         <div *ngIf="paciente.sexo === 'Feminino'">
@@ -179,6 +170,41 @@
                     <b>Tempo de menopausa: </b> {{ historicoSocial.quantosAnosEstaNaMenopausa }}
                 </div>
             </div>
+        </div>
+
+        <!-- Tabela Colorações da diurese do paciente -->
+        <div *ngIf="historicoSocial.coloracoesDiurese && historicoSocial.coloracoesDiurese.length > 0" class="borda-table mt-3">
+            <p-table #dataView [responsive]="true" [columns]="colunasTabelaColoracoesDiuresePaciente" 
+                [value]="historicoSocial.coloracoesDiurese" class="text-center">
+
+                <ng-template pTemplate="caption">
+                    <div style="font-size: 1.3em;">Diurese</div>
+                    <div class="mt-2"><b>Frequência diurese: </b> {{ historicoSocial.frequenciaDiurese }}</div>
+                </ng-template>
+
+                <ng-template pTemplate="header" let-colunas>
+                    <tr>
+                        <th *ngFor="let coluna of colunas" [ngClass]="coluna.style" class="text-center">
+                            {{ coluna.header }}
+                        </th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-coloracaoDiuresePaciente>
+                    <tr>
+                        <td *ngFor="let coluna of colunasTabelaColoracoesDiuresePaciente" class="text-center">
+                            <span class="ui-column-title text-left"></span>
+
+                            <img *ngIf="coluna.header === 'Coloração'" class="imagem-coloracao-diurese"
+                                [src]="coloracaoDiuresePaciente[coluna.field].uuidImagemCorBase64">
+                                
+                            <span *ngIf="coluna.header !== 'Coloração'">
+                                {{ coloracaoDiuresePaciente[coluna.field]?.coloracaoDiurese.descricao }}
+                            </span>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
         </div>
 
         <!-- Tabela Patologias do paciente -->

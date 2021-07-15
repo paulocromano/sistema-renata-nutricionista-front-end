@@ -111,11 +111,11 @@
                 <div class="row">
                     <div class="col-12">
                         <button class="btn btn-warning" style="width: 100%;" (click)="abrirDialogCadastroColoracaoDiurese = true">
-                            Coloração da diurese
+                            Colorações da diurese
                         </button>
                     </div>
                     <div class="col-12 text-center mt-2">
-                        <b>Coloração selecionada: </b> 
+                        <b>Colorações selecionadas: </b> 
                             {{ imagemColoracaoDiureseSelecionada ? imagemColoracaoDiureseSelecionada.label : 'Não informada!' }}
                     </div>
                 </div>
@@ -224,7 +224,7 @@
     [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '70%'}">
 
     <p-header>
-        Cadastrar coloração da diurese de <b>{{ paciente.nome }}</b>
+        Cadastrar coloração da diurese
     </p-header>
 
     <div class="container-fluid">
@@ -270,7 +270,7 @@
     [blockScroll]="true" [draggable]="false" [closable]="false" [style]="{width: '70%'}">
 
     <p-header>
-        Cadastrar patologias de <b>{{ paciente.nome }}</b>
+        Cadastrar patologias
     </p-header>
 
     <div class="container-fluid">

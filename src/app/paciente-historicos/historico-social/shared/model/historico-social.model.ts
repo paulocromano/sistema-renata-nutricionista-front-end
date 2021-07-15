@@ -1,4 +1,5 @@
 import { PatologiaPaciente } from './patologia-paciente.model';
+import { ColoracaoDiuresePaciente } from './colocacao-diurese-paciente.model';
 
 export class HistoricoSocial {
 
@@ -13,7 +14,7 @@ export class HistoricoSocial {
     habitoIntestinal: string;
     consistenciaFezes: string;
     frequenciaDiurese: string;
-    coloracaoDiurese: string;
+    coloracoesDiurese: ColoracaoDiuresePaciente[] = [];
     patologiasPaciente: PatologiaPaciente[] = [];
     horasSono: number;
     menstruacaoNormal: string;

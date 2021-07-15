@@ -123,6 +123,7 @@ export class CadastroHistoricoSocialComponent implements OnInit {
   }
 
   public desabilitarBotaoConfirmarPatologiasPacienteSelecionadas(): boolean {
+    console.log(this.formularioPatologiasSelecionadas.find(patologia => !patologia.quantosAnosPossuiPatologia))
     return new Boolean(this.formularioPatologiasSelecionadas.find(patologia => !patologia.quantosAnosPossuiPatologia)
       || this.formularioPatologiasSelecionadas?.length === 0).valueOf();
   }

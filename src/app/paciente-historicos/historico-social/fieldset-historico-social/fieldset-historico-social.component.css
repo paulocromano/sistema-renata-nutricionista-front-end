@@ -7,3 +7,8 @@
     border: 2px solid rgba(209, 209, 209, 0.774);
     border-radius: 2px;
 }
+
+.imagem-coloracao-diurese {
+    border-radius: 50%;
+    width: 50px;
+}

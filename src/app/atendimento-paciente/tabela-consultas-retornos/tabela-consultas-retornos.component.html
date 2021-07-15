@@ -230,8 +230,8 @@
 
         <div *ngIf="atendimentoSelecionado.descricaoTipoAtendimento === 'Consulta'">
             <div><b>Forma de pagamento:</b> {{ atendimentoSelecionado.formaPagamentoConsulta }}</div>
-            <div *ngIf="atendimentoSelecionado.numeroParcelasConsulta"><b>Forma de pagamento:</b> 
-                {{ atendimentoSelecionado.numeroParcelasConsulta }}
+            <div *ngIf="atendimentoSelecionado.numeroParcelasConsulta"><b>Parcelado em:</b> 
+                {{ atendimentoSelecionado.numeroParcelasConsulta }}x
             </div>
             <div><b>Valor R$:</b> {{ atendimentoSelecionado.valorConsulta }}</div>
             <div><b>Motivo da consulta:</b> {{ atendimentoSelecionado.motivoConsulta }}</div>
