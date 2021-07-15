@@ -44,6 +44,7 @@ export class FieldsetHistoricoAtividadeFisicaComponent implements OnInit {
     this.historicosAtividadeFisica = this.informacoesHistoricosAtividadeFisica.historicosAtividadesFisicas;
     this.dataProximaAtualizacao = this.informacoesHistoricosAtividadeFisica.dataProximaAtualizacaoHistoricoAtividadeFisica;
     this.historicoEstaDesatualizado = this.informacoesHistoricosAtividadeFisica.historicoEstaDesatualizado;
+    this.possuiHistorico = this.informacoesHistoricosAtividadeFisica.possuiHistorico;
 
     this.colunasTabela = [
       { header: 'Cadastrado em', field: 'dataHoraCadastroAtividadeFisica', style: 'col-data-hora-cadastro' },

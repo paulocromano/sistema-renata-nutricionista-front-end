@@ -138,7 +138,9 @@
                 <tr>
                     <td *ngFor="let coluna of colunasTabelaHistoricosPatologiaFamiliares" class="text-center">
                         <span class="ui-column-title text-left"></span>
-                        {{ patologiaFamiliares[coluna.field] }}
+                        <span [ngClass]="{'text-danger font-weight-bold': patologiaFamiliares[coluna.field] === 'Sim'}">
+                            {{ patologiaFamiliares[coluna.field] }}
+                        </span>
                     </td>
                 </tr>
             </ng-template>

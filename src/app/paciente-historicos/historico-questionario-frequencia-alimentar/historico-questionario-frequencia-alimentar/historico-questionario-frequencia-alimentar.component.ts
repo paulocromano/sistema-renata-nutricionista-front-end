@@ -49,6 +49,7 @@ export class HistoricoQuestionarioFrequenciaAlimentarComponent implements OnInit
     this.previaQuestionarios = this.informacoesPreviasQuestionarios.previaQuestionariosFrequenciaAlimentar;
     this.dataProximaAtualizacao = this.informacoesPreviasQuestionarios.dataProximaAtualizacaoQuestionario;
     this.historicoEstaDesatualizado = this.informacoesPreviasQuestionarios.historicoEstaDesatualizado;
+    this.possuiHistorico = this.informacoesPreviasQuestionarios.possuiHistorico;
 
     this.colunasTabelaPreviaHistoricos = [
       { header: 'Cadastrado em', field: 'dataHoraCadastroQuestionario', style: 'col-data-hora-cadastro' },

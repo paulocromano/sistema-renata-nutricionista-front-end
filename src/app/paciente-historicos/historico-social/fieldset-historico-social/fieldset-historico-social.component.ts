@@ -51,6 +51,7 @@ export class FieldsetHistoricoSocialComponent implements OnInit {
     this.previaHistoricosSociais = this.informacoesPreviasHistoricosSociais.previaHistoricosSociais;
     this.dataProximaAtualizacao = this.informacoesPreviasHistoricosSociais.dataProximaAtualizacaoHistoricoSocial;
     this.historicoEstaDesatualizado = this.informacoesPreviasHistoricosSociais.historicoEstaDesatualizado;
+    this.possuiHistorico = this.informacoesPreviasHistoricosSociais.possuiHistorico;
     
     this.colunasTabelaPreviaHistoricos = [
       { header: 'Cadastrado em', field: 'dataHoraCadastroHistoricoSocial', style: 'col-data-hora-cadastro' },

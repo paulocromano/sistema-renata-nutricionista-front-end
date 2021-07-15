@@ -131,7 +131,8 @@
                         </button>
                     </div>
                     <div *ngIf="formularioPatologiasSelecionadas" class="col-12 text-center mt-2">
-                        <b>Patologias selecionadas:</b> {{ formularioPatologiasSelecionadas?.length }}
+                        <b>Patologias selecionadas:</b> 
+                        {{ descricaoPatologiasSelecionadas ? descricaoPatologiasSelecionadas : 'Não informada!' }}
                     </div>
                 </div>
             </div>
@@ -347,7 +348,7 @@
             Cancelar
         </button>
         <button class="btn btn-success" [disabled]="desabilitarBotaoConfirmarPatologiasPacienteSelecionadas()"
-            (click)="abrirDialogCadastroPatologiasPaciente = false">
+            (click)="fecharDialogCadastroPatologiasSelecionadas()">
             <i class="fas fa-check-circle"></i>
             Confirmar
         </button>

@@ -50,6 +50,7 @@ export class FieldsetHistoricoPatologiaFamiliaresComponent implements OnInit {
     this.previaHistoricosPatologiaFamiliares = this.informacoesPreviasHistoricosFamiliaresPorData.previaHistoricosPatologiaFamiliaresPorData;
     this.dataProximaAtualizacao = this.informacoesPreviasHistoricosFamiliaresPorData.dataProximaAtualizacaoHistoricoPatologiasFamiliares;
     this.historicoEstaDesatualizado = this.informacoesPreviasHistoricosFamiliaresPorData.historicoEstaDesatualizado;
+    this.possuiHistorico = this.informacoesPreviasHistoricosFamiliaresPorData.possuiHistorico;
 
     this.colunasTabelaPreviaHistoricosPatologiaFamiliaresPorData = [
       { header: 'Cadastrado em', field: 'dataHoraCadastroPatologiasFamiliaresPorData', style: 'col-data-hora-cadastro' },

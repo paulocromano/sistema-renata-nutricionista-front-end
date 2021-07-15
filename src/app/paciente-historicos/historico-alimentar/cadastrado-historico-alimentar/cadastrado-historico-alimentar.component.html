@@ -71,18 +71,24 @@
                         </span>
                     </div>
                     <div class="col-12 col-sm-6 mt-1">
-                        <b>Medicamentos selecionados:</b> {{ nomesMedicamentosSelecionados }}
+                        <b>Medicamentos selecionados:</b> {{ nomesMedicamentosSelecionados ? nomesMedicamentosSelecionados : 'Não informado!' }}
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="row mt-4">
-            <button class="btn btn-info" style="width: 100%;"
-                (click)="abrirDialogSelecaoSuplementosPaciente = true">
-                <i class="fas fa-capsules"></i>
-                Suplementos
-            </button>
+            <div class="col-12">
+                <button class="btn btn-info" style="width: 100%;"
+                    (click)="abrirDialogSelecaoSuplementosPaciente = true">
+                    <i class="fas fa-capsules"></i>
+                    Suplementos
+                </button>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 mt-2">
+                <b>Suplementos selecionados: </b>
+                {{ descricaoSuplementosSelecionados ? descricaoSuplementosSelecionados : 'Não informado!' }}
+            </div>
         </div>
     </div>
 
@@ -187,7 +193,7 @@
             Cancelar
         </button>
         <button class="btn btn-success" [disabled]="desabilitarBotaoConfirmarSuplementosSelecionadosDoPaciente()"
-            (click)="abrirDialogSelecaoSuplementosPaciente = false">
+            (click)="fecharDialogCadastroSuplementosSelecionados()">
             <i class="fas fa-check-circle"></i>
             Confirmar
         </button>

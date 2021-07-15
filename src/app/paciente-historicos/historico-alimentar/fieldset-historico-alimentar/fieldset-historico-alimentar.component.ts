@@ -51,6 +51,7 @@ export class FieldsetHistoricoAlimentarComponent implements OnInit {
     this.previaHistoricosAlimentares = this.informacoesPreviasHistoricosAlimentares.previaHistoricosAlimentares;
     this.dataProximaAtualizacao = this.informacoesPreviasHistoricosAlimentares.dataProximaAtualizacaoHistoricoAlimentar;
     this.historicoEstaDesatualizado = this.informacoesPreviasHistoricosAlimentares.historicoEstaDesatualizado;
+    this.possuiHistorico = this.informacoesPreviasHistoricosAlimentares.possuiHistorico;
 
     this.colunasTabelaPreviaHistoricos = [
       { header: 'Cadastrado em', field: 'dataHoraCadastroHistoricoAlimentar', style: 'col-data-hora-cadastro' },

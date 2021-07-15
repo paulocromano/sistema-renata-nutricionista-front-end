@@ -30,6 +30,7 @@ export class CadastroHistoricoSocialComponent implements OnInit {
   public patologias: SelectItem[] = [];
   public patologiasSelecionadasDropdown: SelectItem[] = [];
   public formularioPatologiasSelecionadas: PatologiaPacienteFORM[] = [];
+  public descricaoPatologiasSelecionadas: string = '';
   public estadoCivil: SelectItem[] = [];
   public consumoBebidasAlcoolicas: SelectItem[] = [];
   public consumoCigarro: SelectItem[] = [];
@@ -83,9 +84,11 @@ export class CadastroHistoricoSocialComponent implements OnInit {
 
   public alteracaoPatologiasSelecionadasParaCadastro(): void {
     this.formularioPatologiasSelecionadas = [];
-    this.patologiasSelecionadasDropdown.forEach(patologia => this.formularioPatologiasSelecionadas.push({ 
-      idPatologia: patologia.value, descricao: patologia.label, quantosAnosPossuiPatologia: null 
-    }));
+
+    this.patologiasSelecionadasDropdown.forEach(patologia => 
+      this.formularioPatologiasSelecionadas.push({
+        idPatologia: patologia.value, descricao: patologia.label, quantosAnosPossuiPatologia: null})
+    );
   }
 
   public excluirPatologiaDoPaciente(patologiaPaciente: PatologiaPacienteFORM): void {
@@ -105,6 +108,18 @@ export class CadastroHistoricoSocialComponent implements OnInit {
     this.abrirDialogCadastroPatologiasPaciente = false;
     this.patologiasSelecionadasDropdown = [];
     this.formularioPatologiasSelecionadas = [];
+    this.descricaoPatologiasSelecionadas = '';
+  }
+
+  public fecharDialogCadastroPatologiasSelecionadas(): void {
+    this.abrirDialogCadastroPatologiasPaciente = false;
+    this.descricaoPatologiasSelecionadas = '';
+    this.patologiasSelecionadasDropdown.forEach(patologia => this.descricaoPatologiasSelecionadas += patologia.label + ', ');
+    
+    if (this.descricaoPatologiasSelecionadas && this.descricaoPatologiasSelecionadas.includes(', ')) {
+      this.descricaoPatologiasSelecionadas = this.descricaoPatologiasSelecionadas.substring(
+        0, this.descricaoPatologiasSelecionadas.length - 2);
+    }
   }
 
   public desabilitarBotaoConfirmarPatologiasPacienteSelecionadas(): boolean {

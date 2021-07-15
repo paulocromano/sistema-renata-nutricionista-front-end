@@ -31,6 +31,7 @@ export class CadastradoHistoricoAlimentarComponent implements OnInit {
   public suplementosDropdown: SelectItem[] = [];
   public suplementosSelecionadosDropdown: SelectItem[] = [];
   public formularioSuplementosSelecionados: SuplementoPacienteFORM[] = [];
+  public descricaoSuplementosSelecionados: string = '';
 
   public colunasTabelaCadastroSuplementosPaciente: any[];
   public abrirDialogCadastro: boolean = false;
@@ -118,6 +119,19 @@ export class CadastradoHistoricoAlimentarComponent implements OnInit {
     this.abrirDialogSelecaoSuplementosPaciente = false;
     this.suplementosSelecionadosDropdown = [];
     this.formularioSuplementosSelecionados = [];
+    this.descricaoSuplementosSelecionados = '';
+  }
+
+  public fecharDialogCadastroSuplementosSelecionados(): void {
+    this.abrirDialogSelecaoSuplementosPaciente = false;
+    this.descricaoSuplementosSelecionados = '';
+
+    this.suplementosSelecionadosDropdown.forEach(suplemento => this.descricaoSuplementosSelecionados += suplemento.label + ', ');
+
+    if (this.descricaoSuplementosSelecionados && this.descricaoSuplementosSelecionados.includes(', ')) {
+      this.descricaoSuplementosSelecionados = this.descricaoSuplementosSelecionados.substring(
+        0, this.descricaoSuplementosSelecionados.length - 2);
+    }
   }
 
   public desabilitarBotaoConfirmarSuplementosSelecionadosDoPaciente(): boolean {
