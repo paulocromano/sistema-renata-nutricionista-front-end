@@ -12,7 +12,7 @@ export class HistoricoSocialFORM {
     habitoIntestinal: string;
     consistenciaFezes: string;
     frequenciaDiurese: string;
-    coloracaoDiurese: string;
+    coloracoesDiurese: number[] = [];
     patologiasPaciente: PatologiaPacienteFORM[] = [];
     horasSono: number;
     menstruacaoNormal: string;

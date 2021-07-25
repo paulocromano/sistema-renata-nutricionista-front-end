@@ -38,7 +38,7 @@ export class CadastroHistoricoSocialComponent implements OnInit {
   public consistenciaFezes: SelectItem[] = [];
   public frequenciaDiurese: SelectItem[] = [];
   public imagensColoracaoDiurese: SelectItem[] = [];
-  public imagemColoracaoDiureseSelecionada: SelectItem;
+  public imagensColoracaoDiureseSelecionadas: SelectItem[] = [];
 
   public colunasTabelaPatologiasPacienteParaCadastrar: any[];
   public abrirDialogCadastro: boolean = false;
@@ -78,8 +78,32 @@ export class CadastroHistoricoSocialComponent implements OnInit {
       });
   }
 
-  public coloracaoDiureseSelecionada(valueImagemSelecionada: any): void {
-    this.imagemColoracaoDiureseSelecionada = this.imagensColoracaoDiurese.find(imagem => imagem.value === valueImagemSelecionada.value);
+  public descricaoColoracoesDiurese(): string {
+    let descricaoColoracoesDiureseSelecionadas: string = '';
+
+    if (this.imagensColoracaoDiureseSelecionadas && this.imagensColoracaoDiureseSelecionadas.length > 0) {
+      this.imagensColoracaoDiureseSelecionadas.forEach(coloracao => 
+        descricaoColoracoesDiureseSelecionadas += coloracao.label + ', ');
+
+      descricaoColoracoesDiureseSelecionadas = descricaoColoracoesDiureseSelecionadas
+        .substring(0, descricaoColoracoesDiureseSelecionadas.length - 2);
+    }
+    else {
+      descricaoColoracoesDiureseSelecionadas = 'Nenhuma coloração selecionada!';
+    }
+
+    return descricaoColoracoesDiureseSelecionadas;
+  }
+
+  public cancelarColoracoesDiuresePaciente(): void {
+    this.abrirDialogCadastroColoracaoDiurese = false;
+    this.imagensColoracaoDiureseSelecionadas = [];
+  }
+
+  public fecharDialogCadastroColoracoesDiureseSelecionadas(): void {
+    this.abrirDialogCadastroColoracaoDiurese = false;
+    this.formularioHistoricoSocial.coloracoesDiurese = [];
+    this.formularioHistoricoSocial.coloracoesDiurese = this.imagensColoracaoDiureseSelecionadas.map(imagem => parseInt(imagem.value));
   }
 
   public alteracaoPatologiasSelecionadasParaCadastro(): void {
@@ -123,7 +147,6 @@ export class CadastroHistoricoSocialComponent implements OnInit {
   }
 
   public desabilitarBotaoConfirmarPatologiasPacienteSelecionadas(): boolean {
-    console.log(this.formularioPatologiasSelecionadas.find(patologia => !patologia.quantosAnosPossuiPatologia))
     return new Boolean(this.formularioPatologiasSelecionadas.find(patologia => !patologia.quantosAnosPossuiPatologia)
       || this.formularioPatologiasSelecionadas?.length === 0).valueOf();
   }
@@ -140,8 +163,8 @@ export class CadastroHistoricoSocialComponent implements OnInit {
       && this.formularioHistoricoSocial.composicaoFamiliar && this.formularioHistoricoSocial.localRefeicoes
       && this.formularioHistoricoSocial.frequenciaConsumoBebidasAlcoolicas && this.formularioHistoricoSocial.consumoCigarro
       && this.formularioHistoricoSocial.habitoIntestinal && this.formularioHistoricoSocial.consistenciaFezes
-      && this.formularioHistoricoSocial.frequenciaDiurese && this.formularioHistoricoSocial.coloracaoDiurese
-      && this.formularioHistoricoSocial.horasSono);
+      && this.formularioHistoricoSocial.frequenciaDiurese && this.formularioHistoricoSocial.coloracoesDiurese
+      && this.formularioHistoricoSocial.coloracoesDiurese.length > 0 && this.formularioHistoricoSocial.horasSono);
 
     if (this.formularioHistoricoSocial.consumoCigarro) {
       if (this.formularioHistoricoSocial.consumoCigarro !== '2' && (!this.formularioHistoricoSocial.quantidadeCigarrosPorDia 
@@ -182,7 +205,7 @@ export class CadastroHistoricoSocialComponent implements OnInit {
 
       this.informacoesParaCadastro.imagensColoracaoDiurese.forEach(imagem => 
         this.imagensColoracaoDiurese.push({
-          label: imagem.coloracaoDiurese.descricao, value: imagem.coloracaoDiurese.codigo, icon: imagem.uuidImagemCorBase64
+          label: imagem.coloracaoDiurese.descricao, value: imagem.id, icon: imagem.uuidImagemCorBase64
         }));
     }
   }
@@ -207,6 +230,6 @@ export class CadastroHistoricoSocialComponent implements OnInit {
     this.formularioHistoricoSocial = new HistoricoSocialFORM();
     this.patologiasSelecionadasDropdown = [];
     this.formularioPatologiasSelecionadas = [];
-    this.imagemColoracaoDiureseSelecionada = null;
+    this.imagensColoracaoDiureseSelecionadas = [];
   }
 }

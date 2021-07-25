@@ -111,12 +111,11 @@
                 <div class="row">
                     <div class="col-12">
                         <button class="btn btn-warning" style="width: 100%;" (click)="abrirDialogCadastroColoracaoDiurese = true">
-                            Colorações da diurese
+                            Colorações da Diurese
                         </button>
                     </div>
                     <div class="col-12 text-center mt-2">
-                        <b>Colorações selecionadas: </b> 
-                            {{ imagemColoracaoDiureseSelecionada ? imagemColoracaoDiureseSelecionada.label : 'Não informada!' }}
+                        <b>Colorações selecionadas: </b> {{ descricaoColoracoesDiurese() }}
                     </div>
                 </div>
             </div>
@@ -228,40 +227,53 @@
     </p-header>
 
     <div class="container-fluid">
-        <div class="mt-4" [style]="!imagemColoracaoDiureseSelecionada ? 'margin-bottom: 200px' : ''">
+        <div class="mt-4" [style]="!imagensColoracaoDiureseSelecionadas || imagensColoracaoDiureseSelecionadas.length < 2 ? 'margin-bottom: 200px' : ''">
             <span class="p-float-label">
-                <p-dropdown [options]="imagensColoracaoDiurese" [(ngModel)]="formularioHistoricoSocial.coloracaoDiurese" filter="true"
-                    [style]="{width: '100%'}" [autoDisplayFirst]="false" appendTo="body" emptyFilterMessage="Coloração não encontrada!"
-                    (onChange)="coloracaoDiureseSelecionada($event)">
-    
-                    <ng-template let-imagemSelecionada pTemplate="selectedItem">
-                        <img [src]="imagemSelecionada.icon" class="imagem-coloracao-diurese-selecionada"/>
-                        <span class="descricao-coloracao-diurese-selecionada">{{ imagemSelecionada.label }}</span>
-                    </ng-template>
-    
+                <p-multiSelect [options]="imagensColoracaoDiurese" [(ngModel)]="imagensColoracaoDiureseSelecionadas" 
+                    appendTo="body" optionLabel="label" [filter]="true" emptyFilterMessage="Coloração não encontrada!"
+                    [style]="{width: '100%'}" [scrollHeight]="'120px'" [displaySelectedLabel]="false">
+
+                    <!--ng-template let-imagensSelecionadas pTemplate="selectedItems">
+                        <div *ngFor="let imagemSelecionada of imagensColoracaoDiureseSelecionadas">
+                            <img [src]="imagemSelecionada.icon" class="imagem-coloracao-diurese-selecionada"/>
+                            <span>{{ imagemSelecionada.label }}</span>
+                        </div>
+                    </ng-template-->
+
                     <ng-template let-imagem pTemplate="item">
-                        <div class="ui-helper-clearfix" style="position: relative; height: 25px;">
-                            <img [src]="imagem.icon" class="imagem-dropdown-coloracao-diurese"/>
+                        <div style="position: relative; height: 25px;">
+                            <img [src]="imagem.value.icon" class="imagem-dropdown-coloracao-diurese"/>
                             <div class="descricao-dropdown-coloracao-diurese">
-                                {{imagem.label}}
+                                {{ imagem.value.label }}
                             </div>
                         </div>
                     </ng-template>
-                </p-dropdown>
-                <label for="inputtext">Coloração da diurese</label>
-            </span>
-        </div>
+                </p-multiSelect>
 
-        <div *ngIf="imagemColoracaoDiureseSelecionada" class="mt-4 text-center">
-            <img [src]="imagemColoracaoDiureseSelecionada.icon" class="imagem-coloracao-diurese-ampliada">
+                <label for="inputtext">Coloração Diurese</label>
+            </span>
+
+            <div class="row mt-2">
+                <span *ngFor="let imagem of imagensColoracaoDiureseSelecionadas">
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mt-2 text-center">
+                        <img [src]="imagem.icon" class="imagem-coloracao-diurese-ampliada"/>
+                        <div>{{ imagem.label }}</div>
+                    </div>
+                </span>
+            </div>
         </div>
     </div>
 
     <p-footer>
-        <button class="btn btn-danger" (click)="abrirDialogCadastroColoracaoDiurese = false">
-            <i class="fas fa-arrow-circle-left"></i>
-            Voltar
+        <button class="btn btn-danger" (click)="cancelarColoracoesDiuresePaciente()">
+            <i class="fas fa-times-circle"></i>
+            Cancelar
         </button>
+        <button class="btn btn-success" [disabled]="!imagensColoracaoDiureseSelecionadas || imagensColoracaoDiureseSelecionadas.length === 0"
+        (click)="fecharDialogCadastroColoracoesDiureseSelecionadas()">
+        <i class="fas fa-check-circle"></i>
+        Confirmar
+    </button>
     </p-footer>
 </p-dialog>
 
